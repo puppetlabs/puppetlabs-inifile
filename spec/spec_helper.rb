@@ -1,4 +1,8 @@
-dir = File.expand_path(File.dirname(__FILE__))
-$LOAD_PATH.unshift File.join(dir, 'lib')
+gem 'rspec', '>=2.0.0'
+require 'rspec/expectations'
+
 
 require 'puppetlabs_spec_helper/puppetlabs_spec_helper'
+
+require 'puppetlabs_spec_helper/puppetlabs_spec/files'
+
