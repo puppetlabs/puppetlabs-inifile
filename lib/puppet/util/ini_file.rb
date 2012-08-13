@@ -1,5 +1,5 @@
-require 'puppet/util/external_iterator'
-require 'puppet/util/ini_file/section'
+require File.expand_path('../external_iterator', __FILE__)
+require File.expand_path('../ini_file/section', __FILE__)
 
 module Puppet
 module Util
