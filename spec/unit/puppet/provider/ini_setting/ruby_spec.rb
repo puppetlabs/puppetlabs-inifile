@@ -15,6 +15,7 @@ describe provider_class do
 foo=foovalue
 
 bar = barvalue
+master = true
 [section2]
 
 foo= foovalue2
@@ -59,6 +60,7 @@ url = http://192.168.1.1:8080
 foo=foovalue
 
 bar = barvalue
+master = true
 [section2]
 
 foo= foovalue2
@@ -84,6 +86,7 @@ yahoo = yippee
 foo=foovalue
 
 bar = barvalue
+master = true
 [section2]
 
 foo= foovalue2
@@ -109,6 +112,7 @@ url = http://192.168.1.1:8080
 foo=foovalue
 
 bar = barvalue
+master = true
 [section2]
 
 foo= foovalue2
@@ -140,6 +144,7 @@ url = http://192.168.0.1:8080
 foo=foovalue
 
 bar = barvalue
+master = true
 [section2]
 
 foo= foovalue2
@@ -165,5 +170,16 @@ huzzah = shazaam
 setting1 = hellowworld
 ", emptyfile)
     end
+
+    it "should be able to handle variables of any type" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+          :section => "section1", :setting => 'master', :value => true))
+      provider = described_class.new(resource)
+      provider.exists?.should == true
+      provider.create
+    end
+
+
+
   end
 end
