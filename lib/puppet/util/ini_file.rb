@@ -5,14 +5,13 @@ module Puppet
 module Util
   class IniFile
 
-    SECTION_REGEX = /^\s*\[([\w\d\.]+)\]\s*$/
-    SETTING_REGEX = /^\s*([\w\d\.]+)\s*=\s*([\w\d\.]+)\s*$/
+    SECTION_REGEX = /^\s*\[([\S.]+)\]\s*$/
+    SETTING_REGEX = /^\s*([\S]+)\s*=\s*([\S]+)\s*$/
 
     def initialize(path)
       @path = path
       @section_names = []
       @sections_hash = {}
-
       parse_file
     end
 
@@ -43,7 +42,8 @@ module Util
     def save
       File.open(@path, 'w') do |fh|
         first_section = @sections_hash[@section_names[0]]
-        (0..first_section.start_line - 1).each do |line_num|
+        first_section.start_line == nil ? start_line = 0 : start_line = first_section.start_line
+        (0..start_line - 1).each do |line_num|
           fh.puts(lines[line_num])
         end
 
@@ -93,7 +93,6 @@ module Util
         elsif (match = SETTING_REGEX.match(line))
           settings[match[1]] = match[2]
         end
-
         line_iter.next
       end
     end
