@@ -5,8 +5,8 @@ module Puppet
 module Util
   class IniFile
 
-    SECTION_REGEX = /^\s*\[([\S.]+)\]\s*$/
-    SETTING_REGEX = /^\s*([\S]+)\s*=\s*([\S]+)\s*$/
+    SECTION_REGEX = /^\s*\[([\w\d\.\\\/\-]+)\]\s*$/
+    SETTING_REGEX = /^\s*([\w\d\.\\\/\-]+)\s*=\s*([\S]+)\s*$/
 
     def initialize(path)
       @path = path
