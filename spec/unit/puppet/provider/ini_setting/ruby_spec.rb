@@ -6,6 +6,7 @@ describe provider_class do
   include PuppetlabsSpec::Files
 
   let(:tmpfile) { tmpfilename("ini_setting_test") }
+  let(:emptyfile) { tmpfilename("ini_setting_test_empty") }
   let(:orig_content) {
     <<-EOS
 # This is a comment
@@ -18,12 +19,13 @@ bar = barvalue
 
 foo= foovalue2
 baz=bazvalue
+url = http://192.168.1.1:8080
     #another comment
  ; yet another comment
     EOS
 }
 
-  def validate_file(expected_content)
+  def validate_file(expected_content,tmpfile = tmpfile)
     File.read(tmpfile).should == expected_content
   end
 
@@ -31,6 +33,9 @@ baz=bazvalue
   before :each do
     File.open(tmpfile, 'w') do |fh|
       fh.write(orig_content)
+    end
+    File.open(emptyfile, 'w') do |fh|
+      fh.write("")
     end
   end
 
@@ -58,6 +63,7 @@ bar = barvalue
 
 foo= foovalue2
 baz=bazvalue
+url = http://192.168.1.1:8080
     #another comment
  ; yet another comment
 yahoo = yippee
@@ -82,9 +88,35 @@ bar = barvalue
 
 foo= foovalue2
 baz = bazvalue2
+url = http://192.168.1.1:8080
     #another comment
  ; yet another comment
       EOS
+      )
+    end
+
+    it "should be able to handle settings with non alphanumbering settings " do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+                                                   :setting => 'url', :value => 'http://192.168.0.1:8080'))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+
+      validate_file( <<-EOS
+# This is a comment
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.0.1:8080
+    #another comment
+ ; yet another comment
+    EOS
       )
     end
 
@@ -112,6 +144,7 @@ bar = barvalue
 
 foo= foovalue2
 baz=bazvalue
+url = http://192.168.1.1:8080
     #another comment
  ; yet another comment
 
@@ -119,6 +152,18 @@ baz=bazvalue
 huzzah = shazaam
       EOS
       )
+    end
+
+    it "should add a new section if no sections exists" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+          :section => "section1", :setting => 'setting1', :value => 'hellowworld', :path => emptyfile))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+      validate_file("
+[section1]
+setting1 = hellowworld
+", emptyfile)
     end
   end
 end
