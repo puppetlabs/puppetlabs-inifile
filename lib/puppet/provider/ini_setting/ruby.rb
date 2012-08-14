@@ -2,7 +2,7 @@ require File.expand_path('../../../util/ini_file', __FILE__)
 
 Puppet::Type.type(:ini_setting).provide(:ruby) do
   def exists?
-    ini_file.get_value(resource[:section], resource[:setting]) == resource[:value]
+    ini_file.get_value(resource[:section], resource[:setting]) == resource[:value].to_s
   end
 
   def create
