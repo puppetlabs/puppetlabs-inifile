@@ -1,2 +1,0 @@
-puppetlabs-inifile
-==================

@@ -12,7 +12,9 @@ module Util
       @path = path
       @section_names = []
       @sections_hash = {}
-      parse_file
+      if File.file?(@path)
+        parse_file
+      end
     end
 
     def section_names

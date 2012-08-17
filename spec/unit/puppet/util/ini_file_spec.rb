@@ -23,6 +23,7 @@ baz=bazvalue
     }
 
     before :each do
+      File.should_receive(:file?).with("/my/ini/file/path") { true }
       described_class.should_receive(:readlines).once.with("/my/ini/file/path") do
         sample_content
       end
