@@ -3,7 +3,7 @@ module Util
   class ExternalIterator
     def initialize(coll)
       @coll = coll
-      @cur_index = 0
+      @cur_index = -1
     end
 
     def next
@@ -17,7 +17,11 @@ module Util
 
     private
     def item_at(index)
-      [@coll[index], index]
+      if @coll.length > index
+        [@coll[index], index]
+      else
+        [nil, nil]
+      end
     end
   end
 end

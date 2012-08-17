@@ -43,18 +43,13 @@ module Util
 
     def save
       File.open(@path, 'w') do |fh|
-        first_section = @sections_hash[@section_names[0]]
-        first_section.start_line == nil ? start_line = 0 : start_line = first_section.start_line
-        (0..start_line - 1).each do |line_num|
-          fh.puts(lines[line_num])
-        end
 
         @section_names.each do |name|
           section = @sections_hash[name]
 
-          if (section.start_line.nil?)
+          if section.start_line.nil?
             fh.puts("\n[#{section.name}]")
-          else
+          elsif ! section.end_line.nil?
             (section.start_line..section.end_line).each do |line_num|
               fh.puts(lines[line_num])
             end
@@ -76,7 +71,13 @@ module Util
 
     def parse_file
       line_iter = create_line_iter
+
+      # We always create a "global" section at the beginning of the file, for
+      # anything that appears before the first named section.
+      section = read_section('', 0, line_iter)
+      add_section(section)
       line, line_num = line_iter.next
+
       while line
         if (match = SECTION_REGEX.match(line))
           section = read_section(match[1], line_num, line_iter)
@@ -88,13 +89,15 @@ module Util
 
     def read_section(name, start_line, line_iter)
       settings = {}
+      end_line_num = nil
       while true
         line, line_num = line_iter.peek
-        if (line.nil? or match = SECTION_REGEX.match(line))
-          return Section.new(name, start_line, line_num - 1, settings)
+        if (line_num.nil? or match = SECTION_REGEX.match(line))
+          return Section.new(name, start_line, end_line_num, settings)
         elsif (match = SETTING_REGEX.match(line))
           settings[match[1]] = match[2]
         end
+        end_line_num = line_num
         line_iter.next
       end
     end

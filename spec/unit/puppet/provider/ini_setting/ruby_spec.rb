@@ -7,24 +7,12 @@ describe provider_class do
 
   let(:tmpfile) { tmpfilename("ini_setting_test") }
   let(:emptyfile) { tmpfilename("ini_setting_test_empty") }
-  let(:orig_content) {
-    <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
 
-bar = barvalue
-master = true
-[section2]
-
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-    #another comment
- ; yet another comment
-    EOS
-}
+  let(:common_params) { {
+      :title    => 'ini_setting_ensure_present_test',
+      :path     => tmpfile,
+      :section  => 'section2',
+  } }
 
   def validate_file(expected_content,tmpfile = tmpfile)
     File.read(tmpfile).should == expected_content
@@ -41,11 +29,24 @@ url = http://192.168.1.1:8080
   end
 
   context "when ensuring that a setting is present" do
-    let(:common_params) { {
-        :title    => 'ini_setting_ensure_present_test',
-        :path     => tmpfile,
-        :section  => 'section2',
-    } }
+    let(:orig_content) {
+      <<-EOS
+# This is a comment
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+    #another comment
+ ; yet another comment
+      EOS
+    }
 
     it "should add a missing setting to the correct section" do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
@@ -75,7 +76,7 @@ yahoo = yippee
 
     it "should modify an existing setting with a different value" do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
-                                                   :setting => 'baz', :value => 'bazvalue2'))
+           :setting => 'baz', :value => 'bazvalue2'))
       provider = described_class.new(resource)
       provider.exists?.should == false
       provider.create
@@ -100,7 +101,7 @@ url = http://192.168.1.1:8080
 
     it "should be able to handle settings with non alphanumbering settings " do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
-                                                   :setting => 'url', :value => 'http://192.168.0.1:8080'))
+           :setting => 'url', :value => 'http://192.168.0.1:8080'))
       provider = described_class.new(resource)
       provider.exists?.should == false
       provider.create
@@ -126,7 +127,7 @@ url = http://192.168.0.1:8080
 
     it "should recognize an existing setting with the specified value" do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
-                                                   :setting => 'baz', :value => 'bazvalue'))
+           :setting => 'baz', :value => 'bazvalue'))
       provider = described_class.new(resource)
       provider.exists?.should == true
     end
@@ -179,6 +180,109 @@ setting1 = hellowworld
       provider.create
     end
 
-
   end
+
+  context "when dealing with a global section" do
+    let(:orig_content) {
+      <<-EOS
+# This is a comment
+foo=blah
+[section2]
+foo = http://192.168.1.1:8080
+ ; yet another comment
+      EOS
+    }
+
+
+    it "should add a missing setting if it doesn't exist" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+          :section => '', :setting => 'bar', :value => 'yippee'))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+      validate_file(<<-EOS
+# This is a comment
+foo=blah
+bar = yippee
+[section2]
+foo = http://192.168.1.1:8080
+ ; yet another comment
+      EOS
+      )
+    end
+
+    it "should modify an existing setting with a different value" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+           :section => '', :setting => 'foo', :value => 'yippee'))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+      validate_file(<<-EOS
+# This is a comment
+foo = yippee
+[section2]
+foo = http://192.168.1.1:8080
+ ; yet another comment
+      EOS
+      )
+    end
+
+    it "should recognize an existing setting with the specified value" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+           :section => '', :setting => 'foo', :value => 'blah'))
+      provider = described_class.new(resource)
+      provider.exists?.should == true
+    end
+  end
+
+  context "when the first line of the file is a section" do
+    let(:orig_content) {
+      <<-EOS
+[section2]
+foo = http://192.168.1.1:8080
+      EOS
+    }
+
+    it "should be able to add a global setting" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+           :section => '', :setting => 'foo', :value => 'yippee'))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+      validate_file(<<-EOS
+foo = yippee
+[section2]
+foo = http://192.168.1.1:8080
+      EOS
+      )
+    end
+
+    it "should modify an existing setting" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+          :section => 'section2', :setting => 'foo', :value => 'yippee'))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+      validate_file(<<-EOS
+[section2]
+foo = yippee
+      EOS
+      )
+    end
+
+    it "should add a new setting" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+          :section => 'section2', :setting => 'bar', :value => 'baz'))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+      validate_file(<<-EOS
+[section2]
+foo = http://192.168.1.1:8080
+bar = baz
+      EOS
+      )
+    end
+  end
+
 end
