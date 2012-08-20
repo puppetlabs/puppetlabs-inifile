@@ -19,4 +19,6 @@ A few noteworthy features:
    etc. perfectly intact.
  * Supports comments starting with either '#' or ';'.
  * Will add missing sections if they don't exist.
+ * Supports a "global" section (settings that go at the beginning of the file,
+   before any named sections) by specifying a section name of "".
 

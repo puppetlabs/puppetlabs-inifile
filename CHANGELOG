@@ -1,0 +1,2 @@
+2012-08-17 - Chris Price <chris@pupppetlabs.com> - 0.0.2
+ * Add support for "global" section at beginning of file (c57dab4)
