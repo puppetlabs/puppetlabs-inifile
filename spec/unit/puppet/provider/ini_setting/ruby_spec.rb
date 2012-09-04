@@ -43,6 +43,8 @@ master = true
 foo= foovalue2
 baz=bazvalue
 url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
     #another comment
  ; yet another comment
       EOS
@@ -67,6 +69,36 @@ master = true
 foo= foovalue2
 baz=bazvalue
 url = http://192.168.1.1:8080
+yahoo = yippee
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+      EOS
+)
+    end
+
+    it "should add a missing setting to the correct section with colon" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+          :section => 'section:sub', :setting => 'yahoo', :value => 'yippee'))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+      validate_file(<<-EOS
+# This is a comment
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
     #another comment
  ; yet another comment
 yahoo = yippee
@@ -93,6 +125,35 @@ master = true
 foo= foovalue2
 baz = bazvalue2
 url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+      EOS
+      )
+    end
+
+    it "should modify an existing setting with a different value - with colon in section" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+           :section => 'section:sub', :setting => 'subby', :value => 'foo'))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+      validate_file(<<-EOS
+# This is a comment
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section:sub]
+subby = foo
     #another comment
  ; yet another comment
       EOS
@@ -119,6 +180,8 @@ master = true
 foo= foovalue2
 baz=bazvalue
 url = http://192.168.0.1:8080
+[section:sub]
+subby=bar
     #another comment
  ; yet another comment
     EOS
@@ -151,10 +214,42 @@ master = true
 foo= foovalue2
 baz=bazvalue
 url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
     #another comment
  ; yet another comment
 
 [section3]
+huzzah = shazaam
+      EOS
+      )
+    end
+
+    it "should add a new section if the section does not exist - with colon" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+          :section => "section:subsection", :setting => 'huzzah', :value => 'shazaam'))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+      validate_file(<<-EOS
+# This is a comment
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+
+[section:subsection]
 huzzah = shazaam
       EOS
       )
@@ -168,6 +263,18 @@ huzzah = shazaam
       provider.create
       validate_file("
 [section1]
+setting1 = hellowworld
+", emptyfile)
+    end
+
+    it "should add a new section with colon if no sections exists" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+          :section => "section:subsection", :setting => 'setting1', :value => 'hellowworld', :path => emptyfile))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+      validate_file("
+[section:subsection]
 setting1 = hellowworld
 ", emptyfile)
     end
