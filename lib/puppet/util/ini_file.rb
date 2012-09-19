@@ -8,8 +8,9 @@ module Util
     SECTION_REGEX = /^\s*\[([\w\d\.\\\/\-\:]+)\]\s*$/
     SETTING_REGEX = /^\s*([\w\d\.\\\/\-]+)\s*=\s*([\S]+)\s*$/
 
-    def initialize(path)
+    def initialize(path, key_val_separator = ' = ')
       @path = path
+      @key_val_separator = key_val_separator
       @section_names = []
       @sections_hash = {}
       if File.file?(@path)
@@ -56,7 +57,7 @@ module Util
           end
 
           section.additional_settings.each_pair do |key, value|
-            fh.puts("#{key} = #{value}")
+            fh.puts("#{key}#{@key_val_separator}#{value}")
           end
         end
       end
@@ -106,7 +107,7 @@ module Util
       (section.start_line..section.end_line).each do |line_num|
         if (match = SETTING_REGEX.match(lines[line_num]))
           if (match[1] == setting)
-            lines[line_num] = "#{setting} = #{value}"
+            lines[line_num] = "#{setting}#{@key_val_separator}#{value}"
           end
         end
       end

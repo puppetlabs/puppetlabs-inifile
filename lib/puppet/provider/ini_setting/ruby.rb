@@ -14,6 +14,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
 
   private
   def ini_file
-    @ini_file ||= Puppet::Util::IniFile.new(resource[:path])
+    @ini_file ||= Puppet::Util::IniFile.new(resource[:path],
+                                            resource[:key_val_separator])
   end
 end

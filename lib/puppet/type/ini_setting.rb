@@ -30,4 +30,11 @@ Puppet::Type.newtype(:ini_setting) do
     end
   end
 
+  newparam(:key_val_separator) do
+    desc 'The separator string to use between each setting name and value. ' +
+        'Defaults to " = ", but you could use this to override e.g. whether ' +
+        'or not the separator should include whitespace.'
+    defaultto(" = ")
+  end
+
 end
