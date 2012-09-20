@@ -392,4 +392,68 @@ bar = baz
     end
   end
 
+  context "when overriding the separator" do
+    let(:orig_content) {
+      <<-EOS
+[section2]
+foo=bar
+      EOS
+    }
+
+    it "should fail if the separator doesn't include an equals sign" do
+      expect {
+        Puppet::Type::Ini_setting.new(common_params.merge(
+                                         :section           => 'section2',
+                                         :setting           => 'foo',
+                                         :value             => 'yippee',
+                                         :key_val_separator => '+'))
+      }.to raise_error Puppet::Error, /must contain exactly one/
+    end
+
+    it "should fail if the separator includes more than one equals sign" do
+      expect {
+        Puppet::Type::Ini_setting.new(common_params.merge(
+                                         :section           => 'section2',
+                                         :setting           => 'foo',
+                                         :value             => 'yippee',
+                                         :key_val_separator => ' = foo = '))
+      }.to raise_error Puppet::Error, /must contain exactly one/
+    end
+
+    it "should modify an existing setting" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+                                                   :section           => 'section2',
+                                                   :setting           => 'foo',
+                                                   :value             => 'yippee',
+                                                   :key_val_separator => '='))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+      validate_file(<<-EOS
+[section2]
+foo=yippee
+      EOS
+      )
+    end
+
+    it "should add a new setting" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+                                                   :section           => 'section2',
+                                                   :setting           => 'bar',
+                                                   :value             => 'baz',
+                                                   :key_val_separator => '='))
+      provider = described_class.new(resource)
+      provider.exists?.should == false
+      provider.create
+      validate_file(<<-EOS
+[section2]
+foo=bar
+bar=baz
+      EOS
+      )
+    end
+
+
+  end
+
 end
