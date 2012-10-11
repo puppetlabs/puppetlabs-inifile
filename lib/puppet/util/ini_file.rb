@@ -42,17 +42,28 @@ module Util
       end
     end
 
+    def remove_setting(section_name, setting)
+      section = @sections_hash[section_name]
+      if (section.has_existing_setting?(setting))
+        remove_line(section, setting)
+        section.remove_existing_setting(setting)
+      end
+    end
+
     def save
       File.open(@path, 'w') do |fh|
 
         @section_names.each do |name|
+
           section = @sections_hash[name]
 
           if section.start_line.nil?
             fh.puts("\n[#{section.name}]")
           elsif ! section.end_line.nil?
             (section.start_line..section.end_line).each do |line_num|
-              fh.puts(lines[line_num])
+              if lines[line_num]
+                fh.puts(lines[line_num])
+              end
             end
           end
 
@@ -108,6 +119,16 @@ module Util
         if (match = SETTING_REGEX.match(lines[line_num]))
           if (match[1] == setting)
             lines[line_num] = "#{setting}#{@key_val_separator}#{value}"
+          end
+        end
+      end
+    end
+
+    def remove_line(section, setting)
+      (section.start_line..section.end_line).each do |line_num|
+        if (match = SETTING_REGEX.match(lines[line_num]))
+          if (match[1] == setting)
+            lines.delete_at(line_num)
           end
         end
       end

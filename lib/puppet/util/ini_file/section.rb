@@ -24,6 +24,10 @@ class IniFile
       @existing_settings[setting_name] = value
     end
 
+    def remove_existing_setting(setting_name)
+      @existing_settings.delete(setting_name)
+    end
+
     def set_additional_setting(setting_name, value)
       @additional_settings[setting_name] = value
     end

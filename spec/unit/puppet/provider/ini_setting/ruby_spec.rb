@@ -458,7 +458,53 @@ bar=baz
       )
     end
 
+  end
 
+  context "when ensuring that a setting is absent" do
+    let(:orig_content) {
+      <<-EOS
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+EOS
+    }
+
+    it "should remove a setting that exists" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+      :section => 'section1', :setting => 'foo', :ensure => 'absent'))
+      provider = described_class.new(resource)
+      provider.exists?.should be_true
+      provider.destroy
+      validate_file(<<-EOS
+[section1]
+; This is also a comment
+
+bar = barvalue
+master = true
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+EOS
+    )
+    end
   end
 
 end
