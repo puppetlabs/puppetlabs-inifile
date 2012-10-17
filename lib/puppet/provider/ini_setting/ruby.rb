@@ -12,6 +12,12 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
     @ini_file = nil
   end
 
+  def destroy
+    ini_file.remove_setting(section, setting)
+    ini_file.save
+    @ini_file = nil
+  end
+
   def value
     ini_file.get_value(section, setting)
   end
