@@ -45,8 +45,19 @@ module Util
     def remove_setting(section_name, setting)
       section = @sections_hash[section_name]
       if (section.has_existing_setting?(setting))
+        # If the setting is found, we have some work to do.
+        # First, we remove the line from our array of lines:
         remove_line(section, setting)
+
+        # Then, we need to tell the setting object to remove
+        # the setting from its state:
         section.remove_existing_setting(setting)
+
+        # Finally, we need to update all of the start/end line
+        # numbers for all of the sections *after* the one that
+        # was modified.
+        section_index = @section_names.index(section_name)
+        decrement_section_line_numbers(section_index + 1)
       end
     end
 
@@ -61,9 +72,7 @@ module Util
             fh.puts("\n[#{section.name}]")
           elsif ! section.end_line.nil?
             (section.start_line..section.end_line).each do |line_num|
-              if lines[line_num]
-                fh.puts(lines[line_num])
-              end
+              fh.puts(lines[line_num])
             end
           end
 
@@ -151,6 +160,17 @@ module Util
         #  small-ish config files that can fit into memory without
         #  too much trouble.
         File.readlines(path)
+    end
+
+
+    # Utility method; given a section index (index into the @section_names
+    # array), decrement the start/end line numbers for that section and all
+    # all of the other sections that appear *after* the specified section.
+    def decrement_section_line_numbers(section_index)
+      @section_names[section_index..(@section_names.length - 1)].each do |name|
+        section = @sections_hash[name]
+        section.decrement_line_nums
+      end
     end
 
   end

@@ -505,6 +505,32 @@ subby=bar
 EOS
     )
     end
+
+    it "should do nothing for a setting that does not exist" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+                                                   :section => 'section:sub', :setting => 'foo', :ensure => 'absent'))
+      provider = described_class.new(resource)
+      provider.exists?.should be_nil
+      provider.destroy
+      validate_file(<<-EOS
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+      EOS
+      )
+    end
   end
 
 end
