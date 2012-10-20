@@ -64,21 +64,57 @@ module Util
     def save
       File.open(@path, 'w') do |fh|
 
-        @section_names.each do |name|
+        @section_names.each_index do |index|
+          name = @section_names[index]
 
           section = @sections_hash[name]
+
+          # We need a buffer to cache lines that are only whitespace
+          whitespace_buffer = []
 
           if section.start_line.nil?
             fh.puts("\n[#{section.name}]")
           elsif ! section.end_line.nil?
             (section.start_line..section.end_line).each do |line_num|
-              fh.puts(lines[line_num])
+              line = lines[line_num]
+
+              # We buffer any lines that are only whitespace so that
+              # if they are at the end of a section, we can insert
+              # any new settings *before* the final chunk of whitespace
+              # lines.
+              if (line =~ /^\s*$/)
+                whitespace_buffer << line
+              else
+                # If we get here, we've found a non-whitespace line.
+                # We'll flush any cached whitespace lines before we
+                # write it.
+                flush_buffer_to_file(whitespace_buffer, fh)
+                fh.puts(line)
+              end
             end
           end
 
           section.additional_settings.each_pair do |key, value|
             fh.puts("#{' ' * (section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
           end
+
+          if (whitespace_buffer.length > 0)
+            flush_buffer_to_file(whitespace_buffer, fh)
+          else
+            # We get here if there were no blank lines at the end of the
+            # section.
+            #
+            # If we are adding a new section with a new setting,
+            # and if there are more sections that come after this one,
+            # we'll write one blank line just so that there is a little
+            # whitespace between the sections.
+            if (section.end_line.nil? &&
+                (section.additional_settings.length > 0) &&
+                (index < @section_names.length - 1))
+              fh.puts("")
+            end
+          end
+
         end
       end
     end
@@ -173,6 +209,13 @@ module Util
       @section_names[section_index..(@section_names.length - 1)].each do |name|
         section = @sections_hash[name]
         section.decrement_line_nums
+      end
+    end
+
+    def flush_buffer_to_file(buffer, fh)
+      if buffer.length > 0
+        buffer.each { |l| fh.puts(l) }
+        buffer.clear
       end
     end
 

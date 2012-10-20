@@ -361,6 +361,7 @@ foo = http://192.168.1.1:8080
       provider.create
       validate_file(<<-EOS
 foo = yippee
+
 [section2]
 foo = http://192.168.1.1:8080
       EOS
@@ -571,8 +572,8 @@ subby=bar
 
      bar = barvalue
      master = true
-
      yahoo = yippee
+
 [section2]
   foo= foovalue2
   baz=bazvalue
