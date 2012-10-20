@@ -123,7 +123,7 @@ master = true
 [section2]
 
 foo= foovalue2
-baz = bazvalue2
+baz=bazvalue2
 url = http://192.168.1.1:8080
 [section:sub]
 subby=bar
@@ -154,7 +154,7 @@ foo= foovalue2
 baz=bazvalue
 url = http://192.168.1.1:8080
 [section:sub]
-subby = foo
+subby=foo
     #another comment
  ; yet another comment
       EOS
@@ -329,7 +329,7 @@ foo = http://192.168.1.1:8080
       provider.value=('yippee')
       validate_file(<<-EOS
 # This is a comment
-foo = yippee
+foo=yippee
 [section2]
 foo = http://192.168.1.1:8080
  ; yet another comment
@@ -531,6 +531,203 @@ subby=bar
       EOS
       )
     end
+  end
+
+
+  context "when dealing with indentation in sections" do
+    let(:orig_content) {
+      <<-EOS
+# This is a comment
+     [section1]
+     ; This is also a comment
+     foo=foovalue
+
+     bar = barvalue
+     master = true
+
+[section2]
+  foo= foovalue2
+  baz=bazvalue
+  url = http://192.168.1.1:8080
+[section:sub]
+ subby=bar
+    #another comment
+  fleezy = flam
+ ; yet another comment
+      EOS
+    }
+
+    it "should add a missing setting at the correct indentation when the header is aligned" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+                    :section => 'section1', :setting => 'yahoo', :value => 'yippee'))
+      provider = described_class.new(resource)
+      provider.exists?.should be_nil
+      provider.create
+      validate_file(<<-EOS
+# This is a comment
+     [section1]
+     ; This is also a comment
+     foo=foovalue
+
+     bar = barvalue
+     master = true
+
+     yahoo = yippee
+[section2]
+  foo= foovalue2
+  baz=bazvalue
+  url = http://192.168.1.1:8080
+[section:sub]
+ subby=bar
+    #another comment
+  fleezy = flam
+ ; yet another comment
+      EOS
+      )
+    end
+
+    it "should update an existing setting at the correct indentation when the header is aligned" do
+      resource = Puppet::Type::Ini_setting.new(
+          common_params.merge(:section => 'section1', :setting => 'bar', :value => 'barvalue2'))
+      provider = described_class.new(resource)
+      provider.exists?.should be_true
+      provider.create
+      validate_file(<<-EOS
+# This is a comment
+     [section1]
+     ; This is also a comment
+     foo=foovalue
+
+     bar = barvalue2
+     master = true
+
+[section2]
+  foo= foovalue2
+  baz=bazvalue
+  url = http://192.168.1.1:8080
+[section:sub]
+ subby=bar
+    #another comment
+  fleezy = flam
+ ; yet another comment
+      EOS
+      )
+    end
+
+    it "should add a missing setting at the correct indentation when the header is not aligned" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+                                                   :section => 'section2', :setting => 'yahoo', :value => 'yippee'))
+      provider = described_class.new(resource)
+      provider.exists?.should be_nil
+      provider.create
+      validate_file(<<-EOS
+# This is a comment
+     [section1]
+     ; This is also a comment
+     foo=foovalue
+
+     bar = barvalue
+     master = true
+
+[section2]
+  foo= foovalue2
+  baz=bazvalue
+  url = http://192.168.1.1:8080
+  yahoo = yippee
+[section:sub]
+ subby=bar
+    #another comment
+  fleezy = flam
+ ; yet another comment
+      EOS
+      )
+    end
+
+    it "should update an existing setting at the correct indentation when the header is not aligned" do
+      resource = Puppet::Type::Ini_setting.new(
+          common_params.merge(:section => 'section2', :setting => 'baz', :value => 'bazvalue2'))
+      provider = described_class.new(resource)
+      provider.exists?.should be_true
+      provider.create
+      validate_file(<<-EOS
+# This is a comment
+     [section1]
+     ; This is also a comment
+     foo=foovalue
+
+     bar = barvalue
+     master = true
+
+[section2]
+  foo= foovalue2
+  baz=bazvalue2
+  url = http://192.168.1.1:8080
+[section:sub]
+ subby=bar
+    #another comment
+  fleezy = flam
+ ; yet another comment
+      EOS
+      )
+    end
+
+    it "should add a missing setting at the min indentation when the section is not aligned" do
+      resource = Puppet::Type::Ini_setting.new(
+          common_params.merge(:section => 'section:sub', :setting => 'yahoo', :value => 'yippee'))
+      provider = described_class.new(resource)
+      provider.exists?.should be_nil
+      provider.create
+      validate_file(<<-EOS
+# This is a comment
+     [section1]
+     ; This is also a comment
+     foo=foovalue
+
+     bar = barvalue
+     master = true
+
+[section2]
+  foo= foovalue2
+  baz=bazvalue
+  url = http://192.168.1.1:8080
+[section:sub]
+ subby=bar
+    #another comment
+  fleezy = flam
+ ; yet another comment
+ yahoo = yippee
+      EOS
+      )
+    end
+
+    it "should update an existing setting at the previous indentation when the section is not aligned" do
+      resource = Puppet::Type::Ini_setting.new(
+          common_params.merge(:section => 'section:sub', :setting => 'fleezy', :value => 'flam2'))
+      provider = described_class.new(resource)
+      provider.exists?.should be_true
+      provider.create
+      validate_file(<<-EOS
+# This is a comment
+     [section1]
+     ; This is also a comment
+     foo=foovalue
+
+     bar = barvalue
+     master = true
+
+[section2]
+  foo= foovalue2
+  baz=bazvalue
+  url = http://192.168.1.1:8080
+[section:sub]
+ subby=bar
+    #another comment
+  fleezy = flam2
+ ; yet another comment
+      EOS
+      )
+    end
+
   end
 
 end

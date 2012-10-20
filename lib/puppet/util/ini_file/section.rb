@@ -2,15 +2,16 @@ module Puppet
 module Util
 class IniFile
   class Section
-    def initialize(name, start_line, end_line, settings)
+    def initialize(name, start_line, end_line, settings, indentation)
       @name = name
       @start_line = start_line
       @end_line = end_line
       @existing_settings = settings.nil? ? {} : settings
       @additional_settings = {}
+      @indentation = indentation
     end
 
-    attr_reader :name, :start_line, :end_line, :additional_settings
+    attr_reader :name, :start_line, :end_line, :additional_settings, :indentation
 
     def get_value(setting_name)
       @existing_settings[setting_name] || @additional_settings[setting_name]

@@ -6,7 +6,7 @@ module Util
   class IniFile
 
     SECTION_REGEX = /^\s*\[([\w\d\.\\\/\-\:]+)\]\s*$/
-    SETTING_REGEX = /^\s*([\w\d\.\\\/\-]+)\s*=\s*([\S\s]*\S)\s*$/
+    SETTING_REGEX = /^(\s*)([\w\d\.\\\/\-]+)(\s*=\s*)([\S\s]*\S)\s*$/
 
     def initialize(path, key_val_separator = ' = ')
       @path = path
@@ -30,7 +30,7 @@ module Util
 
     def set_value(section_name, setting, value)
       unless (@sections_hash.has_key?(section_name))
-        add_section(Section.new(section_name, nil, nil, nil))
+        add_section(Section.new(section_name, nil, nil, nil, nil))
       end
 
       section = @sections_hash[section_name]
@@ -77,7 +77,7 @@ module Util
           end
 
           section.additional_settings.each_pair do |key, value|
-            fh.puts("#{key}#{@key_val_separator}#{value}")
+            fh.puts("#{' ' * (section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
           end
         end
       end
@@ -111,12 +111,15 @@ module Util
     def read_section(name, start_line, line_iter)
       settings = {}
       end_line_num = nil
+      min_indentation = nil
       while true
         line, line_num = line_iter.peek
         if (line_num.nil? or match = SECTION_REGEX.match(line))
-          return Section.new(name, start_line, end_line_num, settings)
+          return Section.new(name, start_line, end_line_num, settings, min_indentation)
         elsif (match = SETTING_REGEX.match(line))
-          settings[match[1]] = match[2]
+          settings[match[2]] = match[4]
+          indentation = match[1].length
+          min_indentation = [indentation, min_indentation || indentation].min
         end
         end_line_num = line_num
         line_iter.next
@@ -126,8 +129,8 @@ module Util
     def update_line(section, setting, value)
       (section.start_line..section.end_line).each do |line_num|
         if (match = SETTING_REGEX.match(lines[line_num]))
-          if (match[1] == setting)
-            lines[line_num] = "#{setting}#{@key_val_separator}#{value}"
+          if (match[2] == setting)
+            lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}"
           end
         end
       end
@@ -136,7 +139,7 @@ module Util
     def remove_line(section, setting)
       (section.start_line..section.end_line).each do |line_num|
         if (match = SETTING_REGEX.match(lines[line_num]))
-          if (match[1] == setting)
+          if (match[2] == setting)
             lines.delete_at(line_num)
           end
         end
