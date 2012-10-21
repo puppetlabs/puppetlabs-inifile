@@ -72,9 +72,12 @@ module Util
           # We need a buffer to cache lines that are only whitespace
           whitespace_buffer = []
 
-          if section.start_line.nil?
+          if (section.is_new_section?) && (! section.is_global?)
             fh.puts("\n[#{section.name}]")
-          elsif ! section.end_line.nil?
+          end
+
+          if ! section.is_new_section?
+            # write all of the pre-existing settings
             (section.start_line..section.end_line).each do |line_num|
               line = lines[line_num]
 
@@ -94,6 +97,7 @@ module Util
             end
           end
 
+          # write new settings, if there are any
           section.additional_settings.each_pair do |key, value|
             fh.puts("#{' ' * (section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
           end
@@ -108,7 +112,8 @@ module Util
             # and if there are more sections that come after this one,
             # we'll write one blank line just so that there is a little
             # whitespace between the sections.
-            if (section.end_line.nil? &&
+            #if (section.end_line.nil? &&
+            if (section.is_new_section? &&
                 (section.additional_settings.length > 0) &&
                 (index < @section_names.length - 1))
               fh.puts("")
