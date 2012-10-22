@@ -2,15 +2,35 @@ module Puppet
 module Util
 class IniFile
   class Section
-    def initialize(name, start_line, end_line, settings)
+    # Some implementation details:
+    #
+    #  * `name` will be set to the empty string for the 'global' section.
+    #  * there will always be a 'global' section, with a `start_line` of 0,
+    #    but if the file actually begins with a real section header on
+    #    the first line, then the 'global' section will have an
+    #    `end_line` of `nil`.
+    #  * `start_line` and `end_line` will be set to `nil` for a new non-global
+    #    section.
+    def initialize(name, start_line, end_line, settings, indentation)
       @name = name
       @start_line = start_line
       @end_line = end_line
       @existing_settings = settings.nil? ? {} : settings
       @additional_settings = {}
+      @indentation = indentation
     end
 
-    attr_reader :name, :start_line, :end_line, :additional_settings
+    attr_reader :name, :start_line, :end_line, :additional_settings, :indentation
+
+    def is_global?()
+      @name == ''
+    end
+
+    def is_new_section?()
+      # a new section (global or named) will always have `end_line`
+      # set to `nil`
+      @end_line.nil?
+    end
 
     def get_value(setting_name)
       @existing_settings[setting_name] || @additional_settings[setting_name]

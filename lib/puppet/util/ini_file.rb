@@ -6,7 +6,7 @@ module Util
   class IniFile
 
     SECTION_REGEX = /^\s*\[([\w\d\.\\\/\-\:]+)\]\s*$/
-    SETTING_REGEX = /^\s*([\w\d\.\\\/\-]+)\s*=\s*([\S\s]*\S)\s*$/
+    SETTING_REGEX = /^(\s*)([\w\d\.\\\/\-]+)(\s*=\s*)([\S\s]*\S)\s*$/
 
     def initialize(path, key_val_separator = ' = ')
       @path = path
@@ -30,7 +30,7 @@ module Util
 
     def set_value(section_name, setting, value)
       unless (@sections_hash.has_key?(section_name))
-        add_section(Section.new(section_name, nil, nil, nil))
+        add_section(Section.new(section_name, nil, nil, nil, nil))
       end
 
       section = @sections_hash[section_name]
@@ -64,21 +64,62 @@ module Util
     def save
       File.open(@path, 'w') do |fh|
 
-        @section_names.each do |name|
+        @section_names.each_index do |index|
+          name = @section_names[index]
 
           section = @sections_hash[name]
 
-          if section.start_line.nil?
+          # We need a buffer to cache lines that are only whitespace
+          whitespace_buffer = []
+
+          if (section.is_new_section?) && (! section.is_global?)
             fh.puts("\n[#{section.name}]")
-          elsif ! section.end_line.nil?
+          end
+
+          if ! section.is_new_section?
+            # write all of the pre-existing settings
             (section.start_line..section.end_line).each do |line_num|
-              fh.puts(lines[line_num])
+              line = lines[line_num]
+
+              # We buffer any lines that are only whitespace so that
+              # if they are at the end of a section, we can insert
+              # any new settings *before* the final chunk of whitespace
+              # lines.
+              if (line =~ /^\s*$/)
+                whitespace_buffer << line
+              else
+                # If we get here, we've found a non-whitespace line.
+                # We'll flush any cached whitespace lines before we
+                # write it.
+                flush_buffer_to_file(whitespace_buffer, fh)
+                fh.puts(line)
+              end
             end
           end
 
+          # write new settings, if there are any
           section.additional_settings.each_pair do |key, value|
-            fh.puts("#{key}#{@key_val_separator}#{value}")
+            fh.puts("#{' ' * (section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
           end
+
+          if (whitespace_buffer.length > 0)
+            flush_buffer_to_file(whitespace_buffer, fh)
+          else
+            # We get here if there were no blank lines at the end of the
+            # section.
+            #
+            # If we are adding a new section with a new setting,
+            # and if there are more sections that come after this one,
+            # we'll write one blank line just so that there is a little
+            # whitespace between the sections.
+            #if (section.end_line.nil? &&
+            if (section.is_new_section? &&
+                (section.additional_settings.length > 0) &&
+                (index < @section_names.length - 1))
+              fh.puts("")
+            end
+          end
+
         end
       end
     end
@@ -111,12 +152,15 @@ module Util
     def read_section(name, start_line, line_iter)
       settings = {}
       end_line_num = nil
+      min_indentation = nil
       while true
         line, line_num = line_iter.peek
         if (line_num.nil? or match = SECTION_REGEX.match(line))
-          return Section.new(name, start_line, end_line_num, settings)
+          return Section.new(name, start_line, end_line_num, settings, min_indentation)
         elsif (match = SETTING_REGEX.match(line))
-          settings[match[1]] = match[2]
+          settings[match[2]] = match[4]
+          indentation = match[1].length
+          min_indentation = [indentation, min_indentation || indentation].min
         end
         end_line_num = line_num
         line_iter.next
@@ -126,8 +170,8 @@ module Util
     def update_line(section, setting, value)
       (section.start_line..section.end_line).each do |line_num|
         if (match = SETTING_REGEX.match(lines[line_num]))
-          if (match[1] == setting)
-            lines[line_num] = "#{setting}#{@key_val_separator}#{value}"
+          if (match[2] == setting)
+            lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}"
           end
         end
       end
@@ -136,7 +180,7 @@ module Util
     def remove_line(section, setting)
       (section.start_line..section.end_line).each do |line_num|
         if (match = SETTING_REGEX.match(lines[line_num]))
-          if (match[1] == setting)
+          if (match[2] == setting)
             lines.delete_at(line_num)
           end
         end
@@ -170,6 +214,13 @@ module Util
       @section_names[section_index..(@section_names.length - 1)].each do |name|
         section = @sections_hash[name]
         section.decrement_line_nums
+      end
+    end
+
+    def flush_buffer_to_file(buffer, fh)
+      if buffer.length > 0
+        buffer.each { |l| fh.puts(l) }
+        buffer.clear
       end
     end
 
