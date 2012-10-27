@@ -52,6 +52,19 @@ class IniFile
       end
     end
 
+    # This is a hacky method; it's basically called when we need to insert
+    # a new setting but we don't want it to appear at the very end of the
+    # section.  Instead we hack it into the existing settings list and
+    # increment our end_line number--this assumes that the caller (`ini_file`)
+    # is doing some babysitting w/rt the other sections and the actual data
+    # of the lines.
+    def insert_inline_setting(setting_name, value)
+      @existing_settings[setting_name] = value
+      if @end_line
+        @end_line = @end_line + 1
+      end
+    end
+
     def set_additional_setting(setting_name, value)
       @additional_settings[setting_name] = value
     end
@@ -65,6 +78,18 @@ class IniFile
       end
       if @end_line
         @end_line = @end_line - 1
+      end
+    end
+
+    # Increment the start and end line numbers for the section (if they are
+    # defined); this is intended to be called when an inline setting is added
+    # to a section that comes before this section in the ini file.
+    def increment_line_nums()
+      if @start_line
+        @start_line = @start_line + 1
+      end
+      if @end_line
+        @end_line = @end_line + 1
       end
     end
 

@@ -731,4 +731,84 @@ subby=bar
 
   end
 
+
+  context "when dealing settings that have a commented version present" do
+    let(:orig_content) {
+      <<-EOS
+     [section1]
+     # foo=foovalue
+     bar=barvalue
+     foo = foovalue2
+
+[section2]
+# foo = foovalue
+;bar=barvalue
+blah = blah
+      EOS
+    }
+
+    it "should add a new setting below a commented version of that setting" do
+      resource = Puppet::Type::Ini_setting.new(
+          common_params.merge(:section => 'section2', :setting => 'foo', :value => 'foo3'))
+      provider = described_class.new(resource)
+      provider.exists?.should be_false
+      provider.create
+      validate_file(<<-EOS
+     [section1]
+     # foo=foovalue
+     bar=barvalue
+     foo = foovalue2
+
+[section2]
+# foo = foovalue
+foo = foo3
+;bar=barvalue
+blah = blah
+      EOS
+      )
+    end
+
+    it "should update an existing setting in place, even if there is a commented version of that setting" do
+      resource = Puppet::Type::Ini_setting.new(
+          common_params.merge(:section => 'section1', :setting => 'foo', :value => 'foo3'))
+      provider = described_class.new(resource)
+      provider.exists?.should be_true
+      provider.create
+      validate_file(<<-EOS
+     [section1]
+     # foo=foovalue
+     bar=barvalue
+     foo = foo3
+
+[section2]
+# foo = foovalue
+;bar=barvalue
+blah = blah
+      EOS
+      )
+    end
+
+    it "should add a new setting below a commented version of that setting, respecting semicolons as comments" do
+      resource = Puppet::Type::Ini_setting.new(
+          common_params.merge(:section => 'section2', :setting => 'bar', :value => 'bar3'))
+      provider = described_class.new(resource)
+      provider.exists?.should be_false
+      provider.create
+      validate_file(<<-EOS
+     [section1]
+     # foo=foovalue
+     bar=barvalue
+     foo = foovalue2
+
+[section2]
+# foo = foovalue
+;bar=barvalue
+bar=bar3
+blah = blah
+      EOS
+      )
+    end
+
+  end
+
 end
