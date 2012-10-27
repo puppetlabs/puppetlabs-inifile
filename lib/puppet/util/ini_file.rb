@@ -7,6 +7,7 @@ module Util
 
     SECTION_REGEX = /^\s*\[([\w\d\.\\\/\-\:]+)\]\s*$/
     SETTING_REGEX = /^(\s*)([\w\d\.\\\/\-]+)(\s*=\s*)([\S\s]*\S)\s*$/
+    COMMENTED_SETTING_REGEX = /^(\s*)[#;]+(\s*)([\w\d\.\\\/\-]+)(\s*=\s*)([\S\s]*\S)\s*$/
 
     def initialize(path, key_val_separator = ' = ')
       @path = path
@@ -34,9 +35,31 @@ module Util
       end
 
       section = @sections_hash[section_name]
+
       if (section.has_existing_setting?(setting))
         update_line(section, setting, value)
         section.update_existing_setting(setting, value)
+      elsif result = find_commented_setting(section, setting)
+        # So, this stanza is a bit of a hack.  What we're trying
+        # to do here is this: for settings that don't already
+        # exist, we want to take a quick peek to see if there
+        # is a commented-out version of them in the section.
+        # If so, we'd prefer to add the setting directly after
+        # the commented line, rather than at the end of the section.
+
+        # If we get here then we found a commented line, so we
+        # call "insert_inline_setting_line" to update the lines array
+        insert_inline_setting_line(result, section, setting, value)
+
+        # Then, we need to tell the setting object that we hacked
+        # in an inline setting
+        section.insert_inline_setting(setting, value)
+
+        # Finally, we need to update all of the start/end line
+        # numbers for all of the sections *after* the one that
+        # was modified.
+        section_index = @section_names.index(section_name)
+        increment_section_line_numbers(section_index + 1)
       else
         section.set_additional_setting(setting, value)
       end
@@ -206,6 +229,35 @@ module Util
         File.readlines(path)
     end
 
+    # This utility method scans through the lines for a section looking for
+    # commented-out versions of a setting.  It returns `nil` if it doesn't
+    # find one.  If it does find one, then it returns a hash containing
+    # two keys:
+    #
+    #   :line_num - the line number that contains the commented version
+    #               of the setting
+    #   :match    - the ruby regular expression match object, which can
+    #               be used to mimic the whitespace from the comment line
+    def find_commented_setting(section, setting)
+      return nil if section.is_new_section?
+      (section.start_line..section.end_line).each do |line_num|
+        if (match = COMMENTED_SETTING_REGEX.match(lines[line_num]))
+          if (match[3] == setting)
+            return { :match => match, :line_num => line_num }
+          end
+        end
+      end
+      nil
+    end
+
+    # This utility method is for inserting a line into the existing
+    # lines array.  The `result` argument is expected to be in the
+    # format of the return value of `find_commented_setting`.
+    def insert_inline_setting_line(result, section, setting, value)
+      line_num = result[:line_num]
+      match = result[:match]
+      lines.insert(line_num + 1, "#{' ' * section.indentation}#{setting}#{match[4]}#{value}")
+    end
 
     # Utility method; given a section index (index into the @section_names
     # array), decrement the start/end line numbers for that section and all
@@ -216,6 +268,17 @@ module Util
         section.decrement_line_nums
       end
     end
+
+    # Utility method; given a section index (index into the @section_names
+    # array), increment the start/end line numbers for that section and all
+    # all of the other sections that appear *after* the specified section.
+    def increment_section_line_numbers(section_index)
+      @section_names[section_index..(@section_names.length - 1)].each do |name|
+        section = @sections_hash[name]
+        section.increment_line_nums
+      end
+    end
+
 
     def flush_buffer_to_file(buffer, fh)
       if buffer.length > 0
