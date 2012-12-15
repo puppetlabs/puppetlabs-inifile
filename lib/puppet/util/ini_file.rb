@@ -5,8 +5,8 @@ module Puppet
 module Util
   class IniFile
 
-    SECTION_REGEX = /^\s*\[([\w\d\.\\\/\-\:]+)\]\s*$/
-    SETTING_REGEX = /^(\s*)([\w\d\.\\\/\-]+)(\s*=\s*)([\S\s]*\S)\s*$/
+    SECTION_REGEX = /^\s*\[([ \w\d\.,\\\/\-_:;'"!?@#\$%^&*()\|]+?)\]\s*$/
+    SETTING_REGEX = /^(\s*)([ \w\d\.,\\\/\-_:;'"!?@#\$%^&*()\|]+?)(\s*=\s*)([\S\s]*?\S|)\s*$/
     COMMENTED_SETTING_REGEX = /^(\s*)[#;]+(\s*)([\w\d\.\\\/\-]+)(\s*=\s*)([\S\s]*\S)\s*$/
 
     def initialize(path, key_val_separator = ' = ')
