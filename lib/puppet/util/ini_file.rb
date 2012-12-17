@@ -9,18 +9,28 @@ module Util
     SETTING_REGEX = /^(\s*)([\w\d\.\\\/\-]+)(\s*=\s*)([\S\s]*\S)\s*$/
     COMMENTED_SETTING_REGEX = /^(\s*)[#;]+(\s*)([\w\d\.\\\/\-]+)(\s*=\s*)([\S\s]*\S)\s*$/
 
-    def initialize(path, key_val_separator = ' = ')
-      @path = path
+    def initialize(content, key_val_separator = ' = ', is_path = true)
+      if is_path
+        @path = content
+      else
+        @content = content
+      end
       @key_val_separator = key_val_separator
       @section_names = []
       @sections_hash = {}
-      if File.file?(@path)
+      if not is_path or File.file?(@path)
         parse_file
       end
     end
 
     def section_names
       @section_names
+    end
+
+    def section_settings(section_name)
+      if (@sections_hash.has_key?(section_name))
+        @sections_hash[section_name].settings
+      end
     end
 
     def get_value(section_name, setting)
@@ -215,6 +225,9 @@ module Util
     end
 
     def lines
+        if @content
+          return @content.split(/\r?\n/)
+        end
         @lines ||= IniFile.readlines(@path)
     end
 
