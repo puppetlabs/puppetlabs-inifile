@@ -23,6 +23,14 @@ module Util
       @section_names
     end
 
+    def get_settings(section_name)
+      section = @sections_hash[section_name]
+      section.setting_names.inject({}) do |result, setting|
+        result[setting] = section.get_value(setting)
+        result
+      end
+    end
+
     def get_value(section_name, setting)
       if (@sections_hash.has_key?(section_name))
         @sections_hash[section_name].get_value(setting)
