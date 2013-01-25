@@ -175,7 +175,7 @@ module Util
     def read_section(name, start_line, line_iter)
       settings = {}
       end_line_num = nil
-      min_indentation = nil
+      min_indentation = 0
       while true
         line, line_num = line_iter.peek
         if (line_num.nil? or match = SECTION_REGEX.match(line))
