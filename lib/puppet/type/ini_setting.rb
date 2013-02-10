@@ -82,7 +82,7 @@ Puppet::Type.newtype(:ini_setting) do
     return [] if self[:source].empty?
     content = nil
     self[:source].each do |source|
-      if tmp = Puppet::FileServing::Content.indirection.find(source, :environment => self.catalog.environment)
+      if tmp = indirection_get_ini_file(source)
         content = tmp.content
         break
       end
@@ -104,6 +104,11 @@ Puppet::Type.newtype(:ini_setting) do
       end
     end
     children
+  end
+
+  # Having it as its own method makes testing easier
+  def indirection_get_ini_file(source)
+    Puppet::FileServing::Content.indirection.find(source, :environment => self.catalog.environment)
   end
 
 end
