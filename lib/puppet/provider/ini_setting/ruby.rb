@@ -3,6 +3,7 @@ require File.expand_path('../../../util/ini_file', __FILE__)
 Puppet::Type.type(:ini_setting).provide(:ruby) do
 
   def exists?
+    return true unless resource[:source].empty?
     ini_file.get_value(section, setting)
   end
 
@@ -45,7 +46,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
 
   private
   def ini_file
-    @ini_file ||= Puppet::Util::IniFile.new(file_path, separator)
+    @ini_file ||= Puppet::Util::IniFile.new(file_path, separator, true)
   end
 
 end
