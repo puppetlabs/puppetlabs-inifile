@@ -28,6 +28,84 @@ describe provider_class do
     end
   end
 
+  context 'when calling instances' do
+
+    let :orig_content do
+      ''
+    end
+
+    it 'should fail when file path is not set' do
+      expect {
+        described_class.instances
+      }.to raise_error(Puppet::Error, 'Ini_settings only support collecting instances when a file path is hard coded')
+    end
+
+    context 'when file path is set' do
+      it 'should return [] when file is empty' do
+        provider_class.stubs(:file_path).returns(emptyfile)
+        provider_class.instances.should == []
+      end
+      it 'should override the provider instances file_path' do
+        provider_class.stubs(:file_path).returns('/some/file/path')
+        resource = Puppet::Type::Ini_setting.new(common_params)
+        provider = provider_class.new(resource)
+        provider.file_path.should == '/some/file/path'
+      end
+      context 'when file has contecnts' do
+        let(:orig_content) {
+          <<-EOS
+# This is a comment
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+          EOS
+        }
+
+        it 'should be able to parse the results' do
+          provider_class.stubs(:file_path).returns(tmpfile)
+          provider_class.instances.size == 7
+          expected_array = [
+            {:name => 'section1/foo', :value => 'foovalue' },
+            {:name => 'section1/bar', :value => 'barvalue' },
+            {:name => 'section1/master', :value => 'true' },
+            {:name => 'section2/foo', :value => 'foovalue2' },
+            {:name => 'section2/baz', :value => 'bazvalue' },
+            {:name => 'section2/url', :value => 'http://192.168.1.1:8080' },
+            {:name => 'section:sub/subby', :value => 'bar' }
+          ]
+          real_array = []
+          ensure_array = []
+          provider_class.instances.each do |x|
+            prop_hash    = x.instance_variable_get(:@property_hash)
+            ensure_value = prop_hash.delete(:ensure)
+            ensure_array.push(ensure_value)
+            real_array.push(prop_hash)
+          end
+          puts ensure_array.inspect
+          puts real_array.inspect
+          ensure_array.uniq.should == [:present]
+          ((real_array - expected_array) && (expected_array - real_array)).should == []
+
+        end
+
+      end
+
+    end
+
+  end
+
   context "when ensuring that a setting is present" do
     let(:orig_content) {
       <<-EOS
