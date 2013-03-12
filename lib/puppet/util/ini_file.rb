@@ -256,7 +256,7 @@ module Util
     def insert_inline_setting_line(result, section, setting, value)
       line_num = result[:line_num]
       match = result[:match]
-      lines.insert(line_num + 1, "#{' ' * section.indentation}#{setting}#{match[4]}#{value}")
+      lines.insert(line_num + 1, "#{' ' * (section.indentation || 0 )}#{setting}#{match[4]}#{value}")
     end
 
     # Utility method; given a section index (index into the @section_names
