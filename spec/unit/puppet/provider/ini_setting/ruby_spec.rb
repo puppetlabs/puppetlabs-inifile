@@ -887,6 +887,46 @@ blah = blah
       )
     end
 
+    context 'when a section only contains comments' do
+     let(:orig_content) {
+      <<-EOS
+[section1]
+# foo=foovalue
+# bar=bar2
+EOS
+    }
+      it 'should be able to add a new setting when a section contains only comments' do
+        resource = Puppet::Type::Ini_setting.new(
+          common_params.merge(:section => 'section1', :setting => 'foo', :value => 'foovalue2')
+        )
+        provider = described_class.new(resource)
+        provider.exists?.should be_false
+        provider.create
+        validate_file(<<-EOS
+[section1]
+# foo=foovalue
+foo=foovalue2
+# bar=bar2
+        EOS
+        )
+      end
+      it 'should be able to add a new setting when it matches a commented out line other than the first one' do
+        resource = Puppet::Type::Ini_setting.new(
+          common_params.merge(:section => 'section1', :setting => 'bar', :value => 'barvalue2')
+        )
+        provider = described_class.new(resource)
+        provider.exists?.should be_false
+        provider.create
+        validate_file(<<-EOS
+[section1]
+# foo=foovalue
+# bar=bar2
+bar=barvalue2
+        EOS
+        )
+      end
+    end
+
   end
 
 end
