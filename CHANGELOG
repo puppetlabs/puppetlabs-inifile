@@ -1,3 +1,18 @@
+2013-02-15 - Karel Brezina <karel.brezina@gmail.com> - 0.10.0
+ * Added 'ini_subsetting' custom resource type (4351d8b)
+
+2013-03-11 - Dan Bode <dan@puppetlabs.com> - 0.10.0
+ * guard against nil indentation values (5f71d7f)
+
+2013-01-07 - Dan Bode <dan@puppetlabs.com> - 0.10.0
+ * Add purging support to ini file (2f22483)
+
+2013-02-05 - James Sweeny <james.sweeny@puppetlabs.com> - 0.10.0
+ * Fix test to use correct key_val_parameter (b1aff63)
+
+2012-11-06 - Chris Price <chris@puppetlabs.com> - 0.10.0
+ * Added license file w/Apache 2.0 license (5e1d203)
+
 2012-11-02 - Chris Price <chris@puppetlabs.com> - 0.9.0
  * Version 0.9.0 released
 
