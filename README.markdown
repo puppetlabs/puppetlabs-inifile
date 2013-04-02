@@ -27,6 +27,8 @@ settings that consist of several arguments such as
       value   => '512m',
     }
 
+DAN: add notes on purging here
+
 A few noteworthy features:
 
  * The module tries *hard* not to manipulate your file any more than it needs to.

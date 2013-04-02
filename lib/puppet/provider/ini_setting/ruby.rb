@@ -1,8 +1,16 @@
 require File.expand_path('../../../util/ini_file', __FILE__)
 
 Puppet::Type.type(:ini_setting).provide(:ruby) do
-
+  
   def self.instances
+    # this code is here to support purging, on a per-file basis.  Users
+    # can create a child provider type which implements a method called
+    # 'file_path', and that will provide the value for the path to the
+    # ini file (rather than needing to specify it on each ini setting
+    # declaration.  This means that 'purge' can be used to clear out
+    # all settings from a particular ini file except those included in
+    # the catalog.
+
     if self.respond_to?(:file_path)
       # figure out what to do about the seperator
       ini_file  = Puppet::Util::IniFile.new(file_path, '=')
@@ -58,6 +66,12 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def file_path
+    # this method is here to support purging and sub-classing.
+    # if a user subclasses our type/provider and provides a
+    # 'file_path' method, then they don't have to specify the
+    # path as a parameter for every ini_setting declaration.
+    # This implementation allows us to support that while still
+    # falling back to the parameter value when necessary.
     if self.class.respond_to?(:file_path)
       self.class.file_path
     else
