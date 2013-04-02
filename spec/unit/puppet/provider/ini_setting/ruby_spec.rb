@@ -36,19 +36,28 @@ describe provider_class do
 
     it 'should fail when file path is not set' do
       expect {
-        described_class.instances
+        provider_class.instances
       }.to raise_error(Puppet::Error, 'Ini_settings only support collecting instances when a file path is hard coded')
     end
 
-    context 'when file path is set' do
+    context 'when file path is set by a child class' do
       it 'should return [] when file is empty' do
-        provider_class.stubs(:file_path).returns(emptyfile)
-        provider_class.instances.should == []
+        child_one = Class.new(provider_class) do
+          def self.file_path
+            emptyfile
+          end
+        end
+        child_one.stubs(:file_path).returns(emptyfile)
+        child_one.instances.should == []
       end
       it 'should override the provider instances file_path' do
-        provider_class.stubs(:file_path).returns('/some/file/path')
+        child_two = Class.new(provider_class) do
+          def self.file_path
+            '/some/file/path'
+          end
+        end
         resource = Puppet::Type::Ini_setting.new(common_params)
-        provider = provider_class.new(resource)
+        provider = child_two.new(resource)
         provider.file_path.should == '/some/file/path'
       end
       context 'when file has contecnts' do
@@ -74,8 +83,13 @@ subby=bar
         }
 
         it 'should be able to parse the results' do
-          provider_class.stubs(:file_path).returns(tmpfile)
-          provider_class.instances.size == 7
+          child_three = Class.new(provider_class) do
+            def self.file_path
+              '/some/file/path'
+            end
+          end
+          child_three.stubs(:file_path).returns(tmpfile)
+          child_three.instances.size == 7
           expected_array = [
             {:name => 'section1/foo', :value => 'foovalue' },
             {:name => 'section1/bar', :value => 'barvalue' },
@@ -87,14 +101,12 @@ subby=bar
           ]
           real_array = []
           ensure_array = []
-          provider_class.instances.each do |x|
+          child_three.instances.each do |x|
             prop_hash    = x.instance_variable_get(:@property_hash)
             ensure_value = prop_hash.delete(:ensure)
             ensure_array.push(ensure_value)
             real_array.push(prop_hash)
           end
-          puts ensure_array.inspect
-          puts real_array.inspect
           ensure_array.uniq.should == [:present]
           ((real_array - expected_array) && (expected_array - real_array)).should == []
 
