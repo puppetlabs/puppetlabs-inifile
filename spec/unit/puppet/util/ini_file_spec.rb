@@ -20,6 +20,7 @@ describe Puppet::Util::IniFile do
 foo=foovalue
 
 bar = barvalue
+baz=
 [section2]
 
 foo= foovalue2
@@ -44,6 +45,7 @@ baz=bazvalue
     it "should expose settings for sections" do
       subject.get_value("section1", "foo").should == "foovalue"
       subject.get_value("section1", "bar").should == "barvalue"
+      subject.get_value("section1", "baz").should == ""
       subject.get_value("section2", "foo").should == "foovalue2"
       subject.get_value("section2", "baz").should == "bazvalue"
       subject.get_value("section2", "zot").should == "multi word value"
