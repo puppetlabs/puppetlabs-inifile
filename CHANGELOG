@@ -1,3 +1,15 @@
+2013-05-21 - Chris Price <chris@puppetlabs.com>
+ * Change constants to class variables to avoid ruby warnings (6b19864)
+
+2013-04-10 - Erik Dalén <dalen@spotify.com>
+ * Style fixes (c4af8c3)
+
+2013-04-02 - Dan Bode <dan@puppetlabs.com>
+ * Add travisfile and Gemfile (c2052b3)
+
+2013-04-02 - Chris Price <chris@puppetlabs.com>
+ * Update README.markdown (ad38a08)
+
 2013-02-15 - Karel Brezina <karel.brezina@gmail.com> - 0.10.0
  * Added 'ini_subsetting' custom resource type (4351d8b)
 
