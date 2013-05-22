@@ -7,14 +7,6 @@ describe provider_class do
 
   let(:tmpfile) { tmpfilename("ini_setting_test") }
 
-  let(:common_params) { {
-      :title    => 'ini_setting_ensure_present_test',
-      :path     => tmpfile,
-      :section  => '',
-      :key_val_separator => '=',
-      :setting => 'JAVA_ARGS',
-  } }
-
   def validate_file(expected_content,tmpfile = tmpfile)
     File.read(tmpfile).should == expected_content
   end
@@ -27,6 +19,14 @@ describe provider_class do
   end
 
   context "when ensuring that a subsetting is present" do
+    let(:common_params) { {
+        :title    => 'ini_setting_ensure_present_test',
+        :path     => tmpfile,
+        :section  => '',
+        :key_val_separator => '=',
+        :setting => 'JAVA_ARGS',
+    } }
+
     let(:orig_content) {
       <<-EOS
 JAVA_ARGS="-Xmx192m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
@@ -68,6 +68,52 @@ JAVA_ARGS="-Xmx256m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe
       EOS
 )
     end
-    
+  end
+
+  context "when working with subsettings in files with unquoted settings values" do
+    let(:common_params) { {
+        :title    => 'ini_setting_ensure_present_test',
+        :path     => tmpfile,
+        :section  => 'master',
+        :key_val_separator => '=',
+        :setting => 'reports',
+    } }
+
+    let(:orig_content) {
+      <<-EOS
+[master]
+
+reports = http,foo
+      EOS
+    }
+
+    it "should remove an existing subsetting" do
+      resource = Puppet::Type::Ini_subsetting.new(common_params.merge(
+          :subsetting => 'http', :subsetting_separator => ','))
+      provider = described_class.new(resource)
+      provider.exists?.should == ""
+      provider.destroy
+      validate_file(<<-EOS
+[master]
+
+reports = foo
+      EOS
+      )
+    end
+
+    it "should add a new subsetting" do
+      resource = Puppet::Type::Ini_subsetting.new(common_params.merge(
+          :subsetting => 'puppetdb', :subsetting_separator => ','))
+      provider = described_class.new(resource)
+      provider.exists?.should be_nil
+      provider.value=('')
+      validate_file(<<-EOS
+[master]
+
+reports = http,foo,puppetdb
+      EOS
+      )
+    end
+
   end
 end
