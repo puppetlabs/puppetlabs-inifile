@@ -1,13 +1,16 @@
-2013-05-21 - Chris Price <chris@puppetlabs.com>
+2013-05-22 - Chris Price <chris@puppetlabs.com> - 0.10.2
+ * Better handling of quotes for subsettings (1aa7e60)
+
+2013-05-21 - Chris Price <chris@puppetlabs.com> - 0.10.1
  * Change constants to class variables to avoid ruby warnings (6b19864)
 
-2013-04-10 - Erik Dalén <dalen@spotify.com>
+2013-04-10 - Erik Dalén <dalen@spotify.com> - 0.10.1
  * Style fixes (c4af8c3)
 
-2013-04-02 - Dan Bode <dan@puppetlabs.com>
+2013-04-02 - Dan Bode <dan@puppetlabs.com> - 0.10.1
  * Add travisfile and Gemfile (c2052b3)
 
-2013-04-02 - Chris Price <chris@puppetlabs.com>
+2013-04-02 - Chris Price <chris@puppetlabs.com> - 0.10.1
  * Update README.markdown (ad38a08)
 
 2013-02-15 - Karel Brezina <karel.brezina@gmail.com> - 0.10.0
