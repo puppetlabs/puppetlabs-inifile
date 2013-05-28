@@ -75,7 +75,6 @@ JAVA_ARGS="-Xmx256m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe
         :title    => 'ini_setting_ensure_present_test',
         :path     => tmpfile,
         :section  => 'master',
-        :key_val_separator => '=',
         :setting => 'reports',
     } }
 
@@ -101,7 +100,7 @@ reports = foo
       )
     end
 
-    it "should add a new subsetting" do
+    it "should add a new subsetting when the 'parent' setting already exists" do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(
           :subsetting => 'puppetdb', :subsetting_separator => ','))
       provider = described_class.new(resource)
@@ -111,6 +110,23 @@ reports = foo
 [master]
 
 reports = http,foo,puppetdb
+      EOS
+      )
+    end
+
+    it "should add a new subsetting when the 'parent' setting does not already exist" do
+      resource = Puppet::Type::Ini_subsetting.new(common_params.merge(
+          :setting => 'somenewsetting',
+          :subsetting => 'puppetdb',
+          :subsetting_separator => ','))
+      provider = described_class.new(resource)
+      provider.exists?.should be_nil
+      provider.value=('')
+      validate_file(<<-EOS
+[master]
+
+reports = http,foo
+somenewsetting = puppetdb
       EOS
       )
     end

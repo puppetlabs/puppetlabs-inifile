@@ -6,7 +6,9 @@ module Util
     def initialize(setting_value, subsetting_separator = ' ')
       @setting_value = setting_value
       @subsetting_separator = subsetting_separator
-      
+
+      @quote_char = ""
+
       if @setting_value
         unquoted, @quote_char = unquote_setting_value(setting_value)
         @subsetting_items = unquoted.scan(Regexp.new("(?:(?:[^\\#{@subsetting_separator}]|\\.)+)"))  # an item can contain escaped separator

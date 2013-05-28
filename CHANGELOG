@@ -1,3 +1,6 @@
+2013-05-28 - Chris Price <chris@puppetlabs.com> - 0.10.3
+ * Fix bug in subsetting handling for new settings (cbea5dc)
+
 2013-05-22 - Chris Price <chris@puppetlabs.com> - 0.10.2
  * Better handling of quotes for subsettings (1aa7e60)
 
