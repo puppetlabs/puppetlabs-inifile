@@ -83,7 +83,11 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def separator
-    resource[:key_val_separator] || '='
+    if resource.class.validattr?(:key_val_separator)
+      resource[:key_val_separator] || '='
+    else
+      '='
+    end
   end
 
   private
