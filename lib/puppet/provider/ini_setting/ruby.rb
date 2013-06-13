@@ -20,7 +20,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
         ini_file.get_settings(section_name).each do |setting, value|
           resources.push(
             new(
-              :name   => "#{section_name}/#{setting}",
+              :name   => namevar(section_name, setting),
               :value  => value,
               :ensure => :present
             )
@@ -31,6 +31,10 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
     else
       raise(Puppet::Error, 'Ini_settings only support collecting instances when a file path is hard coded')
     end
+  end
+
+  def self.namevar(section_name, setting)
+    "#{section_name}/#{setting}"
   end
 
   def exists?
