@@ -6,6 +6,6 @@ Puppet::Type.type(:inherit_ini_setting).provide(
     '' # all global
   end
   def self.file_path
-    '/tmp/demo_inherit_inifile.cfg'
+    File.expand_path(File.dirname(__FILE__) + '/../../../../../../tmp/inherit_inifile.cfg')
   end
 end
