@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'stringio'
 require 'puppet/util/ini_file'
 
 describe Puppet::Util::IniFile do
@@ -20,6 +21,7 @@ describe Puppet::Util::IniFile do
 foo=foovalue
 
 bar = barvalue
+baz =
 [section2]
 
 foo= foovalue2
@@ -44,6 +46,7 @@ baz=bazvalue
     it "should expose settings for sections" do
       subject.get_value("section1", "foo").should == "foovalue"
       subject.get_value("section1", "bar").should == "barvalue"
+      subject.get_value("section1", "baz").should == ""
       subject.get_value("section2", "foo").should == "foovalue2"
       subject.get_value("section2", "baz").should == "bazvalue"
       subject.get_value("section2", "zot").should == "multi word value"
@@ -102,6 +105,34 @@ foo=foovalue
       subject.get_value("", "foo").should == "bar"
       subject.get_value("section1", "foo").should == "foovalue"
     end
+  end
 
+  context "when updating a file with existing empty values" do
+    let(:sample_content) {
+      template = <<-EOS
+[section1]
+foo=
+#bar=
+      EOS
+      template.split("\n")
+    }
+
+    it "should properly update uncommented values" do
+      subject.get_value("section1", "far").should == nil
+      subject.set_value("section1", "foo", "foovalue")
+      subject.get_value("section1", "foo").should == "foovalue"
+    end
+
+    it "should properly update commented values" do
+      subject.get_value("section1", "bar").should == nil
+      subject.set_value("section1", "bar", "barvalue")
+      subject.get_value("section1", "bar").should == "barvalue"
+    end
+
+    it "should properly add new empty values" do
+      subject.get_value("section1", "baz").should == nil
+      subject.set_value("section1", "baz", "bazvalue")
+      subject.get_value("section1", "baz").should == "bazvalue"
+    end
   end
 end

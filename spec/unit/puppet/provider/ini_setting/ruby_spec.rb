@@ -834,6 +834,7 @@ subby=bar
 # foo = foovalue
 ;bar=barvalue
 blah = blah
+#baz=
       EOS
     }
 
@@ -854,6 +855,7 @@ blah = blah
 foo = foo3
 ;bar=barvalue
 blah = blah
+#baz=
       EOS
       )
     end
@@ -874,6 +876,7 @@ blah = blah
 # foo = foovalue
 ;bar=barvalue
 blah = blah
+#baz=
       EOS
       )
     end
@@ -895,6 +898,29 @@ blah = blah
 ;bar=barvalue
 bar=bar3
 blah = blah
+#baz=
+      EOS
+      )
+    end
+
+    it "should add a new setting below an empty commented version of that setting" do
+      resource = Puppet::Type::Ini_setting.new(
+          common_params.merge(:section => 'section2', :setting => 'baz', :value => 'bazvalue'))
+      provider = described_class.new(resource)
+      provider.exists?.should be_false
+      provider.create
+      validate_file(<<-EOS
+     [section1]
+     # foo=foovalue
+     bar=barvalue
+     foo = foovalue2
+
+[section2]
+# foo = foovalue
+;bar=barvalue
+blah = blah
+#baz=
+baz=bazvalue
       EOS
       )
     end
