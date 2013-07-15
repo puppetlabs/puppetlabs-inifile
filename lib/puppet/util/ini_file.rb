@@ -6,7 +6,7 @@ module Util
   class IniFile
 
     @@SECTION_REGEX = /^\s*\[([\w\d\.\\\/\-\:]+)\]\s*$/
-    @@SETTING_REGEX = /^(\s*)([\w\d\.\\\/\-]+)([ \t]*=[ \t]*)([\S\s]*?)\s*$/
+    @@SETTING_REGEX = /^(\s*)([\w\d\.\\\/\-\s]*[\w\d\.\\\/\-])([ \t]*=[ \t]*)([\S\s]*?)\s*$/
     @@COMMENTED_SETTING_REGEX = /^(\s*)[#;]+(\s*)([\w\d\.\\\/\-]+)([ \t]*=[ \t]*)([\S\s]*?)\s*$/
 
     def initialize(path, key_val_separator = ' = ')
