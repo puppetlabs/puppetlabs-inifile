@@ -21,9 +21,9 @@ env:
   global:
     - PUBLISHER_LOGIN=puppetlabs
     - secure: |-
-        NEyTwYmALbczv+yMX9xY6/g6wKY1StGP/x3oI/AU8clTUmBb295M8YBT9aRp\nWJM4FcD3l
-        CIyXT4CFjVZu/o5a05+WRLoqs+HsSHeWsdzs+G00GI6ld0d/1v3\np4kKgfcKlDae9byfqV
-        bAtgygrzTznMiJmehhPDf+FMbZIO7UJK8=
+        mEqZt84gUpTwozeWT4ra2NIQID4CHkvcDcL/8+ItnS3ahbZ4EOj4NLnEWcNt\nxtOjs6pxn
+        GVND1/gy/1+7w81DpXpJQ6CGloEwP58x86icvrgp8E+ZXeAoYe4\nfqtSE190FMq5FWaPyx
+        wZisaT2OcrpeqvBPQnaGUg4uz/H3djgUo=
 matrix:
   exclude:
     - rvm: 1.9.3
