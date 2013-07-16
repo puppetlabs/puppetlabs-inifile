@@ -1,3 +1,12 @@
+2013-07-16 - Version 1.0.0
+Features:
+- Handle empty values.
+- Handle whitespace in settings names (aka: server role = something)
+- Add mechanism for allowing ini_setting subclasses to override the
+formation of the namevar during .instances, to allow for ini_setting
+derived types that manage flat ini-file-like files and still purge
+them.
+
 2013-05-28 - Chris Price <chris@puppetlabs.com> - 0.10.3
  * Fix bug in subsetting handling for new settings (cbea5dc)
 
