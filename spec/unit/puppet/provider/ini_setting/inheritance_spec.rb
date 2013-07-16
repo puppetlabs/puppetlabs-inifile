@@ -52,10 +52,10 @@ green = purple
 
     it 'should add a value to the file' do
       provider_class.stubs(:file_path).returns(tmpfile)
-      resource = Puppet::Type::Inherit_ini_setting.new(
+      resource = Puppet::Type::Inherit_ini_setting.new({
         :setting => 'set_this',
         :value   => 'to_that',
-      )
+      })
       provider = described_class.new(resource)
       provider.create
       validate_file("set_this=to_that\n")
