@@ -41,8 +41,11 @@ green = purple
         provider_class.stubs(:file_path).returns(tmpfile)
         instances = provider_class.instances
         instances.size.should == 2
-        # inherited version of namevar flattens
-        instances[1].instance_variable_get(:@property_hash)[:name].should == 'green'
+        # inherited version of namevar flattens the names
+        names = instances.map do |instance|
+          instance.instance_variable_get(:@property_hash)[:name]
+        end
+        names.sort.should == [ 'green', 'red' ]
       end
     end
   end
