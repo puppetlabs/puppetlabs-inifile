@@ -7,11 +7,11 @@ files.  The main resource type is `ini_setting`, which is used to manage an
 individual setting in an INI file.  Here's an example usage:
 
     ini_setting { "sample setting":
+      ensure  => present,
       path    => '/tmp/foo.ini',
       section => 'foo',
       setting => 'foosetting',
       value   => 'FOO!',
-      ensure  => present,
     }
 
 A supplementary resource type is `ini_subsetting`, which is used to manage
