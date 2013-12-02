@@ -965,6 +965,58 @@ bar=barvalue2
       end
     end
 
+    context "when sections have spaces and dashes" do
+      let(:orig_content) {
+        <<-EOS
+# This is a comment
+[section - one]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section - two]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+        EOS
+      }
+
+      it "should add a missing setting to the correct section" do
+        resource = Puppet::Type::Ini_setting.new(common_params.merge(
+            :section => 'section - two', :setting => 'yahoo', :value => 'yippee'))
+        provider = described_class.new(resource)
+        provider.exists?.should be_nil
+        provider.create
+        validate_file(<<-EOS
+# This is a comment
+[section - one]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section - two]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+yahoo = yippee
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+        EOS
+  )
+      end
+
+    end
+
   end
 
 end
