@@ -29,6 +29,7 @@ baz=bazvalue
     #another comment
  ; yet another comment
  zot = multi word value
+ xyzzy['thing1']['thing2']=xyzzyvalue
       EOS
       template.split("\n")
     }
@@ -50,6 +51,7 @@ baz=bazvalue
       subject.get_value("section2", "foo").should == "foovalue2"
       subject.get_value("section2", "baz").should == "bazvalue"
       subject.get_value("section2", "zot").should == "multi word value"
+      subject.get_value("section2", "xyzzy['thing1']['thing2']").should == "xyzzyvalue"
     end
 
   end
@@ -113,6 +115,7 @@ foo=foovalue
 [section1]
 foo=
 #bar=
+#xyzzy['thing1']['thing2']='xyzzyvalue'
       EOS
       template.split("\n")
     }
@@ -127,6 +130,9 @@ foo=
       subject.get_value("section1", "bar").should == nil
       subject.set_value("section1", "bar", "barvalue")
       subject.get_value("section1", "bar").should == "barvalue"
+      subject.get_value("section1", "xyzzy['thing1']['thing2']").should == nil
+      subject.set_value("section1", "xyzzy['thing1']['thing2']", "xyzzyvalue")
+      subject.get_value("section1", "xyzzy['thing1']['thing2']").should == "xyzzyvalue"
     end
 
     it "should properly add new empty values" do
