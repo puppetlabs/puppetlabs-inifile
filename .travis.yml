@@ -25,6 +25,7 @@ env:
         GVND1/gy/1+7w81DpXpJQ6CGloEwP58x86icvrgp8E+ZXeAoYe4\nfqtSE190FMq5FWaPyx
         wZisaT2OcrpeqvBPQnaGUg4uz/H3djgUo=
 matrix:
+  fast_finish: true
   exclude:
     - rvm: 1.9.3
       env: PUPPET_GEM_VERSION="~> 2.7.0"
