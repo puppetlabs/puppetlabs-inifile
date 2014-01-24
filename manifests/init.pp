@@ -18,7 +18,7 @@ class inifile (
 
   if $ini_settings != undef {
     if $hiera_merge == true {
-      $ini_settings_real = hiera_hash('ssh::ini_settings')
+      $ini_settings_real = hiera_hash('inifile::ini_settings')
     } else {
       $ini_settings_real = $ini_settings
     }
@@ -28,7 +28,7 @@ class inifile (
 
   if $ini_subsettings != undef {
     if $hiera_merge == true {
-      $ini_subsettings_real = hiera_hash('ssh::ini_subsettings')
+      $ini_subsettings_real = hiera_hash('inifile::ini_subsettings')
     } else {
       $ini_subsettings_real = $ini_subsettings
     }
