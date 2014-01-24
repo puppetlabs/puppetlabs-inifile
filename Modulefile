@@ -6,3 +6,5 @@ description 'Resource types for managing settings in INI files'
 summary 'Resource types for managing settings in INI files'
 license 'Apache'
 project_page 'https://github.com/puppetlabs/puppetlabs-inifile'
+
+dependency 'puppetlabs/stdlib', '>= 3.2.0'

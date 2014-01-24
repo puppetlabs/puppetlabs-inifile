@@ -14,4 +14,7 @@ else
   gem 'puppet', :require => false
 end
 
+gem 'puppet-lint', '>= 0.3.2'
+gem 'hiera-puppet-helper'
+
 # vim:ft=ruby
