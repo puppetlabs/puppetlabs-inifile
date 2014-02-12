@@ -1,3 +1,15 @@
+2014-02-12 - Version 1.0.1
+Summary:
+This release is a bugfix for handling whitespace/[]'s better, and adding a
+bunch of tests.
+
+Bugfixes:
+- Handle whitespace in sections
+- Handle square brances in values
+- Add metadata.json
+- Update some travis testing
+- Tons of beaker-rspec tests
+
 2013-07-16 - Version 1.0.0
 Features:
 - Handle empty values.
