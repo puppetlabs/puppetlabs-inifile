@@ -2,16 +2,16 @@ require 'spec_helper_acceptance'
 
 describe 'ini_subsetting resource' do
   after :all do
-    shell("rm /tmp/*.ini", :acceptable_exit_codes => [0,1])
+    shell("rm /tmp/*.ini", :acceptable_exit_codes => [0,1,2])
   end
 
   shared_examples 'has_content' do |path,pp,content|
     before :all do
-      shell("rm #{path}", :acceptable_exit_codes => [0,1])
+      shell("rm #{path}", :acceptable_exit_codes => [0,1,2])
     end
     after :all do
-      shell("cat #{path}", :acceptable_exit_codes => [0,1])
-      shell("rm #{path}", :acceptable_exit_codes => [0,1])
+      shell("cat #{path}", :acceptable_exit_codes => [0,1,2])
+      shell("rm #{path}", :acceptable_exit_codes => [0,1,2])
     end
 
     it 'applies the manifest twice with no stderr' do
@@ -27,11 +27,11 @@ describe 'ini_subsetting resource' do
 
   shared_examples 'has_error' do |path,pp,error|
     before :all do
-      shell("rm #{path}", :acceptable_exit_codes => [0,1])
+      shell("rm #{path}", :acceptable_exit_codes => [0,1,2])
     end
     after :all do
-      shell("cat #{path}", :acceptable_exit_codes => [0,1])
-      shell("rm #{path}", :acceptable_exit_codes => [0,1])
+      shell("cat #{path}", :acceptable_exit_codes => [0,1,2])
+      shell("rm #{path}", :acceptable_exit_codes => [0,1,2])
     end
 
     it 'applies the manifest and gets a failure message' do
