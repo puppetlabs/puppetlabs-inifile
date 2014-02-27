@@ -1,5 +1,5 @@
 name 'puppetlabs-inifile'
-version '1.0.1'
+version '1.0.2'
 source 'git://github.com/puppetlabs/puppetlabs-inifile.git'
 author 'Puppetlabs'
 description 'Resource types for managing settings in INI files'
