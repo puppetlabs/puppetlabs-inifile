@@ -22,7 +22,7 @@ describe 'ini_setting resource' do
     describe file(path) do
       it { should be_file }
       #XXX Solaris 10 doesn't support multi-line grep
-      it("should contain #{content}", :unless => fact('operatingsystemrelease').match(/^10_u\d+$/)) {
+      it("should contain #{content}", :unless => fact('osfamily') == 'Solaris') {
         should contain(content)
       }
     end
@@ -73,7 +73,7 @@ describe 'ini_setting resource' do
       describe file('/tmp/ini_setting.ini') do
         it { should be_file }
         #XXX Solaris 10 doesn't support multi-line grep
-        it("should contain four = five\n[one]\ntwo = three", :unless => fact('operatingsystemrelease').match(/^10_u\d+$/)) {
+        it("should contain four = five\n[one]\ntwo = three", :unless => fact('osfamily') == 'Solaris') {
           should contain("four = five\n[one]\ntwo = three")
         }
       end

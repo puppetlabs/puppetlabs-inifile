@@ -72,7 +72,7 @@ describe 'ini_subsetting resource' do
       describe file('/tmp/ini_subsetting.ini') do
         it { should be_file }
         #XXX Solaris 10 doesn't support multi-line grep
-        it("should contain [one]\nkey = alphabet betatrons", :unless => fact('operatingsystemrelease').match(/^10_u\d+$/)) {
+        it("should contain [one]\nkey = alphabet betatrons", :unless => fact('osfamily') == 'Solaris') {
           should contain("[one]\nkey = alphabet betatrons")
         }
       end
