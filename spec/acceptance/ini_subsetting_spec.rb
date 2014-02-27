@@ -1,8 +1,10 @@
 require 'spec_helper_acceptance'
 
+tmpdir = default.tmpdir('tmp')
+
 describe 'ini_subsetting resource' do
   after :all do
-    shell("rm /tmp/*.ini", :acceptable_exit_codes => [0,1,2])
+    shell("rm #{tmpdir}/*.ini", :acceptable_exit_codes => [0,1,2])
   end
 
   shared_examples 'has_content' do |path,pp,content|
@@ -48,7 +50,7 @@ describe 'ini_subsetting resource' do
       pp = <<-EOS
       ini_subsetting { 'ensure => present for alpha':
         ensure     => present,
-        path       => '/tmp/ini_subsetting.ini',
+        path       => "#{tmpdir}/ini_subsetting.ini",
         section    => 'one',
         setting    => 'key',
         subsetting => 'alpha',
@@ -56,7 +58,7 @@ describe 'ini_subsetting resource' do
       }
       ini_subsetting { 'ensure => present for beta':
         ensure     => present,
-        path       => '/tmp/ini_subsetting.ini',
+        path       => "#{tmpdir}/ini_subsetting.ini",
         section    => 'one',
         setting    => 'key',
         subsetting => 'beta',
@@ -69,7 +71,7 @@ describe 'ini_subsetting resource' do
         expect(apply_manifest(pp, :catch_changes => true).stderr).to eq("")
       end
 
-      describe file('/tmp/ini_subsetting.ini') do
+      describe file("#{tmpdir}/ini_subsetting.ini") do
         it { should be_file }
         #XXX Solaris 10 doesn't support multi-line grep
         it("should contain [one]\nkey = alphabet betatrons", :unless => fact('osfamily') == 'Solaris') {
@@ -80,13 +82,13 @@ describe 'ini_subsetting resource' do
 
     context 'ensure => absent' do
       before :all do
-        shell('echo -e "[one]\nkey = alphabet betatrons" > /tmp/ini_subsetting.ini')
+        shell("echo -e \"[one]\nkey = alphabet betatrons\" > #{tmpdir}/ini_subsetting.ini")
       end
 
       pp = <<-EOS
       ini_subsetting { 'ensure => absent for subsetting':
         ensure     => absent,
-        path       => '/tmp/ini_subsetting.ini',
+        path       => "#{tmpdir}/ini_subsetting.ini",
         section    => 'one',
         setting    => 'key',
         subsetting => 'alpha',
@@ -98,7 +100,7 @@ describe 'ini_subsetting resource' do
         expect(apply_manifest(pp, :catch_changes  => true).stderr).to eq("")
       end
 
-      describe file('/tmp/ini_subsetting.ini') do
+      describe file("#{tmpdir}/ini_subsetting.ini") do
         it { should be_file }
         it { should contain('[one]') }
         it { should contain('key = betatrons') }
@@ -125,7 +127,7 @@ describe 'ini_subsetting resource' do
           setting    => 'two',
           subsetting => 'twine',
           value      => 'three',
-          path       => '/tmp/subsetting_separator.ini',
+          path       => "#{tmpdir}/subsetting_separator.ini",
           #{parameter}
         }
         ini_subsetting { "foobar":
@@ -134,12 +136,12 @@ describe 'ini_subsetting resource' do
           setting    => 'two',
           subsetting => 'foo',
           value      => 'bar',
-          path       => '/tmp/subsetting_separator.ini',
+          path       => "#{tmpdir}/subsetting_separator.ini",
           #{parameter}
         }
         EOS
 
-        it_behaves_like 'has_content', '/tmp/subsetting_separator.ini', pp, content
+        it_behaves_like 'has_content', "#{tmpdir}/subsetting_separator.ini", pp, content
       end
     end
   end

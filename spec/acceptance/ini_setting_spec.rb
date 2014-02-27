@@ -1,8 +1,10 @@
 require 'spec_helper_acceptance'
 
+tmpdir = default.tmpdir('tmp')
+
 describe 'ini_setting resource' do
   after :all do
-    shell("rm /tmp/*.ini", :acceptable_exit_codes => [0,1,2])
+    shell("rm #{tmpdir}/*.ini", :acceptable_exit_codes => [0,1,2])
   end
 
   shared_examples 'has_content' do |path,pp,content|
@@ -51,14 +53,14 @@ describe 'ini_setting resource' do
       pp = <<-EOS
       ini_setting { 'ensure => present for section':
         ensure  => present,
-        path    => '/tmp/ini_setting.ini',
+        path    => "#{tmpdir}/ini_setting.ini",
         section => 'one',
         setting => 'two',
         value   => 'three',
       }
       ini_setting { 'ensure => present for global':
         ensure  => present,
-        path    => '/tmp/ini_setting.ini',
+        path    => "#{tmpdir}/ini_setting.ini",
         section => '',
         setting => 'four',
         value   => 'five',
@@ -70,7 +72,7 @@ describe 'ini_setting resource' do
         expect(apply_manifest(pp, :catch_changes => true).stderr).to eq("")
       end
 
-      describe file('/tmp/ini_setting.ini') do
+      describe file("#{tmpdir}/ini_setting.ini") do
         it { should be_file }
         #XXX Solaris 10 doesn't support multi-line grep
         it("should contain four = five\n[one]\ntwo = three", :unless => fact('osfamily') == 'Solaris') {
@@ -81,13 +83,13 @@ describe 'ini_setting resource' do
 
     context '=> absent for key/value' do
       before :all do
-        shell('echo -e "four = five\n[one]\ntwo = three" > /tmp/ini_setting.ini')
+        shell("echo -e \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
       end
 
       pp = <<-EOS
       ini_setting { 'ensure => absent for key/value':
         ensure  => absent,
-        path    => '/tmp/ini_setting.ini',
+        path    => "#{tmpdir}/ini_setting.ini",
         section => 'one',
         setting => 'two',
         value   => 'three',
@@ -99,7 +101,7 @@ describe 'ini_setting resource' do
         expect(apply_manifest(pp, :catch_changes  => true).stderr).to eq("")
       end
 
-      describe file('/tmp/ini_setting.ini') do
+      describe file("#{tmpdir}/ini_setting.ini") do
         it { should be_file }
         it { should contain('four = five') }
         it { should contain('[one]') }
@@ -109,17 +111,17 @@ describe 'ini_setting resource' do
 
     context '=> absent for section', :pending => "cannot ensure absent on a section"  do
       before :all do
-        shell('echo -e "four = five\n[one]\ntwo = three" > /tmp/ini_setting.ini')
+        shell("echo -e \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
       end
       after :all do
-        shell("cat /tmp/ini_setting.ini", :acceptable_exit_codes => [0,1,2])
-        shell("rm /tmp/ini_setting.ini", :acceptable_exit_codes => [0,1,2])
+        shell("cat #{tmpdir}/ini_setting.ini", :acceptable_exit_codes => [0,1,2])
+        shell("rm #{tmpdir}/ini_setting.ini", :acceptable_exit_codes => [0,1,2])
       end
 
       pp = <<-EOS
       ini_setting { 'ensure => absent for section':
         ensure  => absent,
-        path    => '/tmp/ini_setting.ini',
+        path    => "#{tmpdir}/ini_setting.ini",
         section => 'one',
       }
       EOS
@@ -129,7 +131,7 @@ describe 'ini_setting resource' do
         expect(apply_manifest(pp, :catch_changes  => true).stderr).to eq("")
       end
 
-      describe file('/tmp/ini_setting.ini') do
+      describe file("#{tmpdir}/ini_setting.ini") do
         it { should be_file }
         it { should contain('four = five') }
         it { should_not contain('[one]') }
@@ -139,17 +141,17 @@ describe 'ini_setting resource' do
 
     context '=> absent for global' do
       before :all do
-        shell('echo -e "four = five\n[one]\ntwo = three" > /tmp/ini_setting.ini')
+        shell("echo -e \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
       end
       after :all do
-        shell("cat /tmp/ini_setting.ini", :acceptable_exit_codes => [0,1,2])
-        shell("rm /tmp/ini_setting.ini", :acceptable_exit_codes => [0,1,2])
+        shell("cat #{tmpdir}/ini_setting.ini", :acceptable_exit_codes => [0,1,2])
+        shell("rm #{tmpdir}/ini_setting.ini", :acceptable_exit_codes => [0,1,2])
       end
 
       pp = <<-EOS
       ini_setting { 'ensure => absent for global':
         ensure  => absent,
-        path    => '/tmp/ini_setting.ini',
+        path    => "#{tmpdir}/ini_setting.ini",
         section => '',
         setting => 'four',
         value   => 'five',
@@ -161,7 +163,7 @@ describe 'ini_setting resource' do
         expect(apply_manifest(pp, :catch_changes  => true).stderr).to eq("")
       end
 
-      describe file('/tmp/ini_setting.ini') do
+      describe file("#{tmpdir}/ini_setting.ini") do
         it { should be_file }
         it { should_not contain('four = five') }
         it { should contain('[one]') }
@@ -180,12 +182,12 @@ describe 'ini_setting resource' do
         pp = <<-EOS
         ini_setting { "#{parameter_list}":
           ensure  => present,
-          path    => '/tmp/ini_setting.ini',
+          path    => "#{tmpdir}/ini_setting.ini",
           #{parameter_list}
         }
         EOS
 
-        it_behaves_like 'has_content', '/tmp/ini_setting.ini', pp, content
+        it_behaves_like 'has_content', "#{tmpdir}/ini_setting.ini", pp, content
       end
     end
 
@@ -201,21 +203,21 @@ describe 'ini_setting resource' do
         pp = <<-EOS
         ini_setting { "#{parameter_list}":
           ensure  => present,
-          path    => '/tmp/ini_setting.ini',
+          path    => "#{tmpdir}/ini_setting.ini",
           #{parameter_list}
         }
         EOS
 
-        it_behaves_like 'has_error', '/tmp/ini_setting.ini', pp, error
+        it_behaves_like 'has_error', "#{tmpdir}/ini_setting.ini", pp, error
       end
     end
   end
 
   describe 'path parameter' do
     [
-      "/tmp/one.ini",
-      "/tmp/two.ini",
-      "/tmp/three.ini",
+      "#{tmpdir}/one.ini",
+      "#{tmpdir}/two.ini",
+      "#{tmpdir}/three.ini",
     ].each do |path|
       context "path => #{path}" do
         pp = <<-EOS
@@ -260,12 +262,12 @@ describe 'ini_setting resource' do
           section => 'one',
           setting => 'two',
           value   => 'three',
-          path    => '/tmp/key_val_separator.ini',
+          path    => "#{tmpdir}/key_val_separator.ini",
           #{parameter}
         }
         EOS
 
-        it_behaves_like 'has_content', '/tmp/key_val_separator.ini', pp, content
+        it_behaves_like 'has_content', "#{tmpdir}/key_val_separator.ini", pp, content
       end
     end
 
@@ -282,12 +284,12 @@ describe 'ini_setting resource' do
           section => 'one',
           setting => 'two',
           value   => 'three',
-          path    => '/tmp/key_val_separator.ini',
+          path    => "#{tmpdir}/key_val_separator.ini",
           #{parameter}
         }
         EOS
 
-        it_behaves_like 'has_error', '/tmp/key_val_separator.ini', pp, error
+        it_behaves_like 'has_error', "#{tmpdir}/key_val_separator.ini", pp, error
       end
     end
   end
