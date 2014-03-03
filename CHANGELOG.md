@@ -1,5 +1,7 @@
-##2014-03-04 - Supported Release 1.0.x
+##2014-03-04 - Supported Release 1.0.3
 ###Summary
+
+This is a supported release.  It has only test changes.
 
 ####Features
 
