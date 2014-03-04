@@ -105,3 +105,9 @@ If the above code is added, then the resulting configured file will only contain
  * Supports a "global" section (settings that go at the beginning of the file,
    before any named sections) by specifying a section name of "".
 
+### Passwords and other secrets
+
+Parameter `keep_secret` allows you prevent outputing actual values to the log. Possible values are:
+ * `false` - default, normal behavior
+ * `true` - value will be replaced with "[sorry, this is secret]"
+ * `md5` - value will be replaced with it's md5 hash
