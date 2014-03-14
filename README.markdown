@@ -107,7 +107,7 @@ If the above code is added, then the resulting configured file will only contain
 
 ### Passwords and other secrets
 
-Parameter `keep_secret` allows you prevent outputing actual values to the log. Possible values are:
+Parameter `keep_secret` allows to prevent outputing actual values to the log. Possible values are:
  * `false` - default, normal behavior
- * `true` - value will be replaced with "[sorry, this is secret]"
+ * `true` - value will be replaced with `[sorry, this is secret]`
  * `md5` - value will be replaced with it's md5 hash
