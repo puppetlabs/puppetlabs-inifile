@@ -53,7 +53,7 @@ Puppet::Type.newtype(:ini_setting) do
 
     def should_to_s(newvalue)
       if (@resource[:keep_secret] == :true) then
-        return '[sorry, this is secret]'
+        return '[redacted sensitive information]'
       elsif (@resource[:keep_secret] == :md5) then
         return '{md5}' + Digest::MD5.hexdigest(newvalue.to_s)
       else

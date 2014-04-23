@@ -105,9 +105,14 @@ If the above code is added, then the resulting configured file will only contain
  * Supports a "global" section (settings that go at the beginning of the file,
    before any named sections) by specifying a section name of "".
 
-### Passwords and other secrets
+### Passwords and other sensitive information
 
-Parameter `keep_secret` allows to prevent outputing actual values to the log. Possible values are:
- * `false` - default, normal behavior
- * `true` - value will be replaced with `[sorry, this is secret]`
- * `md5` - value will be replaced with it's md5 hash
+In order to support handling of sensitive information we have the following parameters available to control how entries within Puppet logfiles look.
+
+### keep_secret
+ 
+This parameter allows you to prevent outputting actual values contained within the catalog to the logfile. Possible values are:
+
+ * `false`: This allows all values to be passed to logfiles. (default)
+ * `true`: The values in the logfiles will be replaced with `[redacted sensitive information]`. 
+ * `md5`: The values in the logfiles will be replaced with their md5 hash.
