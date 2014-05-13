@@ -1,11 +1,11 @@
 {
-    "name": "puppetlabs/inifile",
-    "version": "1.0.2",
-    "summary": "Resource types for managing settings in INI files",
-    "source": "git://github.com/puppetlabs/puppetlabs-inifile.git",
-    "project_page": "https://github.com/puppetlabs/puppetlabs-inifile",
+    "name": "puppetlabs-inifile",
+    "version": "1.0.3",
+    "source": "https://github.com/puppetlabs/puppetlabs-inifile",
     "author": "Puppet Labs",
     "license": "Apache-2.0",
+    "project_page": "https://github.com/puppetlabs/puppetlabs-inifile",
+    "summary": "Resource types for managing settings in INI files",
     "operatingsystem_support": [
       {
         "operatingsystem": "RedHat",
@@ -58,7 +58,8 @@
       {
         "operatingsystem": "Solaris",
         "operatingsystemrelease": [
-          "10"
+          "10",
+          "11"
         ]
       },
       {
@@ -67,8 +68,15 @@
           "Server 2003 R2",
           "Server 2008 R2",
           "Server 2012",
-          "Server 2012 R2",
-          "7"
+          "Server 2012 R2"
+        ]
+      },
+      {
+        "operatingsystem": "AIX",
+        "operatingsystemrelease": [
+          "5.3",
+          "6.1",
+          "7.1"
         ]
       }
     ],
