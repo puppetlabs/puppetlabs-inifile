@@ -1,3 +1,36 @@
+##2014-05-19 - Supported Release 1.1.0
+###Summary
+
+This is a supported release.  This release adds one new feature,
+the ability to control the quote character used.  This allows you
+to do things like:
+
+```
+ini_subsetting { '-Xms':
+    ensure     => present,
+    path       => '/some/config/file',
+    section    => '',
+    setting    => 'JAVA_ARGS',
+    quote_char => '"',
+    subsetting => '-Xms'
+    value      => '256m',
+  }
+```
+
+Which builds:
+
+```
+JAVA_ARGS="-Xmx256m -Xms256m"
+```
+
+####Features
+- Add quote_char parameter to the ini_subsetting resource type
+
+####Bugfixes
+
+####Known Bugs
+* No known bugs
+
 ##2014-03-04 - Supported Release 1.0.3
 ###Summary
 
