@@ -293,4 +293,24 @@ describe 'ini_setting resource' do
       end
     end
   end
+
+  describe 'keep_secret parameter and logging' do
+    secret_value = 'super_secret_value'
+    context 'logging with keep_secret => false (default)' do
+      pp = <<-EOS
+        ini_setting { 'test_keep_secret':
+          ensure  => present,
+          setting => 'something',
+          value   => #{secret_value},
+          path    => "#{tmpdir}/test_keep_secret.ini"
+        }
+      EOS
+      
+      apply_manifest(pp, :catch_failures => true) do |r|
+        expect(r.stdout).to match(/#{secret_value}/)
+      end
+    end
+
+
+  end
 end
