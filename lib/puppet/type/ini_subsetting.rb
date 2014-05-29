@@ -50,6 +50,18 @@ Puppet::Type.newtype(:ini_subsetting) do
     end
   end
 
+  newparam(:quote_char) do
+    desc 'The character used to quote the entire value of the setting. ' +
+        %q{Valid values are '', '"' and "'". Defaults to ''.}
+    defaultto('')
+
+    validate do |value|
+      unless value =~ /^["']?$/
+        raise Puppet::Error, %q{:quote_char valid values are '', '"' and "'"}
+      end
+    end
+  end
+
   newparam(:keep_secret) do
     desc 'Whether puppet should treat this as sensitive information ' +
         'and not output value in the logs.'
