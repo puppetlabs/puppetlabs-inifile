@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby
 require 'spec_helper'
 
-ini_setting = Puppet::Type.type(:ini_subsetting)
+ini_subsetting = Puppet::Type.type(:ini_subsetting)
 
 describe ini_subsetting do
 
