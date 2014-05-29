@@ -16,9 +16,9 @@ describe 'ini_setting resource' do
       shell("rm #{path}", :acceptable_exit_codes => [0,1,2])
     end
 
-    it 'applies the manifest twice with no stderr' do
-      expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-      expect(apply_manifest(pp, :catch_changes => true).stderr).to eq("")
+    it 'applies the manifest twice' do
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
     end
 
     describe file(path) do
@@ -67,9 +67,9 @@ describe 'ini_setting resource' do
       }
       EOS
 
-      it 'applies the manifest twice with no stderr' do
-        expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-        expect(apply_manifest(pp, :catch_changes => true).stderr).to eq("")
+      it 'applies the manifest twice' do
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes => true)
       end
 
       describe file("#{tmpdir}/ini_setting.ini") do
@@ -96,9 +96,9 @@ describe 'ini_setting resource' do
       }
       EOS
 
-      it 'applies the manifest twice with no stderr' do
-        expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-        expect(apply_manifest(pp, :catch_changes  => true).stderr).to eq("")
+      it 'applies the manifest twice' do
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes  => true)
       end
 
       describe file("#{tmpdir}/ini_setting.ini") do
@@ -126,9 +126,9 @@ describe 'ini_setting resource' do
       }
       EOS
 
-      it 'applies the manifest twice with no stderr' do
-        expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-        expect(apply_manifest(pp, :catch_changes  => true).stderr).to eq("")
+      it 'applies the manifest twice' do
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes  => true)
       end
 
       describe file("#{tmpdir}/ini_setting.ini") do
@@ -158,9 +158,9 @@ describe 'ini_setting resource' do
       }
       EOS
 
-      it 'applies the manifest twice with no stderr' do
-        expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-        expect(apply_manifest(pp, :catch_changes  => true).stderr).to eq("")
+      it 'applies the manifest twice' do
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes  => true)
       end
 
       describe file("#{tmpdir}/ini_setting.ini") do
