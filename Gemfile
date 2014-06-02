@@ -10,6 +10,7 @@ group :development, :test do
   gem 'puppet-lint',            :require => false
   gem 'serverspec',             :require => false
   gem 'pry',                    :require => false
+  gem 'rspec','<3.0.0',         :require => false
 end
 
 if puppetversion = ENV['PUPPET_GEM_VERSION']
