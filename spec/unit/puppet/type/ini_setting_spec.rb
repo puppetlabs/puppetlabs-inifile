@@ -50,7 +50,7 @@ describe ini_setting do
       @value = described_class.new(:name => 'foo', :value => 'whatever', :keep_secret => :true).property(:value)
     end
 
-    it "should tell not tel us values of changes being done" do
+    it "should not tell us values of changes being done" do
       @value.change_to_s('not_secret','at_all').should include('[redacted sensitive information]')
       @value.change_to_s('not_secret','at_all').should_not include('not_secret')
       @value.change_to_s('not_secret','at_all').should_not include('at_all')
