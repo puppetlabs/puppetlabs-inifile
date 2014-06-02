@@ -294,23 +294,33 @@ describe 'ini_setting resource' do
     end
   end
 
-  describe 'keep_secret parameter and logging' do
-    secret_value = 'super_secret_value'
-    context 'logging with keep_secret => false (default)' do
-      pp = <<-EOS
-        ini_setting { 'test_keep_secret':
-          ensure  => present,
-          setting => 'something',
-          value   => #{secret_value},
-          path    => "#{tmpdir}/test_keep_secret.ini"
-        }
-      EOS
-      
-      apply_manifest(pp, :catch_failures => true) do |r|
-        expect(r.stdout).to match(/#{secret_value}/)
+  describe 'keep_secret parameter and logging:' do
+    [ {:value => "initial_value", :matcher => "created", :keep_secret => :false},
+      {:value => "public_value", :matcher => /initial_value.*public_value/, :keep_secret => :false},
+      {:value => "secret_value", :matcher => /redacted sensitive information.*redacted sensitive information/, :keep_secret => :true},
+      {:value => "md5_value", :matcher => /{md5}881671aa2bbc680bc530c4353125052b.*{md5}ed0903a7fa5de7886ca1a7a9ad06cf51/, :keep_secret => :md5}
+    ].each do |i|
+      context "keep_secret => #{i[:keep_secret]}" do
+        pp = <<-EOS
+          ini_setting { 'test_keep_secret':
+            ensure      => present,
+            section     => 'test',
+            setting     => 'something',
+            value       => '#{i[:value]}',
+            path        => "#{tmpdir}/test_keep_secret.ini",
+            keep_secret => #{i[:keep_secret]} 
+          }
+        EOS
+
+        it "applies manifest and expects changed value to be logged in proper form" do
+          res = apply_manifest(pp, :expect_changes => true)
+          expect(res.stdout).to match(i[:matcher])
+          expect(res.stdout).not_to match(i[:value]) unless (i[:keep_secret] == :false)
+        end
       end
+
     end
 
-
   end
+
 end
