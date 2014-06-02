@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 Puppet::Type.newtype(:ini_subsetting) do
 
   ensurable do
@@ -60,8 +62,30 @@ Puppet::Type.newtype(:ini_subsetting) do
     end
   end
 
+  newparam(:keep_secret) do
+    desc 'Whether puppet should treat this as sensitive information ' +
+        'and not output value in the logs.'
+    defaultto :false
+    newvalues(:true, :md5, :false)
+  end
+
   newproperty(:value) do
     desc 'The value of the subsetting to be defined.'
+
+    def should_to_s(newvalue)
+      if (@resource[:keep_secret] == :true) then
+        return '[redacted sensitive information]'
+      elsif (@resource[:keep_secret] == :md5) then
+        return '{md5}' + Digest::MD5.hexdigest(newvalue.to_s)
+      else
+        return newvalue
+      end
+    end
+
+    def is_to_s(value)
+        should_to_s(value)
+    end
+
   end
 
 end
