@@ -1,9 +1,9 @@
-##2014-05-19 - Supported Release 1.1.0
+##2014-06-04 - Release 1.1.0
 ###Summary
 
-This is a supported release.  This release adds one new feature,
-the ability to control the quote character used.  This allows you
-to do things like:
+This is a compatibility and feature release.  This release adds one new
+feature, the ability to control the quote character used.  This allows you to
+do things like:
 
 ```
 ini_subsetting { '-Xms':
