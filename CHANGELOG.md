@@ -1,3 +1,9 @@
+##2014-06-04 - Version 1.0.4
+
+###Summary
+
+This is a compatibility release. It only has metadata changes.
+
 ##2014-03-04 - Supported Release 1.0.3
 ###Summary
 
