@@ -82,7 +82,11 @@ describe 'ini_subsetting resource' do
 
     context 'ensure => absent' do
       before :all do
-        shell("echo -e \"[one]\nkey = alphabet betatrons\" > #{tmpdir}/ini_subsetting.ini")
+        if fact('osfamily') == 'Darwin'
+          shell("echo \"[one]\nkey = alphabet betatrons\" > #{tmpdir}/ini_subsetting.ini")
+        else
+          shell("echo -e \"[one]\nkey = alphabet betatrons\" > #{tmpdir}/ini_subsetting.ini")
+        end
       end
 
       pp = <<-EOS
