@@ -25,7 +25,16 @@ RSpec.configure do |c|
   # Configure all nodes in nodeset
   c.before :suite do
     # Install module and dependencies
-    puppet_module_install(:source => proj_root, :module_name => 'inifile')
+    hosts.each do |host|
+      if host['platform'] !~ /windows/i
+        copy_root_module_to(host, :source => proj_root, :module_name => 'inifile')
+      end
+    end
+    hosts.each do |host|
+      if host['platform'] =~ /windows/i
+        on host, puppet('plugin download')
+      end
+    end
   end
 
   c.treat_symbols_as_metadata_keys_with_true_values = true
