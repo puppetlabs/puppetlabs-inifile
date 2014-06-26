@@ -1019,4 +1019,45 @@ subby=bar
 
   end
 
+  context "when sections have spaces and quotations" do
+    let(:orig_content) do
+      <<-EOS
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+
+[alias]
+to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/master
+[branch "production"]
+        remote = origin
+        merge = refs/heads/production
+      EOS
+    end
+
+    it "should add a missing setting to the correct section" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+        :section => 'alias',
+        :setting => 'foo',
+        :value => 'bar'
+      ))
+      provider = described_class.new(resource)
+      provider.exists?.should be false
+      provider.create
+      validate_file(<<-EOS
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+
+[alias]
+to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/master
+foo = bar
+[branch "production"]
+        remote = origin
+        merge = refs/heads/production
+                    EOS
+                   )
+    end
+
+  end
+
 end
