@@ -1,6 +1,7 @@
-spec/fixtures/modules/inifile
-spec/fixtures/manifests/site.pp
-spec/fixtures/tmp/*
-.vagrant
+pkg/
 Gemfile.lock
-*.sw*
+vendor/
+spec/fixtures/
+.vagrant/
+.bundle/
+coverage/
