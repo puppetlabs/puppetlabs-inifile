@@ -141,4 +141,29 @@ foo=
       subject.get_value("section1", "baz").should == "bazvalue"
     end
   end
+
+  context 'the file has quotation marks in its section names' do
+    let(:sample_content) do
+      template = <<-EOS
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+
+[alias]
+to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/master
+[branch "production"]
+        remote = origin
+        merge = refs/heads/production
+      EOS
+      template.split("\n")
+    end
+
+    it 'should parse the sections' do
+      subject.section_names.should match_array ['',
+                                                'branch "master"',
+                                                'alias',
+                                                'branch "production"'
+      ]
+    end
+  end
 end
