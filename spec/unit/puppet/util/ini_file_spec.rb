@@ -166,4 +166,40 @@ to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/produc
       ]
     end
   end
+
+  context 'Samba INI file with dollars in section names' do
+    let(:sample_content) do
+      template = <<-EOS
+      [global]
+        workgroup = FELLOWSHIP
+        ; ...
+        idmap config * : backend = tdb
+
+      [printers]
+        comment = All Printers
+        ; ...
+        browseable = No
+
+      [print$]
+        comment = Printer Drivers
+        path = /var/lib/samba/printers
+
+      [Shares]
+        path = /home/shares
+        read only = No
+        guest ok = Yes
+      EOS
+      template.split("\n")
+    end
+
+    it "should parse the correct section_names" do
+      subject.section_names.should match_array [
+        '',
+        'global',
+        'printers',
+        'print$',
+        'Shares'
+      ]
+    end
+  end
 end
