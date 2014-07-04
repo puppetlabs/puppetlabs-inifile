@@ -202,4 +202,21 @@ to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/produc
       ]
     end
   end
+
+  context 'section names with forward slashes in them' do
+    let(:sample_content) do
+      template = <<-EOS
+[monitor:///var/log/*.log]
+disabled = test_value
+      EOS
+      template.split("\n")
+    end
+
+    it "should parse the correct section_names" do
+      subject.section_names.should match_array [
+        '',
+        'monitor:///var/log/*.log'
+      ]
+    end
+  end
 end
