@@ -141,4 +141,82 @@ foo=
       subject.get_value("section1", "baz").should == "bazvalue"
     end
   end
+
+  context 'the file has quotation marks in its section names' do
+    let(:sample_content) do
+      template = <<-EOS
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+
+[alias]
+to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/master
+[branch "production"]
+        remote = origin
+        merge = refs/heads/production
+      EOS
+      template.split("\n")
+    end
+
+    it 'should parse the sections' do
+      subject.section_names.should match_array ['',
+                                                'branch "master"',
+                                                'alias',
+                                                'branch "production"'
+      ]
+    end
+  end
+
+  context 'Samba INI file with dollars in section names' do
+    let(:sample_content) do
+      template = <<-EOS
+      [global]
+        workgroup = FELLOWSHIP
+        ; ...
+        idmap config * : backend = tdb
+
+      [printers]
+        comment = All Printers
+        ; ...
+        browseable = No
+
+      [print$]
+        comment = Printer Drivers
+        path = /var/lib/samba/printers
+
+      [Shares]
+        path = /home/shares
+        read only = No
+        guest ok = Yes
+      EOS
+      template.split("\n")
+    end
+
+    it "should parse the correct section_names" do
+      subject.section_names.should match_array [
+        '',
+        'global',
+        'printers',
+        'print$',
+        'Shares'
+      ]
+    end
+  end
+
+  context 'section names with forward slashes in them' do
+    let(:sample_content) do
+      template = <<-EOS
+[monitor:///var/log/*.log]
+disabled = test_value
+      EOS
+      template.split("\n")
+    end
+
+    it "should parse the correct section_names" do
+      subject.section_names.should match_array [
+        '',
+        'monitor:///var/log/*.log'
+      ]
+    end
+  end
 end
