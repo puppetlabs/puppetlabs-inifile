@@ -1,3 +1,15 @@
+##2014-07-07 - Supported Release 1.1.1
+###Summary
+
+This supported bugfix release corrects the inifile section header detection
+regex (so you can use more characters in your section titles).
+
+####Bugfixes
+- Correct section regex to allow anything other than ]
+- Correct `exists?` to return a boolean
+- Lots of test updates
+- Add missing CONTRIBUTING.md
+
 ##2014-06-04 - Release 1.1.0
 ###Summary
 
