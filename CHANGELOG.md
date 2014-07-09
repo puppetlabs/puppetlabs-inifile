@@ -1,4 +1,9 @@
-##2014-07-07 - Supported Release 1.1.1
+##2014-07-10 - Supported Release 1.1.2
+###Summary
+
+This is a re-packaging release.
+
+##2014-07-07 - Release 1.1.1
 ###Summary
 
 This supported bugfix release corrects the inifile section header detection
