@@ -85,11 +85,11 @@ Puppet::Type.newtype(:glance_api_config) do
   end
   newproperty(:value) do
     desc 'The value of the setting to be defined.'
-      munge do |v|
-        v.to_s.strip
-        end
-      end
+    munge do |v|
+      v.to_s.strip
     end
+  end
+end
 ```
 
 This type must also have a provider that uses the `ini_setting` provider as its parent. For example:
