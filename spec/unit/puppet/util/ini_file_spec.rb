@@ -30,6 +30,7 @@ baz=bazvalue
  ; yet another comment
  zot = multi word value
  xyzzy['thing1']['thing2']=xyzzyvalue
+ l=git log
       EOS
       template.split("\n")
     }
@@ -52,6 +53,7 @@ baz=bazvalue
       subject.get_value("section2", "baz").should == "bazvalue"
       subject.get_value("section2", "zot").should == "multi word value"
       subject.get_value("section2", "xyzzy['thing1']['thing2']").should == "xyzzyvalue"
+      subject.get_value("section2", "l").should == "git log"
     end
 
   end
