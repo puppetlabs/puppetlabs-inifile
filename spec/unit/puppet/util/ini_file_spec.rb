@@ -26,6 +26,7 @@ baz =
 
 foo= foovalue2
 baz=bazvalue
+ ; commented = out setting
     #another comment
  ; yet another comment
  zot = multi word value
@@ -46,14 +47,19 @@ baz=bazvalue
     end
 
     it "should expose settings for sections" do
-      subject.get_value("section1", "foo").should == "foovalue"
-      subject.get_value("section1", "bar").should == "barvalue"
-      subject.get_value("section1", "baz").should == ""
-      subject.get_value("section2", "foo").should == "foovalue2"
-      subject.get_value("section2", "baz").should == "bazvalue"
-      subject.get_value("section2", "zot").should == "multi word value"
-      subject.get_value("section2", "xyzzy['thing1']['thing2']").should == "xyzzyvalue"
-      subject.get_value("section2", "l").should == "git log"
+      subject.get_settings("section1").should == {
+        "bar" => "barvalue",
+        "baz" => "",
+        "foo" => "foovalue"
+      }
+
+      subject.get_settings("section2").should == {
+        "baz" => "bazvalue",
+        "foo" => "foovalue2",
+        "l" => "git log",
+        "xyzzy['thing1']['thing2']" => "xyzzyvalue",
+        "zot" => "multi word value"
+      }
     end
 
   end
