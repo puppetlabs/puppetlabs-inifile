@@ -1,6 +1,8 @@
-[![Build Status](https://travis-ci.org/puppetlabs/puppetlabs-inifile.png?branch=master)](https://travis-ci.org/puppetlabs/puppetlabs-inifile)
+
 
 #INI file
+
+[![Build Status](https://travis-ci.org/puppetlabs/puppetlabs-inifile.png?branch=master)](https://travis-ci.org/puppetlabs/puppetlabs-inifile)
 
 ####Table of Contents
 
@@ -146,9 +148,9 @@ If the above code is added, the resulting configured file will contain only line
 
 * `name`: An arbitrary name used as the identity of the resource.
 
-* `path`: The INI file in which Puppet will ensure the specified setting.
+* `path`: The INI file in which Puppet ensures the specified setting.
 
-* `provider`: The specific backend to use for this `ini_setting` resource. You will seldom need to specify this --- Puppet will usually discover the appropriate provider for your platform. The only available provider for `ini_setting` is ruby.
+* `provider`: The specific backend to use for this `ini_setting` resource. You will seldom need to specify this --- Puppet usually discovers the appropriate provider for your platform. The only available provider for `ini_setting` is ruby.
 
 * `section`: The name of the INI file section in which the setting should be defined. Add a global section  --- settings that appear at the beginning of the file, before any named sections --- by specifying a section name of "".
 
@@ -166,9 +168,9 @@ If the above code is added, the resulting configured file will contain only line
 
 * `name`: An arbitrary name used as the identity of the resource.
 
-* `path`: The INI file in which Puppet will ensure the specified setting.
+* `path`: The INI file in which Puppet ensures the specified setting.
 
-* `provider`: The specific backend to use for this `ini_subsetting` resource. You will seldom need to specify this --- Puppet will usually discover the appropriate provider for your platform. The only available provider for `ini_subsetting` is ruby.
+* `provider`: The specific backend to use for this `ini_subsetting` resource. You will seldom need to specify this --- Puppet usually discovers the appropriate provider for your platform. The only available provider for `ini_subsetting` is ruby.
 
 * `quote_char`: The character used to quote the entire value of the setting. Valid values are '', '"', and "'". Defaults to ''.
 
@@ -203,6 +205,10 @@ This module has also been tested, but is not officially supported, on:
 * Windows 7
 * Mac OSX 10.9 (Mavericks)
 
+### Agent run failure with Puppet Enterprise 
+
+As of Puppet Enterprise 3.3, agent runs on master fail if you are using an older, manually installed version of inifile. To solve this problem, upgrade your inifile module to version 1.1.0 or later. 
+
 ##Development
  
 Puppet Labs modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. We can’t access the huge number of platforms and myriad of hardware, software, and deployment configurations that Puppet is intended to serve.
@@ -213,7 +219,7 @@ You can read the complete module contribution guide on the [Puppet Labs wiki](ht
 
 ##Contributors
 
-The list of contributors can be found at: [https://github.com/puppetlabs/puppetlabs-inifile/graphs/contributors/contributors](https://github.com/puppetlabs/puppetlabs-inifile/graphs/contributors/contributors).
+The list of contributors can be found at: [https://github.com/puppetlabs/puppetlabs-inifile/graphs/contributors](https://github.com/puppetlabs/puppetlabs-inifile/graphs/contributors).
 
 
 
