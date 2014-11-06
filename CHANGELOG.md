@@ -1,3 +1,8 @@
+##2014-09-30 - Supported Releases 1.1.4
+###Summary
+
+This release includes documentation and test updates.
+
 ##2014-07-15 - Supported Release 1.1.3
 ###Summary
 
