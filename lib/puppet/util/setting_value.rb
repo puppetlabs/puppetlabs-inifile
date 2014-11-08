@@ -2,19 +2,21 @@ module Puppet
 module Util
 
   class SettingValue
-  
-    def initialize(setting_value, subsetting_separator = ' ')
+
+    def initialize(setting_value, subsetting_separator = ' ', default_quote_char = nil)
       @setting_value = setting_value
       @subsetting_separator = subsetting_separator
 
-      @quote_char = ""
+      default_quote_char ||= ''
 
       if @setting_value
         unquoted, @quote_char = unquote_setting_value(setting_value)
         @subsetting_items = unquoted.scan(Regexp.new("(?:(?:[^\\#{@subsetting_separator}]|\\.)+)"))  # an item can contain escaped separator
         @subsetting_items.map! { |item| item.strip }
+        @quote_char = default_quote_char if @quote_char.empty?
       else
-      	@subsetting_items = []        
+        @subsetting_items = []
+        @quote_char = default_quote_char
       end     
     end
 

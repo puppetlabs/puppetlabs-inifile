@@ -16,9 +16,9 @@ describe 'ini_subsetting resource' do
       shell("rm #{path}", :acceptable_exit_codes => [0,1,2])
     end
 
-    it 'applies the manifest twice with no stderr' do
-      expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-      expect(apply_manifest(pp, :catch_changes => true).stderr).to eq("")
+    it 'applies the manifest twice' do
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes  => true)
     end
 
     describe file(path) do
@@ -66,9 +66,9 @@ describe 'ini_subsetting resource' do
       }
       EOS
 
-      it 'applies the manifest twice with no stderr' do
-        expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-        expect(apply_manifest(pp, :catch_changes => true).stderr).to eq("")
+      it 'applies the manifest twice' do
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes  => true)
       end
 
       describe file("#{tmpdir}/ini_subsetting.ini") do
@@ -82,7 +82,11 @@ describe 'ini_subsetting resource' do
 
     context 'ensure => absent' do
       before :all do
-        shell("echo -e \"[one]\nkey = alphabet betatrons\" > #{tmpdir}/ini_subsetting.ini")
+        if fact('osfamily') == 'Darwin'
+          shell("echo \"[one]\nkey = alphabet betatrons\" > #{tmpdir}/ini_subsetting.ini")
+        else
+          shell("echo -e \"[one]\nkey = alphabet betatrons\" > #{tmpdir}/ini_subsetting.ini")
+        end
       end
 
       pp = <<-EOS
@@ -95,9 +99,9 @@ describe 'ini_subsetting resource' do
       }
       EOS
 
-      it 'applies the manifest twice with no stderr' do
-        expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-        expect(apply_manifest(pp, :catch_changes  => true).stderr).to eq("")
+      it 'applies the manifest twice' do
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes  => true)
       end
 
       describe file("#{tmpdir}/ini_subsetting.ini") do
@@ -142,6 +146,49 @@ describe 'ini_subsetting resource' do
         EOS
 
         it_behaves_like 'has_content', "#{tmpdir}/subsetting_separator.ini", pp, content
+      end
+    end
+  end
+
+  describe 'quote_char' do
+    {
+      ['-Xmx']         => 'args=""',
+      ['-Xmx', '256m'] => 'args=-Xmx256m',
+      ['-Xmx', '512m'] => 'args="-Xmx512m"',
+      ['-Xms', '256m'] => 'args="-Xmx256m -Xms256m"',
+    }.each do |parameter, content|
+      context %Q{with '#{parameter.first}' #{parameter.length > 1 ? '=> \'' << parameter[1] << '\'' : 'absent'} makes '#{content}'} do
+        path = File.join(tmpdir, 'ini_subsetting.ini')
+
+        before :all do
+          shell(%Q{echo '[java]\nargs=-Xmx256m' > #{path}})
+        end
+        after :all do
+          shell("cat #{path}", :acceptable_exit_codes => [0,1,2])
+          shell("rm #{path}", :acceptable_exit_codes => [0,1,2])
+        end
+
+        pp = <<-EOS
+        ini_subsetting { '#{parameter.first}':
+          ensure     => #{parameter.length > 1 ? 'present' : 'absent'},
+          path       => '#{path}',
+          section    => 'java',
+          setting    => 'args',
+          quote_char => '"',
+          subsetting => '#{parameter.first}',
+          value      => '#{parameter.length > 1 ? parameter[1] : ''}'
+        }
+        EOS
+
+        it 'applies the manifest twice' do
+          apply_manifest(pp, :catch_failures => true)
+          apply_manifest(pp, :catch_changes  => true)
+        end
+
+        describe file("#{tmpdir}/ini_subsetting.ini") do
+          it { should be_file }
+          it { should contain(content) }
+        end
       end
     end
   end
