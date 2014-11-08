@@ -502,7 +502,7 @@ foo=bar
                                                    :value             => 'yippee',
                                                    :key_val_separator => '='))
       provider = described_class.new(resource)
-      provider.exists?.should == 'bar'
+      provider.exists?.should be true
       provider.value.should == 'bar'
       provider.value=('yippee')
       validate_file(<<-EOS
