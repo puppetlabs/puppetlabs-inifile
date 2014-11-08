@@ -16,9 +16,9 @@ describe 'ini_setting resource' do
       shell("rm #{path}", :acceptable_exit_codes => [0,1,2])
     end
 
-    it 'applies the manifest twice with no stderr' do
-      expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-      expect(apply_manifest(pp, :catch_changes => true).stderr).to eq("")
+    it 'applies the manifest twice' do
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
     end
 
     describe file(path) do
@@ -67,9 +67,9 @@ describe 'ini_setting resource' do
       }
       EOS
 
-      it 'applies the manifest twice with no stderr' do
-        expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-        expect(apply_manifest(pp, :catch_changes => true).stderr).to eq("")
+      it 'applies the manifest twice' do
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes => true)
       end
 
       describe file("#{tmpdir}/ini_setting.ini") do
@@ -83,7 +83,11 @@ describe 'ini_setting resource' do
 
     context '=> absent for key/value' do
       before :all do
-        shell("echo -e \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
+        if fact('osfamily') == 'Darwin'
+          shell("echo \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
+        else
+          shell("echo -e \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
+        end
       end
 
       pp = <<-EOS
@@ -96,9 +100,9 @@ describe 'ini_setting resource' do
       }
       EOS
 
-      it 'applies the manifest twice with no stderr' do
-        expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-        expect(apply_manifest(pp, :catch_changes  => true).stderr).to eq("")
+      it 'applies the manifest twice' do
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes  => true)
       end
 
       describe file("#{tmpdir}/ini_setting.ini") do
@@ -111,7 +115,11 @@ describe 'ini_setting resource' do
 
     context '=> absent for section', :pending => "cannot ensure absent on a section"  do
       before :all do
-        shell("echo -e \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
+        if fact('osfamily') == 'Darwin'
+          shell("echo \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
+        else
+          shell("echo -e \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
+        end
       end
       after :all do
         shell("cat #{tmpdir}/ini_setting.ini", :acceptable_exit_codes => [0,1,2])
@@ -126,9 +134,9 @@ describe 'ini_setting resource' do
       }
       EOS
 
-      it 'applies the manifest twice with no stderr' do
-        expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-        expect(apply_manifest(pp, :catch_changes  => true).stderr).to eq("")
+      it 'applies the manifest twice' do
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes  => true)
       end
 
       describe file("#{tmpdir}/ini_setting.ini") do
@@ -141,7 +149,11 @@ describe 'ini_setting resource' do
 
     context '=> absent for global' do
       before :all do
-        shell("echo -e \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
+        if fact('osfamily') == 'Darwin'
+          shell("echo \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
+        else
+          shell("echo -e \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
+        end
       end
       after :all do
         shell("cat #{tmpdir}/ini_setting.ini", :acceptable_exit_codes => [0,1,2])
@@ -158,9 +170,9 @@ describe 'ini_setting resource' do
       }
       EOS
 
-      it 'applies the manifest twice with no stderr' do
-        expect(apply_manifest(pp, :catch_failures => true).stderr).to eq("")
-        expect(apply_manifest(pp, :catch_changes  => true).stderr).to eq("")
+      it 'applies the manifest twice' do
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes  => true)
       end
 
       describe file("#{tmpdir}/ini_setting.ini") do

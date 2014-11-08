@@ -5,16 +5,11 @@ module Puppet
 module Util
   class IniFile
 
-
     def initialize(path, key_val_separator = ' = ')
-
       k_v_s = key_val_separator.strip
-
-      @@SECTION_REGEX = /^\s*\[([\w\d\.\\\/\-\:\s]*[\w\d\.\\\/\-])\]\s*$/
-      @@SETTING_REGEX = /^(\s*)([^\[#;][\w\d\.\\\/\-\s\[\]\']*[\w\d\.\\\/\-\]])([ \t]*#{k_v_s}[ \t]*)([\S\s]*?)\s*$/o
-      @@COMMENTED_SETTING_REGEX = /^(\s*)[#;]+(\s*)([^\[]*[\w\d\.\\\/\-]+[\w\d\.\\\/\-\[\]\']+)([ \t]*#{k_v_s}[ \t]*)([\S\s]*?)\s*$/o
-
-
+      @@SECTION_REGEX = /^\s*\[([^\]]*)\]\s*$/
+      @@SETTING_REGEX = /^(\s*)([^\s#{k_v_s}]*)(\s*#{k_v_s}\s*)(.*)\s*$/
+      @@COMMENTED_SETTING_REGEX = /^(\s*)[#;]+(\s*)([^\s#{k_v_s}]*)(\s*#{k_v_s}[ \t]*)(.*)\s*$/
       @path = path
       @key_val_separator = key_val_separator
       @section_names = []

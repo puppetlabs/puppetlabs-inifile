@@ -38,7 +38,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def exists?
-    ini_file.get_value(section, setting)
+    !ini_file.get_value(section, setting).nil?
   end
 
   def create

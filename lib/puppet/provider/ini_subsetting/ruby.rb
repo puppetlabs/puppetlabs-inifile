@@ -57,14 +57,17 @@ Puppet::Type.type(:ini_subsetting).provide(:ruby) do
     resource[:key_val_separator] || '='
   end
 
+  def quote_char
+    resource[:quote_char]
+  end
+
   private
   def ini_file
     @ini_file ||= Puppet::Util::IniFile.new(file_path, separator)
   end
 
-  private
   def setting_value
-    @setting_value ||= Puppet::Util::SettingValue.new(ini_file.get_value(section, setting), subsetting_separator)
+    @setting_value ||= Puppet::Util::SettingValue.new(ini_file.get_value(section, setting), subsetting_separator, quote_char)
   end
 
 end

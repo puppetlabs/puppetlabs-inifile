@@ -144,7 +144,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
 # This is a comment
@@ -172,7 +172,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => 'section:sub', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
 # This is a comment
@@ -200,7 +200,7 @@ yahoo = yippee
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :setting => 'baz', :value => 'bazvalue2'))
       provider = described_class.new(resource)
-      provider.exists?.should == 'bazvalue'
+      provider.exists?.should be true
       provider.value=('bazvalue2')
       validate_file(<<-EOS
 # This is a comment
@@ -227,7 +227,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :section => 'section:sub', :setting => 'subby', :value => 'foo'))
       provider = described_class.new(resource)
-      provider.exists?.should == 'bar'
+      provider.exists?.should be true
       provider.value.should == 'bar'
       provider.value=('foo')
       validate_file(<<-EOS
@@ -255,7 +255,7 @@ subby=foo
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :setting => 'url', :value => 'http://192.168.0.1:8080'))
       provider = described_class.new(resource)
-      provider.exists?.should == 'http://192.168.1.1:8080'
+      provider.exists?.should be true
       provider.value.should == 'http://192.168.1.1:8080'
       provider.value=('http://192.168.0.1:8080')
 
@@ -284,14 +284,14 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :setting => 'baz', :value => 'bazvalue'))
       provider = described_class.new(resource)
-      provider.exists?.should == 'bazvalue'
+      provider.exists?.should be true
     end
 
     it "should add a new section if the section does not exist" do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => "section3", :setting => 'huzzah', :value => 'shazaam'))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
 # This is a comment
@@ -321,7 +321,7 @@ huzzah = shazaam
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => "section:subsection", :setting => 'huzzah', :value => 'shazaam'))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
 # This is a comment
@@ -351,7 +351,7 @@ huzzah = shazaam
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => "section1", :setting => 'setting1', :value => 'hellowworld', :path => emptyfile))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file("
 [section1]
@@ -363,7 +363,7 @@ setting1 = hellowworld
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => "section:subsection", :setting => 'setting1', :value => 'hellowworld', :path => emptyfile))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file("
 [section:subsection]
@@ -375,7 +375,7 @@ setting1 = hellowworld
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => "section1", :setting => 'master', :value => true))
       provider = described_class.new(resource)
-      provider.exists?.should == 'true'
+      provider.exists?.should be true
       provider.value.should == 'true'
     end
 
@@ -397,7 +397,7 @@ foo = http://192.168.1.1:8080
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => '', :setting => 'bar', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
 # This is a comment
@@ -414,7 +414,7 @@ foo = http://192.168.1.1:8080
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :section => '', :setting => 'foo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should == 'blah'
+      provider.exists?.should be true
       provider.value.should == 'blah'
       provider.value=('yippee')
       validate_file(<<-EOS
@@ -431,7 +431,7 @@ foo = http://192.168.1.1:8080
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :section => '', :setting => 'foo', :value => 'blah'))
       provider = described_class.new(resource)
-      provider.exists?.should == 'blah'
+      provider.exists?.should be true
     end
   end
 
@@ -447,7 +447,7 @@ foo = http://192.168.1.1:8080
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :section => '', :setting => 'foo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
 foo = yippee
@@ -462,7 +462,7 @@ foo = http://192.168.1.1:8080
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => 'section2', :setting => 'foo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should == 'http://192.168.1.1:8080'
+      provider.exists?.should be true
       provider.value.should == 'http://192.168.1.1:8080'
       provider.value=('yippee')
       validate_file(<<-EOS
@@ -476,7 +476,7 @@ foo = yippee
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => 'section2', :setting => 'bar', :value => 'baz'))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
 [section2]
@@ -502,7 +502,7 @@ foo=bar
                                                    :value             => 'yippee',
                                                    :key_val_separator => '='))
       provider = described_class.new(resource)
-      provider.exists?.should == 'bar'
+      provider.exists?.should be true
       provider.value.should == 'bar'
       provider.value=('yippee')
       validate_file(<<-EOS
@@ -529,7 +529,7 @@ foo: bar
                                                    :value             => 'yippee',
                                                    :key_val_separator => ': '))
       provider = described_class.new(resource)
-      provider.exists?.should == 'bar'
+      provider.exists?.should be true
       provider.value.should == 'bar'
       provider.value=('yippee')
       validate_file(<<-EOS
@@ -546,7 +546,7 @@ foo: yippee
                                                    :value             => 'baz',
                                                    :key_val_separator => ': '))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
 [section2]
@@ -583,7 +583,7 @@ EOS
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
       :section => 'section1', :setting => 'foo', :ensure => 'absent'))
       provider = described_class.new(resource)
-      provider.exists?.should be_true
+      provider.exists?.should be true
       provider.destroy
       validate_file(<<-EOS
 [section1]
@@ -608,7 +608,7 @@ EOS
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
                                                    :section => 'section:sub', :setting => 'foo', :ensure => 'absent'))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.destroy
       validate_file(<<-EOS
 [section1]
@@ -659,7 +659,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
                     :section => 'section1', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
 # This is a comment
@@ -688,7 +688,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section1', :setting => 'bar', :value => 'barvalue2'))
       provider = described_class.new(resource)
-      provider.exists?.should be_true
+      provider.exists?.should be true
       provider.create
       validate_file(<<-EOS
 # This is a comment
@@ -716,7 +716,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
                                                    :section => 'section2', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
 # This is a comment
@@ -745,7 +745,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section2', :setting => 'baz', :value => 'bazvalue2'))
       provider = described_class.new(resource)
-      provider.exists?.should be_true
+      provider.exists?.should be true
       provider.create
       validate_file(<<-EOS
 # This is a comment
@@ -773,7 +773,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section:sub', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be_nil
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
 # This is a comment
@@ -802,7 +802,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section:sub', :setting => 'fleezy', :value => 'flam2'))
       provider = described_class.new(resource)
-      provider.exists?.should be_true
+      provider.exists?.should be true
       provider.create
       validate_file(<<-EOS
 # This is a comment
@@ -849,7 +849,7 @@ blah = blah
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section2', :setting => 'foo', :value => 'foo3'))
       provider = described_class.new(resource)
-      provider.exists?.should be_false
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
      [section1]
@@ -871,7 +871,7 @@ blah = blah
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section1', :setting => 'foo', :value => 'foo3'))
       provider = described_class.new(resource)
-      provider.exists?.should be_true
+      provider.exists?.should be true
       provider.create
       validate_file(<<-EOS
      [section1]
@@ -892,7 +892,7 @@ blah = blah
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section2', :setting => 'bar', :value => 'bar3'))
       provider = described_class.new(resource)
-      provider.exists?.should be_false
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
      [section1]
@@ -914,7 +914,7 @@ blah = blah
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section2', :setting => 'baz', :value => 'bazvalue'))
       provider = described_class.new(resource)
-      provider.exists?.should be_false
+      provider.exists?.should be false
       provider.create
       validate_file(<<-EOS
      [section1]
@@ -945,7 +945,7 @@ EOS
           common_params.merge(:section => 'section1', :setting => 'foo', :value => 'foovalue2')
         )
         provider = described_class.new(resource)
-        provider.exists?.should be_false
+        provider.exists?.should be false
         provider.create
         validate_file(<<-EOS
 [section1]
@@ -960,7 +960,7 @@ foo=foovalue2
           common_params.merge(:section => 'section1', :setting => 'bar', :value => 'barvalue2')
         )
         provider = described_class.new(resource)
-        provider.exists?.should be_false
+        provider.exists?.should be false
         provider.create
         validate_file(<<-EOS
 [section1]
@@ -998,7 +998,7 @@ subby=bar
         resource = Puppet::Type::Ini_setting.new(common_params.merge(
             :section => 'section - two', :setting => 'yahoo', :value => 'yippee'))
         provider = described_class.new(resource)
-        provider.exists?.should be_nil
+        provider.exists?.should be false
         provider.create
         validate_file(<<-EOS
 # This is a comment
@@ -1022,6 +1022,47 @@ subby=bar
   )
       end
 
+    end
+
+  end
+
+  context "when sections have spaces and quotations" do
+    let(:orig_content) do
+      <<-EOS
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+
+[alias]
+to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/master
+[branch "production"]
+        remote = origin
+        merge = refs/heads/production
+      EOS
+    end
+
+    it "should add a missing setting to the correct section" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+        :section => 'alias',
+        :setting => 'foo',
+        :value => 'bar'
+      ))
+      provider = described_class.new(resource)
+      provider.exists?.should be false
+      provider.create
+      validate_file(<<-EOS
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+
+[alias]
+to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/master
+foo = bar
+[branch "production"]
+        remote = origin
+        merge = refs/heads/production
+                    EOS
+                   )
     end
 
   end
