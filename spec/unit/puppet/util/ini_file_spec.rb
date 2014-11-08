@@ -244,4 +244,22 @@ EOS
       subject.get_value("khotkeys", "{d03619b6-9b3c-48cc-9d9c-a2aadb485550}").should == "Search,none,Search"
     end
   end
+
+  context 'Configuration with colons in setting names' do
+    let(:sample_content) do
+      template = <<-EOS
+      [Drive names]
+A:=5¼" Floppy
+B:=3½" Floppy
+C:=Winchester
+EOS
+      template.split("\n")
+    end
+
+    it "should expose settings for sections" do
+      subject.get_value("Drive names", "A:").should eq '5¼" Floppy'
+      subject.get_value("Drive names", "B:").should eq '3½" Floppy'
+      subject.get_value("Drive names", "C:").should eq 'Winchester'
+    end
+  end
 end
