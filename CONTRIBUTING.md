@@ -45,7 +45,7 @@ Checklist (and a short version for the impatient)
 
       - Make sure you have a [GitHub account](https://github.com/join)
 
-      - [Create a ticket](http://projects.puppetlabs.com/projects/modules/issues/new), or [watch the ticket](http://projects.puppetlabs.com/projects/modules/issues) you are patching for.
+      - [Create a ticket](https://tickets.puppetlabs.com/secure/CreateIssue!default.jspa), or [watch the ticket](https://tickets.puppetlabs.com/browse/) you are patching for.
 
     * Preferred method:
 
@@ -220,13 +220,13 @@ review.
 Additional Resources
 ====================
 
-* [Getting additional help](http://projects.puppetlabs.com/projects/puppet/wiki/Getting_Help)
+* [Getting additional help](http://puppetlabs.com/community/get-help)
 
 * [Writing tests](http://projects.puppetlabs.com/projects/puppet/wiki/Development_Writing_Tests)
 
 * [Patchwork](https://patchwork.puppetlabs.com)
 
-* [Contributor License Agreement](https://projects.puppetlabs.com/contributor_licenses/sign)
+* [Contributor License Agreement](https://cla.puppetlabs.com/)
 
 * [General GitHub documentation](http://help.github.com/)
 
