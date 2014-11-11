@@ -1,3 +1,15 @@
+##2014-11-11 - Supported Releases 1.2.0
+###Summary
+
+This is primarily a bugfix release, but also includes documentation updates and synchronization of files with modulesync.
+
+####Features
+- Synchronized files using modulesync
+- Improved documentation with a warning about old, manually installed inifile with PE3.3+
+
+####Bugfixes
+- Fix issue where single character settings were not being saved
+
 ##2014-09-30 - Supported Releases 1.1.4
 ###Summary
 
