@@ -41,8 +41,6 @@ Checklist (and a short version for the impatient)
 
     * Pre-requisites:
 
-      - Sign the [Contributor License Agreement](https://cla.puppetlabs.com/)
-
       - Make sure you have a [GitHub account](https://github.com/join)
 
       - [Create a ticket](https://tickets.puppetlabs.com/secure/CreateIssue!default.jspa), or [watch the ticket](https://tickets.puppetlabs.com/browse/) you are patching for.
@@ -94,17 +92,7 @@ The long version
       whitespace or other "whitespace errors".  You can do this by
       running "git diff --check" on your changes before you commit.
 
-  2.  Sign the Contributor License Agreement
-
-      Before we can accept your changes, we do need a signed Puppet
-      Labs Contributor License Agreement (CLA).
-
-      You can access the CLA via the [Contributor License Agreement link](https://cla.puppetlabs.com/)
-
-      If you have any questions about the CLA, please feel free to
-      contact Puppet Labs via email at cla-submissions@puppetlabs.com.
-
-  3.  Sending your patches
+  2.  Sending your patches
 
       To submit your changes via a GitHub pull request, we _highly_
       recommend that you have them on a topic branch, instead of
@@ -124,7 +112,7 @@ The long version
       in order to open a pull request.
 
 
-  4.  Update the related GitHub issue.
+  3.  Update the related GitHub issue.
 
       If there is a GitHub issue associated with the change you
       submitted, then you should update the ticket to include the
@@ -225,8 +213,6 @@ Additional Resources
 * [Writing tests](http://projects.puppetlabs.com/projects/puppet/wiki/Development_Writing_Tests)
 
 * [Patchwork](https://patchwork.puppetlabs.com)
-
-* [Contributor License Agreement](https://cla.puppetlabs.com/)
 
 * [General GitHub documentation](http://help.github.com/)
 
