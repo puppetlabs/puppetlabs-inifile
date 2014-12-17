@@ -3,7 +3,7 @@ module Util
 
   class SettingValue
 
-    def initialize(setting_value, subsetting_separator = ' ', default_quote_char = nil)
+    def initialize(setting_value, subsetting_separator = ' ', subsetting_val_separator = '', default_quote_char = nil)
       @setting_value = setting_value
       @subsetting_separator = subsetting_separator
 
@@ -51,13 +51,14 @@ module Util
       @quote_char + result + @quote_char
     end
 
-    def get_subsetting_value(subsetting)
+    def get_subsetting_value(subsetting, val_separator)
     
       value = nil
       
       @subsetting_items.each { |item|
-        if(item.start_with?(subsetting))
-          value = item[subsetting.length, item.length - subsetting.length]
+        subsetting_and_val_separator = subsetting+val_separator
+        if(item.start_with?(subsetting_and_val_separator))
+          value = item[subsetting_and_val_separator.length, item.length - subsetting_and_val_separator.length]
           break
         end
       }
@@ -65,13 +66,13 @@ module Util
       value
     end
     
-    def add_subsetting(subsetting, subsetting_value)
+    def add_subsetting(subsetting, val_separator, subsetting_value)
     
-      new_item = subsetting + (subsetting_value || '')
+      new_item = subsetting + (val_separator || '') + (subsetting_value || '')
       found = false
 
       @subsetting_items.map! { |item|
-        if item.start_with?(subsetting)
+        if item.start_with?(subsetting+val_separator)
           value = new_item
           found = true
         else
@@ -86,8 +87,8 @@ module Util
       end
     end
 
-    def remove_subsetting(subsetting)   
-      @subsetting_items = @subsetting_items.map { |item| item.start_with?(subsetting) ? nil : item }.compact
+    def remove_subsetting(subsetting, val_separator)   
+      @subsetting_items = @subsetting_items.map { |item| item.start_with?(subsetting+val_separator) ? nil : item }.compact
     end
     
   end
