@@ -28,15 +28,9 @@ Puppet::Type.newtype(:ini_setting) do
 
   newparam(:key_val_separator) do
     desc 'The separator string to use between each setting name and value. ' +
-        'Defaults to " = ", but you could use this to override e.g. whether ' +
-        'or not the separator should include whitespace.'
+        'Defaults to " = ", but you could use this to override e.g. ": ", or' +
+        'whether or not the separator should include whitespace.'
     defaultto(" = ")
-
-    validate do |value|
-      unless value.scan('=').size == 1
-        raise Puppet::Error, ":key_val_separator must contain exactly one = character."
-      end
-    end
   end
 
   newproperty(:value) do
