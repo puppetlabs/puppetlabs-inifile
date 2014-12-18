@@ -282,27 +282,5 @@ describe 'ini_setting resource' do
         it_behaves_like 'has_content', "#{tmpdir}/key_val_separator.ini", pp, content
       end
     end
-
-    {
-      "key_val_separator => '',"      => /must contain exactly one/,
-      "key_val_separator => ',',"     => /must contain exactly one/,
-      "key_val_separator => '   ',"   => /must contain exactly one/,
-      "key_val_separator => ' ==  '," => /must contain exactly one/,
-    }.each do |parameter, error|
-      context "with \"#{parameter}\" raises \"#{error}\"" do
-        pp = <<-EOS
-        ini_setting { "with #{parameter} raises #{error}":
-          ensure  => present,
-          section => 'one',
-          setting => 'two',
-          value   => 'three',
-          path    => "#{tmpdir}/key_val_separator.ini",
-          #{parameter}
-        }
-        EOS
-
-        it_behaves_like 'has_error', "#{tmpdir}/key_val_separator.ini", pp, error
-      end
-    end
   end
 end
