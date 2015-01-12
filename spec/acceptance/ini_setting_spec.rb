@@ -72,13 +72,7 @@ describe 'ini_setting resource' do
         apply_manifest(pp, :catch_changes => true)
       end
 
-      describe file("#{tmpdir}/ini_setting.ini") do
-        it { should be_file }
-        #XXX Solaris 10 doesn't support multi-line grep
-        it("should contain four = five\n[one]\ntwo = three", :unless => fact('osfamily') == 'Solaris') {
-          should contain("four = five\n[one]\ntwo = three")
-        }
-      end
+      it_behaves_like 'has_content', "#{tmpdir}/ini_setting.ini", pp, "four = five\n[one]\ntwo = three"
     end
 
     context '=> absent for key/value' do
