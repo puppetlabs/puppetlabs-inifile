@@ -113,40 +113,6 @@ describe 'ini_setting resource' do
       end
     end
 
-    context '=> absent for section', :pending => "cannot ensure absent on a section"  do
-      before :all do
-        if fact('osfamily') == 'Darwin'
-          shell("echo \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
-        else
-          shell("echo -e \"four = five\n[one]\ntwo = three\" > #{tmpdir}/ini_setting.ini")
-        end
-      end
-      after :all do
-        shell("cat #{tmpdir}/ini_setting.ini", :acceptable_exit_codes => [0,1,2])
-        shell("rm #{tmpdir}/ini_setting.ini", :acceptable_exit_codes => [0,1,2])
-      end
-
-      pp = <<-EOS
-      ini_setting { 'ensure => absent for section':
-        ensure  => absent,
-        path    => "#{tmpdir}/ini_setting.ini",
-        section => 'one',
-      }
-      EOS
-
-      it 'applies the manifest twice' do
-        apply_manifest(pp, :catch_failures => true)
-        apply_manifest(pp, :catch_changes  => true)
-      end
-
-      describe file("#{tmpdir}/ini_setting.ini") do
-        it { should be_file }
-        it { should contain('four = five') }
-        it { should_not contain('[one]') }
-        it { should_not contain('two = three') }
-      end
-    end
-
     context '=> absent for global' do
       before :all do
         if fact('osfamily') == 'Darwin'
