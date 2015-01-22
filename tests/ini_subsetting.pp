@@ -16,3 +16,14 @@ ini_subsetting { 'sample subsetting2':
   setting           => 'JAVA_ARGS',
   subsetting        => '-Xms',
 }
+
+ini_subsetting {'sample subsetting3':
+  ensure                   => present,
+  section                  => '',
+  key_val_separator        => '=',
+  path                     => '/etc/default/pe-puppetdb',
+  setting                  => 'JAVA_ARGS',
+  subsetting               => '-XX:MaxPermSize',
+  subsetting_val_separator => '=',
+  value                    => '256m',
+}

@@ -41,6 +41,12 @@ Puppet::Type.newtype(:ini_subsetting) do
         'whether or not the separator should include whitespace.'
     defaultto(" = ")
   end
+  
+  newparam(:subsetting_val_separator) do
+    desc 'The separator string to us between each subsetting name and value. ' +
+         'defaults to "".'
+    defaultto("")
+  end  
 
   newparam(:quote_char) do
     desc 'The character used to quote the entire value of the setting. ' +

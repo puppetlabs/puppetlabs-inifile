@@ -64,6 +64,15 @@ describe 'ini_subsetting resource' do
         subsetting => 'beta',
         value      => 'trons',
       }
+      ini_subsetting { 'ensure => present for gamma':
+        ensure                   => present,
+        path                     => "#{tmpdir}/ini_subsetting.ini",
+        section                  => 'one',
+        setting                  => 'key',
+        subsetting               => 'gamma',
+        subsetting_val_separator => '=',
+        value                    => 'ray',
+      }
       EOS
 
       it 'applies the manifest twice' do
@@ -74,8 +83,8 @@ describe 'ini_subsetting resource' do
       describe file("#{tmpdir}/ini_subsetting.ini") do
         it { should be_file }
         #XXX Solaris 10 doesn't support multi-line grep
-        it("should contain [one]\nkey = alphabet betatrons", :unless => fact('osfamily') == 'Solaris') {
-          should contain("[one]\nkey = alphabet betatrons")
+        it("should contain [one]\nkey = alphabet betatrons gamma=ray", :unless => fact('osfamily') == 'Solaris') {
+          should contain("[one]\nkey = alphabet betatrons gamma=ray")
         }
       end
     end
@@ -83,9 +92,9 @@ describe 'ini_subsetting resource' do
     context 'ensure => absent' do
       before :all do
         if fact('osfamily') == 'Darwin'
-          shell("echo \"[one]\nkey = alphabet betatrons\" > #{tmpdir}/ini_subsetting.ini")
+          shell("echo \"[one]\nkey = alphabet betatrons gamma=ray\" > #{tmpdir}/ini_subsetting.ini")
         else
-          shell("echo -e \"[one]\nkey = alphabet betatrons\" > #{tmpdir}/ini_subsetting.ini")
+          shell("echo -e \"[one]\nkey = alphabet betatrons gamma=ray\" > #{tmpdir}/ini_subsetting.ini")
         end
       end
 
@@ -107,7 +116,7 @@ describe 'ini_subsetting resource' do
       describe file("#{tmpdir}/ini_subsetting.ini") do
         it { should be_file }
         it { should contain('[one]') }
-        it { should contain('key = betatrons') }
+        it { should contain('key = betatrons gamma=ray') }
         it { should_not contain('alphabet') }
       end
     end
@@ -149,6 +158,41 @@ describe 'ini_subsetting resource' do
       end
     end
   end
+
+  describe 'subsetting_val_separator' do
+    {
+      ""                                    => "two = gammaray",
+      "subsetting_val_separator => '=',"    => "two = gamma=ray",
+      "subsetting_val_separator => ':',"    => "two = gamma:ray",
+      "subsetting_val_separator => ' == '," => "two = gamma == ray",
+    }.each do |parameter, content|
+      context "with \"#{parameter}\" makes \"#{content}\"" do
+        pp = <<-EOS
+        ini_subsetting { "with #{parameter} makes #{content}":
+          ensure     => present,
+          section    => 'one',
+          setting    => 'two',
+          subsetting => 'gamma',
+          value      => 'ray',
+          path       => "#{tmpdir}/subsetting_val_separator.ini",
+          #{parameter}
+        }
+        ini_subsetting { "foobar":
+          ensure     => present,
+          section    => 'one',
+          setting    => 'two',
+          subsetting => 'gamma',
+          value      => 'ray',
+          path       => "#{tmpdir}/subsetting_val_separator.ini",
+          #{parameter}
+        }
+        EOS
+
+        it_behaves_like 'has_content', "#{tmpdir}/subsetting_val_separator.ini", pp, content
+      end
+    end
+  end
+
 
   describe 'quote_char' do
     {

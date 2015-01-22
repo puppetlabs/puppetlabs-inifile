@@ -4,11 +4,11 @@ require File.expand_path('../../../util/setting_value', __FILE__)
 Puppet::Type.type(:ini_subsetting).provide(:ruby) do
 
   def exists?
-    setting_value.get_subsetting_value(subsetting)
+    setting_value.get_subsetting_value(subsetting, subsetting_val_separator)
   end
 
   def create
-    setting_value.add_subsetting(subsetting, resource[:value])
+    setting_value.add_subsetting(subsetting, subsetting_val_separator, resource[:value])
     ini_file.set_value(section, setting, setting_value.get_value)
     ini_file.save
     @ini_file = nil
@@ -16,7 +16,7 @@ Puppet::Type.type(:ini_subsetting).provide(:ruby) do
   end
 
   def destroy
-    setting_value.remove_subsetting(subsetting)
+    setting_value.remove_subsetting(subsetting, subsetting_val_separator)
     ini_file.set_value(section, setting, setting_value.get_value)
     ini_file.save
     @ini_file = nil
@@ -24,11 +24,11 @@ Puppet::Type.type(:ini_subsetting).provide(:ruby) do
   end
 
   def value
-    setting_value.get_subsetting_value(subsetting)
+    setting_value.get_subsetting_value(subsetting, subsetting_val_separator)
   end
 
   def value=(value)
-    setting_value.add_subsetting(subsetting, resource[:value])
+    setting_value.add_subsetting(subsetting, subsetting_val_separator, resource[:value])
     ini_file.set_value(section, setting, setting_value.get_value)
     ini_file.save
   end
@@ -55,6 +55,10 @@ Puppet::Type.type(:ini_subsetting).provide(:ruby) do
 
   def separator
     resource[:key_val_separator] || '='
+  end
+
+  def subsetting_val_separator
+    resource[:subsetting_val_separator] || ''
   end
 
   def quote_char
