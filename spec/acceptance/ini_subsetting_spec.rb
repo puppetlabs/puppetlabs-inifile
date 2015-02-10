@@ -65,6 +65,7 @@ describe 'ini_subsetting resource' do
         setting    => 'key',
         subsetting => 'beta',
         value      => 'trons',
+        require    => Ini_subsetting['ensure => present for alpha'],
       }
       EOS
 
@@ -133,6 +134,7 @@ describe 'ini_subsetting resource' do
           subsetting => 'twine',
           value      => 'three',
           path       => "#{tmpdir}/subsetting_separator.ini",
+          before     => Ini_subsetting['foobar'],
           #{parameter}
         }
         ini_subsetting { "foobar":
