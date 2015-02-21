@@ -34,6 +34,8 @@ This module tries hard not to manipulate your file any more than it needs to. In
 
 ##Setup
 
+This module support Puppet versions 3.4, 3.6 and 3.7 with Ruby versions 1.8.7, 1.9.3, 2.0.0 and 2.1.0.
+
 ##Beginning with inifile
 
 To manage an INI file, add the resource type `ini_setting` or `ini_subsetting` to a class.
