@@ -52,7 +52,7 @@ ini_setting { "sample setting":
 }
 ```
 
-Manage an individual setting in the global (top of the file) section. For example:
+Manage an individual setting in the global (top of the file) section. For example (note the lack of section parameter):
 
 ```
 ini_setting { "sample global setting":
