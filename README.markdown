@@ -43,7 +43,6 @@ ini_setting { "sample setting":
 
 The inifile module tries hard not to manipulate your file any more than it needs to. In most cases, it doesn't affect the original whitespace, comments, ordering, etc.
 
-
  * Supports comments starting with either '#' or ';'.
  * Supports either whitespace or no whitespace around '='.
  * Adds any missing sections to the INI file.
@@ -171,7 +170,7 @@ Determines whether the specified setting should exist. Valid options: 'present' 
 
 ##### `setting`
 
-*Required.* Designates a setting to manage within the specified INI file and section. Valid options: a string.
+*Optional.* Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Defaults to "". Valid options: a string.
 
 ##### `value`
 
@@ -202,7 +201,7 @@ Specifies whether the subsetting should be present. Valid options: 'present' and
 
 ##### `section`
 
-*Required.* Designates a section of the specified INI file containing the subsetting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Valid options: a string, or "".
+*Optional.* Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Defaults to "". Valid options: a string.
 
 ##### `setting`
 

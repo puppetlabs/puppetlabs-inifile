@@ -10,7 +10,9 @@ Puppet::Type.newtype(:ini_setting) do
   end
 
   newparam(:section) do
-    desc 'The name of the section in the ini file in which the setting should be defined.'
+    desc 'The name of the section in the ini file in which the setting should be defined.' +
+      'If not provided, defaults to global, top of file, sections.'
+    defaultto("")
   end
 
   newparam(:setting) do
