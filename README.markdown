@@ -52,6 +52,18 @@ ini_setting { "sample setting":
 }
 ```
 
+Manage an individual setting in the global (top of the file) section. For example (note the lack of section parameter):
+
+```
+ini_setting { "sample global setting":
+  ensure  => present,
+  path    => '/tmp/foo.ini',
+  setting => 'aglobalsetting',
+  value   => "Look at me ma! I'm at the top of the file!",
+}
+```
+
+
 To control multiple values in a setting, use `ini_subsetting`. For example:
 
 ```
@@ -152,7 +164,7 @@ If the above code is added, the resulting configured file will contain only line
 
 * `provider`: The specific backend to use for this `ini_setting` resource. You will seldom need to specify this --- Puppet usually discovers the appropriate provider for your platform. The only available provider for `ini_setting` is ruby.
 
-* `section`: The name of the INI file section in which the setting should be defined. Add a global section  --- settings that appear at the beginning of the file, before any named sections --- by specifying a section name of "".
+* `section`: The name of the INI file section in which the setting should be defined. Add a global section  --- settings that appear at the beginning of the file, before any named sections --- by either not declaring this parameter or by specifying a section name of "".
 
 * `setting`: The name of the INI file setting to be defined.
 
@@ -174,7 +186,7 @@ If the above code is added, the resulting configured file will contain only line
 
 * `quote_char`: The character used to quote the entire value of the setting. Valid values are '', '"', and "'". Defaults to ''.
 
-* `section`: The name of the INI file section in which the setting should be defined. Add a global section  --- settings that appear at the beginning of the file, before any named sections --- by specifying a section name of "".
+* `section`: The name of the INI file section in which the setting should be defined. Add a global section  --- settings that appear at the beginning of the file, before any named sections --- by either not declaring this parameter or by specifying a section name of "".
 
 * `setting`: The name of the INI file setting to be defined.
 
