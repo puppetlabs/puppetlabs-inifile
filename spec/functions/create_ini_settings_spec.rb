@@ -20,7 +20,4 @@ describe 'create_ini_settings' do
 
     it { should run.with_params({ 1 => 2 }).and_raise_error(Puppet::ParseError, /Section 1 must contain a Hash/) }
   end
-
-  context 'given a catalog with puppet package => absent' do
-  end
 end
