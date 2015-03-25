@@ -1,6 +1,4 @@
-
-
-#INI file
+#inifile
 
 [![Build Status](https://travis-ci.org/puppetlabs/puppetlabs-inifile.png?branch=master)](https://travis-ci.org/puppetlabs/puppetlabs-inifile)
 
@@ -9,74 +7,77 @@
 1. [Overview](#overview)
 2. [Module Description - What the module does and why it is useful](#module-description)
 3. [Setup - The basics of getting started with inifile module](#setup)
-    * [Setup requirements](#setup-requirements)
     * [Beginning with inifile](#beginning-with-inifile)
 4. [Usage - Configuration options and additional functionality](#usage)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
 
-##Overview 
+##Overview
 
-This module adds resource types to manage settings in INI-style configuration files.
+The inifile module lets Puppet manage settings stored in INI-style configuration files.
 
 ##Module Description
 
-The inifile module adds two resource types so that you can use Puppet to manage settings and subsettings in INI-style configuration files. 
+Many applications use INI-style configuration files to store their settings. This module supplies two custom resource types to let you manage those settings through Puppet.
 
-This module tries hard not to manipulate your file any more than it needs to. In most cases, it should leave the original whitespace, comments, ordering, etc. intact.
+##Setup
 
-###Noteworthy module features include:
+###Beginning with inifile
+
+
+To manage a single setting in an INI file, add the `ini_setting` type to a class:
+
+~~~
+ini_setting { "sample setting":
+  ensure  => present,
+  path    => '/tmp/foo.ini',
+  section => 'bar',
+  setting => 'baz',
+  value   => 'quux',
+}
+~~~
+
+##Usage
+
+
+The inifile module tries hard not to manipulate your file any more than it needs to. In most cases, it doesn't affect the original whitespace, comments, ordering, etc.
+
 
  * Supports comments starting with either '#' or ';'.
  * Supports either whitespace or no whitespace around '='.
  * Adds any missing sections to the INI file.
 
-##Setup
+###Manage multiple values in a setting
 
-##Beginning with inifile
+Use the `ini_subsetting` type:
 
-To manage an INI file, add the resource type `ini_setting` or `ini_subsetting` to a class.
-
-##Usage
-
-Manage individual settings in INI files by adding the `ini_setting` resource type to a class. For example:
-
-```
-ini_setting { "sample setting":
-  ensure  => present,
-  path    => '/tmp/foo.ini',
-  section => 'foo',
-  setting => 'foosetting',
-  value   => 'FOO!',
-}
-```
-
-To control multiple values in a setting, use `ini_subsetting`. For example:
-
-```
+~~~
 JAVA_ARGS="-Xmx192m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof "
 
 ini_subsetting {'sample subsetting':
-  ensure  => present,
-  section => '',
+  ensure            => present,
+  section           => '',
   key_val_separator => '=',
-  path => '/etc/default/pe-puppetdb',
-  setting => 'JAVA_ARGS',
-  subsetting => '-Xmx',
-  value   => '512m',
+  path              => '/etc/default/pe-puppetdb',
+  setting           => 'JAVA_ARGS',
+  subsetting        => '-Xmx',
+  value             => '512m',
 }
-```
+~~~
 
-###Implementing child providers:
+###Implement child providers
 
-You can set up custom child providers that inherit the `ini_setting` provider. This allows you to implement custom resources to manage INI settings for specific configuration files without copying all the code or writing your own code from scratch. This also allows resource purging to be used.
 
-To implement child providers, you'll need to specify your own type. This type needs to implement a namevar (name) and a property called value:
+You might want to create child providers that inherit the `ini_setting` provider, for one or both of these purposes:
 
-For example:
+ * Make a custom resource to manage an application that stores its settings in INI files, without recreating the code to manage the files themselves.
 
-```
+ * [Purge all unmanaged settings](https://docs.puppetlabs.com/references/latest/type.html#resources-attribute-purge) from a managed INI file.
+
+To implement child providers, first specify a custom type. Have it implement a namevar called `name` and a property called `value`:
+
+~~~
 #my_module/lib/puppet/type/glance_api_config.rb
 Puppet::Type.newtype(:glance_api_config) do
   ensurable
@@ -86,17 +87,17 @@ Puppet::Type.newtype(:glance_api_config) do
     newvalues(/\S+\/\S+/)
   end
   newproperty(:value) do
-    desc 'The value of the setting to be defined.'
+    desc 'The value of the setting to define'
     munge do |v|
       v.to_s.strip
     end
   end
 end
-```
+~~~
 
-This type must also have a provider that uses the `ini_setting` provider as its parent. For example:
+Your type also needs a provider that uses the `ini_setting` provider as its parent:
 
-```
+~~~
 # my_module/lib/puppet/provider/glance_api_config/ini_setting.rb
 Puppet::Type.type(:glance_api_config).provide(
   :ini_setting,
@@ -116,111 +117,124 @@ Puppet::Type.type(:glance_api_config).provide(
     '/etc/glance/glance-api.conf'
   end
 end
-```
+~~~
 
-Now the individual settings of the /etc/glance/glance-api.conf file can be managed as individual resources:
+Now the settings in /etc/glance/glance-api.conf file can be managed as individual resources:
 
-```
+~~~
 glance_api_config { 'HEADER/important_config':
   value => 'secret_value',
 }
-```
+~~~
 
-If the self.file_path has been implemented, you can purge with the following Puppet syntax:
+If you've implemented self.file_path, you can have Puppet purge the file of all lines that aren't implemented as Puppet resources:
 
-```
+~~~
 resources { 'glance_api_config'
   purge => true,
 }
-```
-
-If the above code is added, the resulting configured file will contain only lines implemented as Puppet resources.
+~~~
 
 ##Reference
 
-###Type: ini_setting
+###Public Types
+
+ * [`ini_setting`](#type-ini_setting)
+
+ * [`ini_subsetting`](#type-ini_subsetting)
+
+### Type: ini_setting
+
+Manages a setting within an INI file.
 
 #### Parameters
 
-* `ensure`: Ensures that the resource is present. Valid values are 'present', 'absent'.
+##### `ensure`
 
-* `key_val_separator`: The separator string to use between each setting name and value. Defaults to ' = ', but you could use this to override the default (e.g., whether or not the separator should include whitespace).
+Determines whether the specified setting should exist. Valid options: 'present' and 'absent'. Default value: 'present'.
 
-* `name`: An arbitrary name used as the identity of the resource.
+##### `key_val_separator`
 
-* `path`: The INI file in which Puppet ensures the specified setting.
+*Optional.* Specifies a string to use between each setting name and value (e.g., to determine whether the separator includes whitespace). Valid options: a string. Default value: ' = '.
 
-* `provider`: The specific backend to use for this `ini_setting` resource. You will seldom need to specify this --- Puppet usually discovers the appropriate provider for your platform. The only available provider for `ini_setting` is ruby.
+##### `name`
 
-* `section`: The name of the INI file section in which the setting should be defined. Add a global section  --- settings that appear at the beginning of the file, before any named sections --- by specifying a section name of "".
+*Optional.* Specifies an arbitrary name to identify the resource. Valid options: a string. Default value: the title of your declared resource.
 
-* `setting`: The name of the INI file setting to be defined.
+##### `path`
 
-* `value`: The value of the INI file setting to be defined.
+*Required.* Specifies an INI file containing the setting to manage. Valid options: a string containing an absolute path.
 
-###Type: ini_subsetting
+##### `section`
+
+*Required.* Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Valid options: a string.
+
+##### `setting`
+
+*Required.* Designates a setting to manage within the specified INI file and section. Valid options: a string.
+
+##### `value`
+
+*Optional.* Supplies a value for the specified setting. Valid options: a string. Default value: undefined.
+
+### Type: ini_subsetting
+
+
+Manages multiple values within the same INI setting.
 
 #### Parameters
 
-* `ensure`: Ensures that the resource is present. Valid values are 'present', 'absent'.
+##### `ensure`
 
-* `key_val_separator`: The separator string to use between each setting name and value. Defaults to ' = ', but you could use this to override the default (e.g., whether or not the separator should include whitespace).
+Specifies whether the subsetting should be present. Valid options: 'present' and 'absent'. Default value: 'present'.
 
-* `name`: An arbitrary name used as the identity of the resource.
+##### `key_val_separator`
 
-* `path`: The INI file in which Puppet ensures the specified setting.
+*Optional.* Specifies a string to use between subsetting name and value (e.g., to determine whether the separator includes whitespace). Valid options: a string. Default value: ' = '.
 
-* `provider`: The specific backend to use for this `ini_subsetting` resource. You will seldom need to specify this --- Puppet usually discovers the appropriate provider for your platform. The only available provider for `ini_subsetting` is ruby.
+##### `path`
 
-* `quote_char`: The character used to quote the entire value of the setting. Valid values are '', '"', and "'". Defaults to ''.
+*Required.* Specifies an INI file containing the subsetting to manage. Valid options: a string containing an absolute path.
 
-* `section`: The name of the INI file section in which the setting should be defined. Add a global section  --- settings that appear at the beginning of the file, before any named sections --- by specifying a section name of "".
+##### `quote_char`
 
-* `setting`: The name of the INI file setting to be defined.
+*Optional.* The character used to quote the entire value of the setting. Valid values are '', '"', and "'". Defaults to ''. Valid options: '', '"' and "'". Default value: ''.
 
-* `subsetting`: The name of the INI file subsetting to be defined.
+##### `section`
 
-* `subsetting_separator`: The separator string used between subsettings. Defaults to " ".
+*Required.* Designates a section of the specified INI file containing the subsetting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Valid options: a string, or "".
 
-* `value`: The value of the INI file subsetting to be defined.
+##### `setting`
+
+*Required.* Designates a setting within the specified section containing the subsetting to manage. Valid options: a string.
+
+##### `subsetting`
+
+*Required.* Designates a subsetting to manage within the specified setting. Valid options: a string.
+
+
+##### `subsetting_separator`
+
+*Optional.* Specifies a string to use between subsettings. Valid options: a string. Default value: " ".
+
+##### `value`
+
+*Optional.* Supplies a value for the specified subsetting. Valid options: a string. Default value: undefined.
 
 ##Limitations
 
-This module is officially [supported](https://forge.puppetlabs.com/supported) on :
-
-* Red Hat Enterprise Linux (RHEL) 5, 6, 7
-* CentOS 5, 6, 7
-* Oracle Linux 5, 6, 7
-* Scientific Linux 5, 6, 7
-* SLES 11 SP1 or greater
-* Debian 6, 7
-* Ubuntu 10.04 LTS, 12.04 LTS, 14.04 LTS
-* Solaris 10, 11
-* Windows Server 2003/2008 R2, 2012/2012 R2 
-* AIX 5.3, 6.1, 7.1
-
-This module has also been tested, but is not officially supported, on:
-
-* Red Hat Enterprise Linux (RHEL) 4
-* Windows 7
-* Mac OSX 10.9 (Mavericks)
-
-### Agent run failure with Puppet Enterprise 
-
-As of Puppet Enterprise 3.3, agent runs on master fail if you are using an older, manually installed version of inifile. To solve this problem, upgrade your inifile module to version 1.1.0 or later. 
+This module has been tested on [all PE-supported platforms](https://forge.puppetlabs.com/supported#compat-matrix), and no issues have been identified. Additionally, it is tested (but not supported) on Windows 7 and Mac OS X 10.9.
 
 ##Development
- 
-Puppet Labs modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. We can’t access the huge number of platforms and myriad of hardware, software, and deployment configurations that Puppet is intended to serve.
+
+#Development
+
+Puppet Labs modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. We can't access the huge number of platforms and myriad of hardware, software, and deployment configurations that Puppet is intended to serve.
 
 We want to keep it as easy as possible to contribute changes so that our modules work in your environment. There are a few guidelines that we need contributors to follow so that we can have a chance of keeping on top of things.
 
-You can read the complete module contribution guide in [CONTRIBUTING.md](./CONTRIBUTING.md)
+For more information, see our [module contribution guide.](https://docs.puppetlabs.com/forge/contributing.html)
 
-##Contributors
+###Contributors
 
-The list of contributors can be found at: [https://github.com/puppetlabs/puppetlabs-inifile/graphs/contributors](https://github.com/puppetlabs/puppetlabs-inifile/graphs/contributors).
-
-
-
-
+To see who's already involved, see the [list of contributors.](https://github.com/puppetlabs/puppetlabs-inifile/graphs/contributors)
