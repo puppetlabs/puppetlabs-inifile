@@ -262,7 +262,8 @@ EOS
       subject.get_value("Drive names", "C:").should eq 'Winchester'
     end
   end
-context 'Configuration with spaces in setting names' do
+
+  context 'Configuration with spaces in setting names' do
     let(:sample_content) do
       template = <<-EOS
       [global]

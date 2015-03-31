@@ -147,9 +147,10 @@ describe 'ini_setting resource' do
 
   describe 'section, setting, value parameters' do
     {
-        "section => 'test', setting => 'foo', value => 'bar',"   => /\[test\]\nfoo = bar/,
-        "section => 'more', setting => 'baz', value => 'quux',"  => /\[more\]\nbaz = quux/,
-        "section => '',     setting => 'top', value => 'level'," => /top = level/,
+        "section => 'test', setting => 'foo', value => 'bar',"         => /\[test\]\nfoo = bar/,
+        "section => 'more', setting => 'baz', value => 'quux',"        => /\[more\]\nbaz = quux/,
+        "section => '',     setting => 'top', value => 'level',"       => /top = level/,
+        "section => 'z',    setting => 'sp aces', value => 'foo bar'," => /\[z\]\nsp aces = foo bar/,
     }.each do |parameter_list, content|
       context parameter_list do
         pp = <<-EOS
