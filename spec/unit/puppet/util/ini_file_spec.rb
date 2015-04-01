@@ -262,4 +262,26 @@ EOS
       subject.get_value("Drive names", "C:").should eq 'Winchester'
     end
   end
+
+  context 'Configuration with spaces in setting names' do
+    let(:sample_content) do
+      template = <<-EOS
+      [global]
+        # log files split per-machine:
+        log file = /var/log/samba/log.%m
+
+        kerberos method = system keytab
+        passdb backend = tdbsam
+        security = ads
+EOS
+      template.split("\n")
+    end
+
+    it "should expose settings for sections" do
+      subject.get_value("global", "log file").should eq '/var/log/samba/log.%m'
+      subject.get_value("global", "kerberos method").should eq 'system keytab'
+      subject.get_value("global", "passdb backend").should eq 'tdbsam'
+      subject.get_value("global", "security").should eq 'ads'
+    end
+  end
 end

@@ -10,9 +10,8 @@ module Util
       k_v_s = key_val_separator.strip
 
       @@SECTION_REGEX = /^\s*\[([^\]]*)\]\s*$/
-      @@SETTING_REGEX = /^(\s*)([^\s#{k_v_s}]*)(\s*#{k_v_s}\s*)(.*)\s*$/
-      @@COMMENTED_SETTING_REGEX = /^(\s*)[#;]+(\s*)([^\s#{k_v_s}]*)(\s*#{k_v_s}[ \t]*)(.*)\s*$/
-
+      @@SETTING_REGEX = /^(\s*)([^#;\s]|[^#;\s].*?[^\s#{k_v_s}])(\s*#{k_v_s}\s*)(.*)\s*$/
+      @@COMMENTED_SETTING_REGEX = /^(\s*)[#;]+(\s*)(.*?[^\s#{k_v_s}])(\s*#{k_v_s}[ \t]*)(.*)\s*$/
 
       @path = path
       @key_val_separator = key_val_separator
