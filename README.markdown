@@ -65,6 +65,24 @@ ini_subsetting {'sample subsetting':
 }
 ~~~
 
+###Use a non-standard section header
+
+~~~
+default:
+   minage = 1
+   maxage = 13
+
+ini_setting { 'default minage':
+  ensure         => present,
+  path           => '/etc/security/users',
+  section        => 'default',
+  setting        => 'minage',
+  value          => '1',
+  section_prefix => '',
+  section_suffix => ':',
+}
+~~~
+
 ###Implement child providers
 
 
@@ -175,6 +193,16 @@ Determines whether the specified setting should exist. Valid options: 'present' 
 ##### `value`
 
 *Optional.* Supplies a value for the specified setting. Valid options: a string. Default value: undefined.
+
+##### `section_prefix`
+
+*Optional.*  Designates the string that will appear before the section's name.  Default value: "["
+
+##### `section_suffix`
+
+*Optional.*  Designates the string that will appear after the section's name.  Default value: "]"
+
+**NOTE:** The way this type finds all sections in the file is by looking for lines like `${section_prefix}${title}${section_suffix}`
 
 ### Type: ini_subsetting
 

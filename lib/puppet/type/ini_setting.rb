@@ -39,5 +39,16 @@ Puppet::Type.newtype(:ini_setting) do
     desc 'The value of the setting to be defined.'
   end
 
+  newparam(:section_prefix) do
+    desc 'The prefix to the section name\'s header.' +
+        'Defaults to \'[\'.'
+    defaultto('[')
+  end
+
+  newparam(:section_suffix) do
+    desc 'The suffix to the section name\'s header.' +
+        'Defaults to \']\'.'
+    defaultto(']')
+  end
 
 end
