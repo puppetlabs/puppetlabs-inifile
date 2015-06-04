@@ -1,4 +1,4 @@
-##2015-05-29 - Supported Releases 1.3.0
+##2015-06-09 - Supported Releases 1.3.0
 ###Summary
 
 This is primarily a feature release, but also includes test fixes, documentation updates and synchronization of files with modulesync.
