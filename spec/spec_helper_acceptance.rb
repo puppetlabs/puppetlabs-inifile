@@ -1,6 +1,6 @@
 require 'beaker-rspec/spec_helper'
 require 'beaker-rspec/helpers/serverspec'
-require 'beaker/puppet_installer_helper'
+require 'beaker/puppet_install_helper'
 
 run_puppet_install_helper
 
