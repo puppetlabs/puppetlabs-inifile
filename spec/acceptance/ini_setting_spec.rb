@@ -72,6 +72,40 @@ describe 'ini_setting resource' do
       it_behaves_like 'has_content', "#{tmpdir}/ini_setting.ini", pp, /four = five\n\n\[one\]\ntwo = three/
     end
 
+    context '=> present for global and section (from previous blank value)' do
+      before :all do
+        if fact('osfamily') == 'Darwin'
+          shell("echo \"four =[one]\ntwo =\" > #{tmpdir}/ini_setting.ini")
+        else
+          shell("echo -e \"four =\n[one]\ntwo =\" > #{tmpdir}/ini_setting.ini")
+        end
+      end
+
+      pp = <<-EOS
+      ini_setting { 'ensure => present for section':
+        ensure  => present,
+        path    => "#{tmpdir}/ini_setting.ini",
+        section => 'one',
+        setting => 'two',
+        value   => 'three',
+      }
+      ini_setting { 'ensure => present for global':
+        ensure  => present,
+        path    => "#{tmpdir}/ini_setting.ini",
+        section => '',
+        setting => 'four',
+        value   => 'five',
+      }
+      EOS
+
+      it 'applies the manifest twice' do
+        apply_manifest(pp, :catch_failures => true)
+        apply_manifest(pp, :catch_changes => true)
+      end
+
+      it_behaves_like 'has_content', "#{tmpdir}/ini_setting.ini", pp, /four = five\n\n\[one\]\ntwo = three/
+    end
+
     context '=> absent for key/value' do
       before :all do
         if fact('osfamily') == 'Darwin'

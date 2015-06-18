@@ -13,7 +13,7 @@ module Util
       @section_suffix = section_suffix
 
       @@SECTION_REGEX = section_regex
-      @@SETTING_REGEX = /^(\s*)([^#;\s]|[^#;\s].*?[^\s#{k_v_s}])(\s*#{k_v_s}\s*)(.*)\s*$/
+      @@SETTING_REGEX = /^(\s*)([^#;\s]|[^#;\s].*?[^\s#{k_v_s}])(\s*#{k_v_s}[ \t]*)(.*)\s*$/
       @@COMMENTED_SETTING_REGEX = /^(\s*)[#;]+(\s*)(.*?[^\s#{k_v_s}])(\s*#{k_v_s}[ \t]*)(.*)\s*$/
 
       @path = path
