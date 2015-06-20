@@ -250,7 +250,7 @@ Specifies whether the subsetting should be present. Valid options: 'present' and
 
 ##Limitations
 
-This module has been tested on [all PE-supported platforms](https://forge.puppetlabs.com/supported#compat-matrix), and no issues have been identified. Additionally, it is tested (but not supported) on Windows 7 and Mac OS X 10.9.
+This module has been tested on [all PE-supported platforms](https://forge.puppetlabs.com/supported#compat-matrix), and no issues have been identified. Additionally, it is tested (but not supported) on Windows 7, Mac OS X 10.9, and Solaris 12.
 
 ##Development
 
