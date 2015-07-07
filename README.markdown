@@ -188,7 +188,7 @@ Determines whether the specified setting should exist. Valid options: 'present' 
 
 ##### `setting`
 
-*Optional.* Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Defaults to "". Valid options: a string.
+*Optional.* The name of the setting to define. Valid options: a string.
 
 ##### `value`
 
