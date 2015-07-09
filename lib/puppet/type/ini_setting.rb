@@ -35,6 +35,11 @@ Puppet::Type.newtype(:ini_setting) do
     defaultto(" = ")
   end
 
+  newparam(:ensure_absent_val) do
+    desc 'A value that is specified as the value property will behave as if ensure => absent was specified'
+    defaultto('nil')
+  end
+
   newproperty(:value) do
     desc 'The value of the setting to be defined.'
   end
