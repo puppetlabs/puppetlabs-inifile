@@ -160,6 +160,13 @@ resources { 'glance_api_config'
 
  * [`ini_subsetting`](#type-ini_subsetting)
 
+###Public Functions
+
+ * [`create_ini_settings`](#function-create_ini_settings)
+
+
+
+
 ### Type: ini_setting
 
 Manages a setting within an INI file.
@@ -188,7 +195,7 @@ Determines whether the specified setting should exist. Valid options: 'present' 
 
 ##### `setting`
 
-*Optional.* Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Defaults to "". Valid options: a string.
+*Optional.* The name of the setting to define. Valid options: a string.
 
 ##### `value`
 
@@ -204,8 +211,10 @@ Determines whether the specified setting should exist. Valid options: 'present' 
 
 **NOTE:** The way this type finds all sections in the file is by looking for lines like `${section_prefix}${title}${section_suffix}`
 
-### Type: ini_subsetting
 
+
+
+### Type: ini_subsetting
 
 Manages multiple values within the same INI setting.
 
@@ -247,6 +256,134 @@ Specifies whether the subsetting should be present. Valid options: 'present' and
 ##### `value`
 
 *Optional.* Supplies a value for the specified subsetting. Valid options: a string. Default value: undefined.
+
+
+
+
+### Function: create_ini_settings
+
+`create_ini_settings($settings, $defaults)`
+
+Manage multiple ini_setting resources from a hash with comfort. You can provide a hash in your manifest and feed it from Hiera. This can however not be used with ini_subsettings!
+
+#### Parameters
+
+##### `$settings`
+
+*Required.* Specify a hash with the ini_setting resources.
+
+###### Example
+~~~
+defaults = { 'path' => '/tmp/foo.ini' }
+$example = { 'section1' => { 'setting1' => 'value1' } }
+create_ini_settings($example, $defaults)
+~~~
+results in a resource
+~~~
+ini_setting { '[section1] setting1':
+    ensure  => present,
+    section => 'section1',
+    setting => 'setting1',
+    value   => 'value1',
+    path    => '/tmp/foo.ini'
+}
+~~~
+
+###### Example with special parameters
+~~~
+defaults = { 'path' => '/tmp/foo.ini' }
+$example = { 'section1' => {
+                'setting1' => 'value1',
+                'settings2' => {
+                        'ensure' => 'absent'
+                    }
+                }
+           }
+create_ini_settings($example, $defaults)
+~~~
+results in resources
+~~~
+ini_setting { '[section1] setting1':
+    ensure  => present,
+    section => 'section1',
+    setting => 'setting1',
+    value   => 'value1',
+    path    => '/tmp/foo.ini',
+}
+ini_setting { '[section1] setting2':
+    ensure  => absent,
+    section => 'section1',
+    setting => 'setting2',
+    path    => '/tmp/foo.ini',
+}
+~~~
+
+##### `$defaults`
+
+*Optional, but recommended.* 
+
+This works exactly like `create_resources` defaults parameter. Use it to not repeat yourself to often
+and write settings more densely. Example usage see parameter `$settings` above.
+
+If you omit this parameter, you will need to add the `path` and `value` attribute to every single setting as a hash 
+(`$example = { 'section1' => { 'setting1' => { 'value' => 'value1', 'path' => '/tmp/foo.ini' } } }`).
+This most certainly is not what you want, but if you need it it's there.
+
+Default value: '{}'.
+
+#### Example with Hiera
+This example will need Puppet 3.x/4.x as it uses automatic retrieval of Hiera data for class parameters and
+`puppetlabs/stdlib` (you use that one already, don't you?).
+
+Of course you may use `hiera_hash` when on Puppet 2.x or other use cases. Remember this is only one example,
+feel free to live your creativity on writing manifests.
+
+Imagine a profile `example`:
+~~~
+class profile::example (
+    $settings,
+) {
+    validate_hash($settings)
+    $defaults = { 'path' => '/tmp/foo.ini' }
+    create_ini_settings($settings, $defaults)
+}
+~~~
+
+Now provide this in your Hiera data:
+~~~
+profile::example::settings:
+    section1:
+        setting1: value1
+        setting2: value2
+        setting3:
+            ensure: absent
+~~~
+
+This will result in resources:
+~~~
+ini_setting { '[section1] setting1':
+    ensure  => present,
+    section => 'section1',
+    setting => 'setting1',
+    value   => 'value1',
+    path    => '/tmp/foo.ini',
+}
+ini_setting { '[section1] setting2':
+    ensure  => present,
+    section => 'section1',
+    setting => 'setting2',
+    value   => 'value2',
+    path    => '/tmp/foo.ini',
+}
+ini_setting { '[section1] setting3':
+    ensure  => absent,
+    section => 'section1',
+    setting => 'setting3',
+    path    => '/tmp/foo.ini',
+}
+~~~
+
+
 
 ##Limitations
 
