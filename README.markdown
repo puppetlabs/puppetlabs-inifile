@@ -51,8 +51,11 @@ The inifile module tries hard not to manipulate your file any more than it needs
 Use the `ini_subsetting` type:
 
 ~~~puppet
-JAVA_ARGS="-Xmx192m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof "
+JAVA_ARGS="-Xmx512m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
+~~~
 
+
+~~~puppet
 ini_subsetting {'sample subsetting':
   ensure            => present,
   section           => '',
@@ -69,8 +72,9 @@ ini_subsetting {'sample subsetting':
 ~~~puppet
 default:
    minage = 1
-   maxage = 13
+~~~
 
+~~~puppet
 ini_setting { 'default minage':
   ensure         => present,
   path           => '/etc/security/users',
@@ -368,18 +372,18 @@ Manages multiple `ini_setting` resources from a hash. Note that this cannot be u
 
 *Required.* Specify a hash representing the `ini_setting` resources you want to create.
 
-##### `defaults`
+##### Second argument: `defaults`
 
 *Optional.* Accepts a hash to be used as the values for any attributes not defined in the first argument.
  
 ~~~puppet
-`$example = {
+$example = {
   'section1' => {
     'setting1' => {
       'value' => 'value1', 'path' => '/tmp/foo.ini' 
-      } 
     } 
-  }`
+  } 
+}
 ~~~
 
 Default value: '{}'.
