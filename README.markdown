@@ -51,11 +51,6 @@ The inifile module tries hard not to manipulate your file any more than it needs
 Use the `ini_subsetting` type:
 
 ~~~puppet
-JAVA_ARGS="-Xmx512m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
-~~~
-
-
-~~~puppet
 ini_subsetting {'sample subsetting':
   ensure            => present,
   section           => '',
@@ -67,12 +62,14 @@ ini_subsetting {'sample subsetting':
 }
 ~~~
 
-###Use a non-standard section header
+Results in managing this `-Xmx` subsetting:
 
 ~~~puppet
-default:
-   minage = 1
+JAVA_ARGS="-Xmx512m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
 ~~~
+
+
+###Use a non-standard section header
 
 ~~~puppet
 ini_setting { 'default minage':
@@ -84,6 +81,13 @@ ini_setting { 'default minage':
   section_prefix => '',
   section_suffix => ':',
 }
+~~~
+
+Results in:
+
+~~~puppet
+default:
+   minage = 1
 ~~~
 
 ###Implement child providers
@@ -219,9 +223,9 @@ For the profile `example`:
 class profile::example (
   $settings,
 ) {
-    validate_hash($settings)
-    $defaults = { 'path' => '/tmp/foo.ini' }
-    create_ini_settings($settings, $defaults)
+  validate_hash($settings)
+  $defaults = { 'path' => '/tmp/foo.ini' }
+  create_ini_settings($settings, $defaults)
 }
 ~~~
 
@@ -375,14 +379,14 @@ Manages multiple `ini_setting` resources from a hash. Note that this cannot be u
 ##### Second argument: `defaults`
 
 *Optional.* Accepts a hash to be used as the values for any attributes not defined in the first argument.
- 
+
 ~~~puppet
 $example = {
   'section1' => {
     'setting1' => {
-      'value' => 'value1', 'path' => '/tmp/foo.ini' 
-    } 
-  } 
+      'value' => 'value1', 'path' => '/tmp/foo.ini'
+    }
+  }
 }
 ~~~
 
