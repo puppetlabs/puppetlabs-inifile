@@ -226,7 +226,7 @@ Specifies whether the subsetting should be present. Valid options: 'present' and
 
 ##### `key_val_separator`
 
-*Optional.* Specifies a string to use between subsetting name and value (e.g., to determine whether the separator includes whitespace). Valid options: a string. Default value: ' = '.
+*Optional.* Specifies a string to use between setting name and value (e.g., to determine whether the separator includes whitespace). Valid options: a string. Default value: ' = '.
 
 ##### `path`
 
@@ -252,6 +252,10 @@ Specifies whether the subsetting should be present. Valid options: 'present' and
 ##### `subsetting_separator`
 
 *Optional.* Specifies a string to use between subsettings. Valid options: a string. Default value: " ".
+
+##### `use_exact_match`
+
+*Optional.* Whether to use partial or exact matching for subsetting. Should be set to true if the subsettings do not have values. Valid options: true, false. Default value: false.
 
 ##### `value`
 
