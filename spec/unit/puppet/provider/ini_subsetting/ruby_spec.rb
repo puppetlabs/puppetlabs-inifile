@@ -132,4 +132,50 @@ somenewsetting = puppetdb
     end
 
   end
+
+  context "when working with subsettings in files with use_exact_match" do
+    let(:common_params) { {
+        :title           => 'ini_setting_ensure_present_test',
+        :path            => tmpfile,
+        :section         => 'master',
+        :setting         => 'reports',
+        :use_exact_match => true,
+    } }
+
+    let(:orig_content) {
+      <<-EOS
+[master]
+
+reports = http,foo
+      EOS
+    }
+
+    it "should add a new subsetting when the 'parent' setting already exists" do
+      resource = Puppet::Type::Ini_subsetting.new(common_params.merge(
+          :subsetting => 'fo', :subsetting_separator => ','))
+      provider = described_class.new(resource)
+      provider.value=('')
+      validate_file(<<-eos
+[master]
+
+reports = http,foo,fo
+      eos
+      )
+    end
+
+    it "should not remove substring subsettings" do
+      resource = Puppet::Type::Ini_subsetting.new(common_params.merge(
+          :subsetting => 'fo', :subsetting_separator => ','))
+      provider = described_class.new(resource)
+      provider.value=('')
+      provider.destroy
+      validate_file(<<-EOS
+[master]
+
+reports = http,foo
+      EOS
+      )
+    end
+  end
+
 end

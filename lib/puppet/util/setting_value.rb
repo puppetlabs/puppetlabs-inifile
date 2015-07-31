@@ -51,27 +51,32 @@ module Puppet
         @quote_char + result + @quote_char
       end
 
-      def get_subsetting_value(subsetting)
+      def get_subsetting_value(subsetting, use_exact_match=:false)
 
         value = nil
 
         @subsetting_items.each { |item|
-          if(item.start_with?(subsetting))
+          if(use_exact_match == :false and item.start_with?(subsetting))
             value = item[subsetting.length, item.length - subsetting.length]
             break
+          elsif(use_exact_match == :true and item.eql?(subsetting))
+            return true
           end
         }
 
         value
       end
 
-      def add_subsetting(subsetting, subsetting_value)
+      def add_subsetting(subsetting, subsetting_value, use_exact_match=:false)
 
         new_item = subsetting + (subsetting_value || '')
         found = false
 
         @subsetting_items.map! { |item|
-          if item.start_with?(subsetting)
+          if use_exact_match == :false and item.start_with?(subsetting)
+            value = new_item
+            found = true
+          elsif use_exact_match == :true and item.eql?(subsetting)
             value = new_item
             found = true
           else
@@ -86,8 +91,12 @@ module Puppet
         end
       end
 
-      def remove_subsetting(subsetting)
-        @subsetting_items = @subsetting_items.map { |item| item.start_with?(subsetting) ? nil : item }.compact
+      def remove_subsetting(subsetting, use_exact_match=:false)
+        if use_exact_match == :false
+          @subsetting_items = @subsetting_items.map { |item| item.start_with?(subsetting) ? nil : item }.compact
+        else
+          @subsetting_items = @subsetting_items.map { |item| item.eql?(subsetting) ? nil : item }.compact
+        end
       end
     end
   end

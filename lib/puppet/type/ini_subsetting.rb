@@ -56,6 +56,12 @@ Puppet::Type.newtype(:ini_subsetting) do
     end
   end
 
+  newparam(:use_exact_match) do
+    desc 'Set to true if your subsettings don\'t have values and you want to use exact matches to determine if the subsetting exists. See MODULES-2212'
+    newvalues(:true, :false)
+    defaultto(:false)
+  end
+
   newproperty(:value) do
     desc 'The value of the subsetting to be defined.'
   end
