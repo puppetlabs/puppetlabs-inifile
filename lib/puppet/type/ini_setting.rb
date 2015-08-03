@@ -17,6 +17,12 @@ Puppet::Type.newtype(:ini_setting) do
 
   newparam(:setting) do
     desc 'The name of the setting to be defined.'
+    munge do |value|
+      if value =~ /(^\s|\s$)/
+        Puppet.warn("Settings should not have spaces in the value, we are going to strip the whitespace")
+      end
+      value.lstrip.rstrip
+    end
   end
 
   newparam(:path) do
