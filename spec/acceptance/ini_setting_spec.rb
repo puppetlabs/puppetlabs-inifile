@@ -262,6 +262,8 @@ describe 'ini_setting resource' do
         ""                             => /two = three/,
         "key_val_separator => '=',"    => /two=three/,
         "key_val_separator => ' =  '," => /two =  three/,
+        "key_val_separator => ' '," => /two three/,
+        "key_val_separator => '   '," => /two   three/,
     }.each do |parameter, content|
       context "with \"#{parameter}\" makes \"#{content}\"" do
         pp = <<-EOS
