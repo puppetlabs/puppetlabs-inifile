@@ -7,7 +7,7 @@ module Util
 
     def initialize(path, key_val_separator = ' = ', section_prefix = '[', section_suffix = ']')
 
-      k_v_s = key_val_separator.strip
+      k_v_s = key_val_separator =~ /^\s+$/ ? ' ' : key_val_separator.strip
 
       @section_prefix = section_prefix
       @section_suffix = section_suffix
