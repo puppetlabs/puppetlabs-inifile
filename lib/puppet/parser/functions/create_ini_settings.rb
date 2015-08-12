@@ -24,21 +24,21 @@ Uses create_resources to create a set of ini_setting resources from a hash:
 
 Will create the following resources
 
-    ini_setting{'[section1] setting1':
+    ini_setting{'/tmp/foo.ini [section1] setting1':
       ensure  => present,
       section => 'section1',
       setting => 'setting1',
       value   => 'val1',
       path    => '/tmp/foo.ini',
     }
-    ini_setting{'[section2] setting2':
+    ini_setting{'/tmp/foo.ini [section2] setting2':
       ensure  => present,
       section => 'section2',
       setting => 'setting2',
       value   => 'val2',
       path    => '/tmp/foo.ini',
     }
-    ini_setting{'[section2] setting3':
+    ini_setting{'/tmp/foo.ini [section2] setting3':
       ensure  => absent,
       section => 'section2',
       setting => 'setting3',
@@ -64,8 +64,12 @@ EOS
         "create_ini_settings(): Section #{section} must contain a Hash") \
         unless settings[section].is_a?(Hash)
 
+      unless path = defaults.merge(settings)['path']
+        raise Puppet::ParseError, 'create_ini_settings(): must pass the path parameter to the Ini_setting resource!'
+      end
+
       settings[section].each do |setting, value|
-        res["[#{section}] #{setting}"] = {
+        res["#{path} [#{section}] #{setting}"] = {
           'ensure'  => 'present',
           'section' => section,
           'setting' => setting,

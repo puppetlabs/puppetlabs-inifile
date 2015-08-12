@@ -284,7 +284,7 @@ create_ini_settings($example, $defaults)
 ~~~
 results in a resource
 ~~~
-ini_setting { '[section1] setting1':
+ini_setting { '/tmp/foo.ini [section1] setting1':
     ensure  => present,
     section => 'section1',
     setting => 'setting1',
@@ -307,14 +307,14 @@ create_ini_settings($example, $defaults)
 ~~~
 results in resources
 ~~~
-ini_setting { '[section1] setting1':
+ini_setting { '/tmp/foo.ini [section1] setting1':
     ensure  => present,
     section => 'section1',
     setting => 'setting1',
     value   => 'value1',
     path    => '/tmp/foo.ini',
 }
-ini_setting { '[section1] setting2':
+ini_setting { '/tmp/foo.ini [section1] setting2':
     ensure  => absent,
     section => 'section1',
     setting => 'setting2',
@@ -324,12 +324,12 @@ ini_setting { '[section1] setting2':
 
 ##### `$defaults`
 
-*Optional, but recommended.* 
+*Optional, but recommended.*
 
 This works exactly like `create_resources` defaults parameter. Use it to not repeat yourself to often
 and write settings more densely. Example usage see parameter `$settings` above.
 
-If you omit this parameter, you will need to add the `path` and `value` attribute to every single setting as a hash 
+If you omit this parameter, you will need to add the `path` and `value` attribute to every single setting as a hash
 (`$example = { 'section1' => { 'setting1' => { 'value' => 'value1', 'path' => '/tmp/foo.ini' } } }`).
 This most certainly is not what you want, but if you need it it's there.
 
