@@ -1,3 +1,12 @@
+## 2015-09-01 - Supported Release 1.4.2
+### Summary
+This release adds some bugfixes.
+
+####Bugfixes
+- MODULES-2212 Add use_exact_match parameter for subsettings
+- MODULES-1908 Munge the setting to ensure we always strip the whitespace
+- MODULES-2369 Support a space as a key_val_separator
+
 ## 2015-07-15 - Supported Release 1.4.1
 ### Summary
 This release bumps the metadata for PE up.
