@@ -10,9 +10,9 @@ Puppet::Type.newtype(:ini_setting) do
   def munge_boolean_md5(value)
     case value
     when true, :true, 'true', :yes, 'yes'
-      true
+      :true
     when false, :false, 'false', :no, 'no'
-      false
+      :false
     when :md5, 'md5'
       :md5
     else
@@ -72,7 +72,7 @@ Puppet::Type.newtype(:ini_setting) do
     desc 'The value of the setting to be defined.'
 
     def should_to_s(newvalue)
-      if (@resource[:show_diff] == true && Puppet[:show_diff]) then
+      if (@resource[:show_diff] == :true && Puppet[:show_diff]) then
         return newvalue
       elsif (@resource[:show_diff] == :md5 && Puppet[:show_diff]) then
         return '{md5}' + Digest::MD5.hexdigest(newvalue.to_s)
