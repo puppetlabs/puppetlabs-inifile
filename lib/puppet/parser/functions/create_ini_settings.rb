@@ -65,7 +65,7 @@ EOS
         unless settings[section].is_a?(Hash)
 
       settings[section].each do |setting, value|
-        res["[#{section}] #{setting}"] = {
+        res["#{section} #{setting}"] = {
           'ensure'  => 'present',
           'section' => section,
           'setting' => setting,
