@@ -134,6 +134,11 @@ module Util
           end
 
           if ! section.is_new_section?
+            # don't add empty sections
+            if section.empty? and ! section.is_global?
+              next
+            end
+
             # write all of the pre-existing settings
             (section.start_line..section.end_line).each do |line_num|
               line = lines[line_num]
