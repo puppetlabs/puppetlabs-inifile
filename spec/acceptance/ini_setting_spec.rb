@@ -134,7 +134,7 @@ describe 'ini_setting resource' do
         it { should be_file }
         its(:content) {
           should match /four = five/
-          should match /\[one\]/
+          should_not match /\[one\]/
           should_not match /two = three/
         }
       end
