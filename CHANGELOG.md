@@ -1,3 +1,14 @@
+## Supported Release 1.5.0
+### Summary
+This release adds the long-awaited `show_diff` parameter for diffing the complete file on changes (or can also just show the md5 sums).
+
+### Features
+- Added `show_diff` parameter to show diffs on changes.
+- Remove empty ini sections when the last line in the section is removed.
+
+### Bugfixes
+- Workaround `create_ini_settings()` duplicate resources puppet bug PUP-4709
+
 ## Supported Release 1.4.3
 ###Summary
 
