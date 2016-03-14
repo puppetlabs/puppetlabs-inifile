@@ -331,6 +331,33 @@ Global show_diff configuraton takes priority over this one -
 
 *Optional.*  Designates the string that will appear after the section's name.  Default value: "]".
 
+##### `refreshonly`
+
+*Optional.*  A boolean to indicate whether or not the value associated with the setting should be updated if this resource is only part of a refresh event.  Default value: **false**.
+
+For example, if we want a timestamp associated with the last time a setting's value was updated, we could do something like this:
+
+~~~
+ini_setting { 'foosetting':
+  ensure  => present,
+  path    => '/tmp/file.ini',
+  section => 'foo',
+  setting => 'foosetting',
+  value   => 'bar',
+  notify  => Ini_Setting['foosetting_timestamp'],
+}
+
+$now = strftime('%Y-%m-%d %H:%M:%S')
+ini_setting {'foosetting_timestamp':
+  ensure      => present,
+  path        => '/tmp/file.ini',
+  section     => 'foo',
+  setting     => 'foosetting_timestamp',
+  value       => $now,
+  refreshonly => true,
+}
+~~~
+
 **NOTE:** This type finds all sections in the file by looking for lines like `${section_prefix}${title}${section_suffix}`.
 
 ### Type: ini_subsetting
