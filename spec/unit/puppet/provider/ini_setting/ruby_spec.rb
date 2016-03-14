@@ -89,7 +89,7 @@ subby=bar
             end
           end
           child_three.stubs(:file_path).returns(tmpfile)
-          child_three.instances.size == 7
+          child_three.instances.size.should eq(7)
           expected_array = [
             {:name => 'section1/foo', :value => 'foovalue' },
             {:name => 'section1/bar', :value => 'barvalue' },
@@ -107,7 +107,7 @@ subby=bar
             ensure_array.push(ensure_value)
             real_array.push(prop_hash)
           end
-          ensure_array.uniq.should == [:present]
+          ensure_array.uniq.should eq([:present])
           ((real_array - expected_array) && (expected_array - real_array)).should == []
 
         end
@@ -305,7 +305,7 @@ subby=bar
            :section => 'section:sub', :setting => 'subby', :value => 'foo'))
       provider = described_class.new(resource)
       provider.exists?.should be true
-      provider.value.should == 'bar'
+      provider.value.should eq('bar')
       provider.value=('foo')
       validate_file(<<-EOS
 # This is a comment
@@ -336,7 +336,7 @@ subby=foo
            :setting => 'url', :value => 'http://192.168.0.1:8080'))
       provider = described_class.new(resource)
       provider.exists?.should be true
-      provider.value.should == 'http://192.168.1.1:8080'
+      provider.value.should eq('http://192.168.1.1:8080')
       provider.value=('http://192.168.0.1:8080')
 
       validate_file( <<-EOS
@@ -370,7 +370,7 @@ subby=bar
            :section_prefix => '-', :section_suffix => '-' ))
       provider = described_class.new(resource)
       provider.exists?.should be true
-      provider.value.should == 'purple'
+      provider.value.should eq('purple')
       provider.value=('http://192.168.0.1:8080')
 
       validate_file( <<-EOS
@@ -640,7 +640,7 @@ foo = http://192.168.1.1:8080
            :section => '', :setting => 'foo', :value => 'yippee'))
       provider = described_class.new(resource)
       provider.exists?.should be true
-      provider.value.should == 'blah'
+      provider.value.should eq('blah')
       provider.value=('yippee')
       validate_file(<<-EOS
 # This is a comment
@@ -688,7 +688,7 @@ foo = http://192.168.1.1:8080
           :section => 'section2', :setting => 'foo', :value => 'yippee'))
       provider = described_class.new(resource)
       provider.exists?.should be true
-      provider.value.should == 'http://192.168.1.1:8080'
+      provider.value.should eq('http://192.168.1.1:8080')
       provider.value=('yippee')
       validate_file(<<-EOS
 [section2]
@@ -728,7 +728,7 @@ foo=bar
                                                    :key_val_separator => '='))
       provider = described_class.new(resource)
       provider.exists?.should be true
-      provider.value.should == 'bar'
+      provider.value.should eq('bar')
       provider.value=('yippee')
       validate_file(<<-EOS
 [section2]
@@ -755,7 +755,7 @@ foo: bar
                                                    :key_val_separator => ': '))
       provider = described_class.new(resource)
       provider.exists?.should be true
-      provider.value.should == 'bar'
+      provider.value.should eq('bar')
       provider.value=('yippee')
       validate_file(<<-EOS
 [section2]
@@ -799,7 +799,7 @@ foo bar
                                                    :key_val_separator => ' '))
       provider = described_class.new(resource)
       provider.exists?.should be true
-      provider.value.should == 'bar'
+      provider.value.should eq('bar')
       provider.value=('yippee')
       validate_file(<<-EOS
 [section2]
@@ -840,6 +840,11 @@ master = true
 foo= foovalue2
 baz=bazvalue
 url = http://192.168.1.1:8080
+[section3]
+# com = ment
+uncom = ment
+[section4]
+uncom = ment
 [section:sub]
 subby=bar
     #another comment
@@ -867,6 +872,11 @@ master = true
 foo= foovalue2
 baz=bazvalue
 url = http://192.168.1.1:8080
+[section3]
+# com = ment
+uncom = ment
+[section4]
+uncom = ment
 [section:sub]
 subby=bar
     #another comment
@@ -897,12 +907,16 @@ master = true
 foo= foovalue2
 baz=bazvalue
 url = http://192.168.1.1:8080
+[section3]
+# com = ment
+uncom = ment
+[section4]
+uncom = ment
 [section:sub]
 subby=bar
     #another comment
  ; yet another comment
 
- -nonstandard-
 EOS
     )
     end
@@ -925,6 +939,11 @@ master = true
 foo= foovalue2
 baz=bazvalue
 url = http://192.168.1.1:8080
+[section3]
+# com = ment
+uncom = ment
+[section4]
+uncom = ment
 [section:sub]
 subby=bar
     #another comment
@@ -955,6 +974,11 @@ master = true
 foo= foovalue2
 baz=bazvalue
 url = http://192.168.1.1:8080
+[section3]
+# com = ment
+uncom = ment
+[section4]
+uncom = ment
 [section:sub]
 subby=bar
     #another comment
@@ -964,6 +988,77 @@ subby=bar
    shoes = purple
       EOS
       )
+    end
+
+    it "does not remove a section when the last uncommented setting is removed if there are comments" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+        :section => 'section3',
+        :setting => 'uncom',
+        :ensure => 'absent',
+      ))
+      provider = described_class.new(resource)
+      provider.exists?.should be true
+      provider.destroy
+      validate_file(<<-EOS
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section3]
+# com = ment
+[section4]
+uncom = ment
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+
+ -nonstandard-
+   shoes = purple
+      EOS
+      )
+    end
+
+    it "removes the section when removing the last line in the section" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+        :section => 'section4',
+        :setting => 'uncom',
+        :ensure => 'absent',
+      ))
+      provider = described_class.new(resource)
+      provider.exists?.should be true
+      provider.destroy
+      validate_file(<<-EOS
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section3]
+# com = ment
+uncom = ment
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+
+ -nonstandard-
+   shoes = purple
+      EOS
+                   )
     end
   end
 
@@ -1399,7 +1494,5 @@ foo = bar
                     EOS
                    )
     end
-
   end
-
 end
