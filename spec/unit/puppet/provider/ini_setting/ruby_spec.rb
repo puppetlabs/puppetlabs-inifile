@@ -268,6 +268,36 @@ subby=bar
       )
     end
 
+    it "should modify an existing setting with a different boolean value" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+        :section => 'section1', :setting => 'master', :value => false))
+      provider = described_class.new(resource)
+      provider.exists?.should be true
+      expect(Puppet::Transaction::ResourceHarness.new(nil).evaluate(provider.resource).out_of_sync).to eq(true)
+      validate_file(<<-EOS
+# This is a comment
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = false
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+
+-nonstandard-
+  shoes = purple
+      EOS
+)
+    end
+
     it "should modify an existing setting with pre/suffix with a different value" do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :section => 'nonstandard',

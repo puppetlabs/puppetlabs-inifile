@@ -71,6 +71,10 @@ Puppet::Type.newtype(:ini_setting) do
   newproperty(:value) do
     desc 'The value of the setting to be defined.'
 
+    munge do |value|
+      value.to_s
+    end
+
     def should_to_s(newvalue)
       if (@resource[:show_diff] == :true && Puppet[:show_diff]) then
         return newvalue
