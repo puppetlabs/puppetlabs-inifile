@@ -107,10 +107,11 @@ Puppet::Type.newtype(:ini_setting) do
     defaultto(']')
   end
 
-  newparam(:update_only_on_refresh, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+  newparam(:update_only_on_refresh) do
     desc 'A flag indicating whether or not the ini_setting should be updated '+
          'only when called as part of a refresh event'
     defaultto false
+    newvalues(true,false)
   end
 
   def refresh
