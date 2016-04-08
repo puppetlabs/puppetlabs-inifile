@@ -149,7 +149,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -171,7 +171,7 @@ subby=bar
 -nonstandard-
   shoes = purple
       EOS
-)
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a missing setting to the correct section with pre/suffix" do
@@ -182,7 +182,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -204,7 +204,7 @@ subby=bar
   shoes = purple
   yahoo = yippee
       EOS
-)
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a missing setting to the correct section with colon" do
@@ -213,7 +213,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -235,7 +235,7 @@ subby=bar
   shoes = purple
 yahoo = yippee
       EOS
-)
+      validate_file(expected_content, tmpfile)
     end
 
     it "should modify an existing setting with a different value" do
@@ -244,7 +244,7 @@ yahoo = yippee
       provider = described_class.new(resource)
       provider.exists?.should be true
       provider.value=('bazvalue2')
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -265,7 +265,7 @@ subby=bar
 -nonstandard-
   shoes = purple
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should modify an existing setting with a different boolean value" do
@@ -274,7 +274,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be true
       expect(Puppet::Transaction::ResourceHarness.new(nil).evaluate(provider.resource).out_of_sync).to eq(true)
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -295,7 +295,7 @@ subby=bar
 -nonstandard-
   shoes = purple
       EOS
-)
+      validate_file(expected_content, tmpfile)
     end
 
     it "should modify an existing setting with pre/suffix with a different value" do
@@ -306,7 +306,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be true
       provider.value=('orange')
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -327,7 +327,7 @@ subby=bar
 -nonstandard-
   shoes = orange
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should modify an existing setting with a different value - with colon in section" do
@@ -337,7 +337,7 @@ subby=bar
       provider.exists?.should be true
       provider.value.should eq('bar')
       provider.value=('foo')
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -358,7 +358,7 @@ subby=foo
 -nonstandard-
   shoes = purple
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should be able to handle settings with non alphanumbering settings " do
@@ -368,8 +368,7 @@ subby=foo
       provider.exists?.should be true
       provider.value.should eq('http://192.168.1.1:8080')
       provider.value=('http://192.168.0.1:8080')
-
-      validate_file( <<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -390,7 +389,7 @@ subby=bar
 -nonstandard-
   shoes = purple
     EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should be able to handle settings with pre/suffix with non alphanumbering settings " do
@@ -402,8 +401,7 @@ subby=bar
       provider.exists?.should be true
       provider.value.should eq('purple')
       provider.value=('http://192.168.0.1:8080')
-
-      validate_file( <<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -424,7 +422,7 @@ subby=bar
 -nonstandard-
   shoes = http://192.168.0.1:8080
     EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should recognize an existing setting with the specified value" do
@@ -449,7 +447,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -473,7 +471,7 @@ subby=bar
 [section3]
 huzzah = shazaam
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a new section with pre/suffix if the section does not exist" do
@@ -483,7 +481,7 @@ huzzah = shazaam
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -507,7 +505,7 @@ subby=bar
 -section3-
 huzzah = shazaam
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a new section if the section does not exist - with colon" do
@@ -516,7 +514,7 @@ huzzah = shazaam
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -540,7 +538,7 @@ subby=bar
 [section:subsection]
 huzzah = shazaam
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a new section with pre/suffix if the section does not exist - with colon" do
@@ -550,7 +548,7 @@ huzzah = shazaam
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 [section1]
 ; This is also a comment
@@ -574,7 +572,7 @@ subby=bar
 -section:subsection-
 huzzah = shazaam
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a new section if no sections exists" do
@@ -654,7 +652,7 @@ foo = http://192.168.1.1:8080
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 foo=blah
 bar = yippee
@@ -662,7 +660,7 @@ bar = yippee
 foo = http://192.168.1.1:8080
  ; yet another comment
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should modify an existing setting with a different value" do
@@ -672,14 +670,14 @@ foo = http://192.168.1.1:8080
       provider.exists?.should be true
       provider.value.should eq('blah')
       provider.value=('yippee')
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
 foo=yippee
 [section2]
 foo = http://192.168.1.1:8080
  ; yet another comment
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should recognize an existing setting with the specified value" do
@@ -704,13 +702,13 @@ foo = http://192.168.1.1:8080
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 foo = yippee
 
 [section2]
 foo = http://192.168.1.1:8080
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should modify an existing setting" do
@@ -720,11 +718,11 @@ foo = http://192.168.1.1:8080
       provider.exists?.should be true
       provider.value.should eq('http://192.168.1.1:8080')
       provider.value=('yippee')
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section2]
 foo = yippee
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a new setting" do
@@ -733,12 +731,12 @@ foo = yippee
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section2]
 foo = http://192.168.1.1:8080
 bar = baz
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
   end
 
@@ -760,11 +758,11 @@ foo=bar
       provider.exists?.should be true
       provider.value.should eq('bar')
       provider.value=('yippee')
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section2]
 foo=yippee
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
   end
@@ -787,11 +785,11 @@ foo: bar
       provider.exists?.should be true
       provider.value.should eq('bar')
       provider.value=('yippee')
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section2]
 foo: yippee
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a new setting" do
@@ -803,12 +801,12 @@ foo: yippee
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section2]
 foo: bar
 bar: baz
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
   end
@@ -831,11 +829,11 @@ foo bar
       provider.exists?.should be true
       provider.value.should eq('bar')
       provider.value=('yippee')
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section2]
 foo yippee
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a new setting" do
@@ -847,12 +845,12 @@ foo yippee
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section2]
 foo bar
 bar baz
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
   end
 
@@ -891,7 +889,7 @@ EOS
       provider = described_class.new(resource)
       provider.exists?.should be true
       provider.destroy
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section1]
 ; This is also a comment
 
@@ -914,8 +912,8 @@ subby=bar
 
  -nonstandard-
    shoes = purple
-EOS
-    )
+      EOS
+      validate_file(expected_content, tmpfile)
     end
 
     it "should remove a setting with pre/suffix that exists" do
@@ -925,7 +923,7 @@ EOS
       provider = described_class.new(resource)
       provider.exists?.should be true
       provider.destroy
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section1]
 ; This is also a comment
 foo=foovalue
@@ -947,8 +945,8 @@ subby=bar
     #another comment
  ; yet another comment
 
-EOS
-    )
+    EOS
+    validate_file(expected_content, tmpfile)
     end
 
     it "should do nothing for a setting that does not exist" do
@@ -957,7 +955,7 @@ EOS
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.destroy
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section1]
 ; This is also a comment
 foo=foovalue
@@ -982,7 +980,7 @@ subby=bar
  -nonstandard-
    shoes = purple
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should do nothing for a setting with pre/suffix that does not exist" do
@@ -992,7 +990,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.destroy
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section1]
 ; This is also a comment
 foo=foovalue
@@ -1017,7 +1015,7 @@ subby=bar
  -nonstandard-
    shoes = purple
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "does not remove a section when the last uncommented setting is removed if there are comments" do
@@ -1029,7 +1027,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be true
       provider.destroy
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section1]
 ; This is also a comment
 foo=foovalue
@@ -1053,7 +1051,7 @@ subby=bar
  -nonstandard-
    shoes = purple
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "removes the section when removing the last line in the section" do
@@ -1065,7 +1063,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be true
       provider.destroy
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [section1]
 ; This is also a comment
 foo=foovalue
@@ -1088,7 +1086,7 @@ subby=bar
  -nonstandard-
    shoes = purple
       EOS
-                   )
+      validate_file(expected_content, tmpfile)
     end
   end
 
@@ -1121,7 +1119,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
      [section1]
      ; This is also a comment
@@ -1141,7 +1139,7 @@ subby=bar
   fleezy = flam
  ; yet another comment
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should update an existing setting at the correct indentation when the header is aligned" do
@@ -1150,7 +1148,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be true
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
      [section1]
      ; This is also a comment
@@ -1169,7 +1167,7 @@ subby=bar
   fleezy = flam
  ; yet another comment
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a missing setting at the correct indentation when the header is not aligned" do
@@ -1178,7 +1176,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
      [section1]
      ; This is also a comment
@@ -1198,7 +1196,7 @@ subby=bar
   fleezy = flam
  ; yet another comment
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should update an existing setting at the correct indentation when the header is not aligned" do
@@ -1207,7 +1205,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be true
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
      [section1]
      ; This is also a comment
@@ -1226,7 +1224,7 @@ subby=bar
   fleezy = flam
  ; yet another comment
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a missing setting at the min indentation when the section is not aligned" do
@@ -1235,7 +1233,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
      [section1]
      ; This is also a comment
@@ -1255,7 +1253,7 @@ subby=bar
  ; yet another comment
  yahoo = yippee
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should update an existing setting at the previous indentation when the section is not aligned" do
@@ -1264,7 +1262,7 @@ subby=bar
       provider = described_class.new(resource)
       provider.exists?.should be true
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 # This is a comment
      [section1]
      ; This is also a comment
@@ -1283,7 +1281,7 @@ subby=bar
   fleezy = flam2
  ; yet another comment
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
   end
@@ -1311,7 +1309,7 @@ blah = blah
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
      [section1]
      # foo=foovalue
      bar=barvalue
@@ -1324,7 +1322,7 @@ foo = foo3
 blah = blah
 #baz=
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should update an existing setting in place, even if there is a commented version of that setting" do
@@ -1333,7 +1331,7 @@ blah = blah
       provider = described_class.new(resource)
       provider.exists?.should be true
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
      [section1]
      # foo=foovalue
      bar=barvalue
@@ -1345,7 +1343,7 @@ blah = blah
 blah = blah
 #baz=
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a new setting below a commented version of that setting, respecting semicolons as comments" do
@@ -1354,7 +1352,7 @@ blah = blah
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
      [section1]
      # foo=foovalue
      bar=barvalue
@@ -1367,7 +1365,7 @@ bar=bar3
 blah = blah
 #baz=
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a new setting below an empty commented version of that setting" do
@@ -1376,7 +1374,7 @@ blah = blah
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
      [section1]
      # foo=foovalue
      bar=barvalue
@@ -1389,7 +1387,7 @@ blah = blah
 #baz=
 baz=bazvalue
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     context 'when a section only contains comments' do
@@ -1400,6 +1398,7 @@ baz=bazvalue
 # bar=bar2
 EOS
     }
+
       it 'should be able to add a new setting when a section contains only comments' do
         resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section1', :setting => 'foo', :value => 'foovalue2')
@@ -1407,14 +1406,15 @@ EOS
         provider = described_class.new(resource)
         provider.exists?.should be false
         provider.create
-        validate_file(<<-EOS
+        expected_content = <<-EOS
 [section1]
 # foo=foovalue
 foo=foovalue2
 # bar=bar2
         EOS
-        )
+        validate_file(expected_content, tmpfile)
       end
+
       it 'should be able to add a new setting when it matches a commented out line other than the first one' do
         resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section1', :setting => 'bar', :value => 'barvalue2')
@@ -1422,13 +1422,13 @@ foo=foovalue2
         provider = described_class.new(resource)
         provider.exists?.should be false
         provider.create
-        validate_file(<<-EOS
+        expected_content = <<-EOS
 [section1]
 # foo=foovalue
 # bar=bar2
 bar=barvalue2
         EOS
-        )
+        validate_file(expected_content, tmpfile)
       end
     end
 
@@ -1460,7 +1460,7 @@ subby=bar
         provider = described_class.new(resource)
         provider.exists?.should be false
         provider.create
-        validate_file(<<-EOS
+        expected_content = <<-EOS
 # This is a comment
 [section - one]
 ; This is also a comment
@@ -1479,7 +1479,7 @@ subby=bar
     #another comment
  ; yet another comment
         EOS
-  )
+        validate_file(expected_content, tmpfile)
       end
 
     end
@@ -1510,7 +1510,7 @@ to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/produc
       provider = described_class.new(resource)
       provider.exists?.should be false
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [branch "master"]
         remote = origin
         merge = refs/heads/master
@@ -1521,8 +1521,8 @@ foo = bar
 [branch "production"]
         remote = origin
         merge = refs/heads/production
-                    EOS
-                   )
+      EOS
+      validate_file(expected_content, tmpfile)
     end
   end
 end

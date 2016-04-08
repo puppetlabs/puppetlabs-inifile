@@ -9,7 +9,7 @@ describe provider_class do
 
   let(:tmpfile) { tmpfilename('inherit_ini_setting_test') }
 
-  def validate_file(expected_content,tmpfile = tmpfile)
+  def validate_file(expected_content, tmpfile)
     File.read(tmpfile).should == expected_content
   end
 
@@ -61,7 +61,7 @@ green = purple
       })
       provider = described_class.new(resource)
       provider.create
-      validate_file("set_this=to_that\n")
+      validate_file("set_this=to_that\n", tmpfile)
     end
   end
 end
