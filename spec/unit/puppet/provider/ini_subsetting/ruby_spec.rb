@@ -7,7 +7,7 @@ describe provider_class do
 
   let(:tmpfile) { tmpfilename("ini_setting_test") }
 
-  def validate_file(expected_content,tmpfile = tmpfile)
+  def validate_file(expected_content, tmpfile)
     File.read(tmpfile).should == expected_content
   end
 
@@ -39,10 +39,10 @@ JAVA_ARGS="-Xmx192m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe
       provider = described_class.new(resource)
       provider.exists?.should be_nil
       provider.create
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 JAVA_ARGS="-Xmx192m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof -Xms128m"
       EOS
-)
+      validate_file(expected_content, tmpfile)
     end
 
     it "should remove an existing subsetting" do
@@ -51,10 +51,10 @@ JAVA_ARGS="-Xmx192m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe
       provider = described_class.new(resource)
       provider.exists?.should == "192m"
       provider.destroy
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 JAVA_ARGS="-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
       EOS
-)
+      validate_file(expected_content, tmpfile)
     end
     
     it "should modify an existing subsetting" do
@@ -63,10 +63,10 @@ JAVA_ARGS="-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb
       provider = described_class.new(resource)
       provider.exists?.should == "192m"
       provider.value=('256m')
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 JAVA_ARGS="-Xmx256m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
       EOS
-)
+      validate_file(expected_content, tmpfile)
     end
   end
 
@@ -92,12 +92,12 @@ reports = http,foo
       provider = described_class.new(resource)
       provider.exists?.should == ""
       provider.destroy
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [master]
 
 reports = foo
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a new subsetting when the 'parent' setting already exists" do
@@ -106,12 +106,12 @@ reports = foo
       provider = described_class.new(resource)
       provider.exists?.should be_nil
       provider.value=('')
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [master]
 
 reports = http,foo,puppetdb
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
     it "should add a new subsetting when the 'parent' setting does not already exist" do
@@ -122,13 +122,13 @@ reports = http,foo,puppetdb
       provider = described_class.new(resource)
       provider.exists?.should be_nil
       provider.value=('')
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [master]
 
 reports = http,foo
 somenewsetting = puppetdb
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
 
   end
@@ -155,12 +155,12 @@ reports = http,foo
           :subsetting => 'fo', :subsetting_separator => ','))
       provider = described_class.new(resource)
       provider.value=('')
-      validate_file(<<-eos
+      expected_content = <<-EOS
 [master]
 
 reports = http,foo,fo
-      eos
-      )
+      EOS
+      validate_file(expected_content, tmpfile)
     end
 
     it "should not remove substring subsettings" do
@@ -169,12 +169,12 @@ reports = http,foo,fo
       provider = described_class.new(resource)
       provider.value=('')
       provider.destroy
-      validate_file(<<-EOS
+      expected_content = <<-EOS
 [master]
 
 reports = http,foo
       EOS
-      )
+      validate_file(expected_content, tmpfile)
     end
   end
 
