@@ -88,6 +88,15 @@ Puppet::Type.newtype(:ini_setting) do
     def is_to_s(value)
       should_to_s(value)
     end
+
+    def insync?(current)
+      if (@resource[:update_only_on_refresh]) then
+        true
+      else
+        current == should
+      end
+    end
+
   end
 
   newparam(:section_prefix) do
@@ -100,6 +109,20 @@ Puppet::Type.newtype(:ini_setting) do
     desc 'The suffix to the section name\'s header.' +
       'Defaults to \']\'.'
     defaultto(']')
+  end
+
+  newparam(:update_only_on_refresh) do
+    desc 'A flag indicating whether or not the ini_setting should be updated '+
+         'only when called as part of a refresh event'
+    defaultto false
+    newvalues(true,false)
+  end
+
+  def refresh
+    if self[:update_only_on_refresh] then
+      # update the value in the provider, which will save the value to the ini file
+      provider.value = self[:value]
+    end
   end
 
 end
