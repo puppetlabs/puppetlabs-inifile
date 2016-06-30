@@ -2,7 +2,7 @@ require 'spec_helper'
 
 # This is a reduced version of ruby_spec.rb just to ensure we can subclass as
 # documented
-$: << 'spec/fixtures/modules/inherit_ini_setting/lib'
+$: << './spec/fixtures/modules/inherit_ini_setting/lib'
 provider_class = Puppet::Type.type(:inherit_ini_setting).provider(:ini_setting)
 describe provider_class do
   include PuppetlabsSpec::Files
