@@ -69,7 +69,7 @@ EOS
       end
 
       settings[section].each do |setting, value|
-        res["#{path} #{section} #{setting}"] = {
+        res["#{path} [#{section}] #{setting}"] = {
           'ensure'  => 'present',
           'section' => section,
           'setting' => setting,
