@@ -43,6 +43,11 @@ Puppet::Type.newtype(:ini_subsetting) do
     defaultto(" ")
   end
 
+  newparam(:subsetting_key_val_separator) do
+    desc 'The separator string between the subsetting name and its value. Defaults to the empty string.'
+    defaultto('')
+  end
+
   newparam(:path) do
     desc 'The ini file Puppet will ensure contains the specified setting.'
     validate do |value|
@@ -107,6 +112,25 @@ Puppet::Type.newtype(:ini_subsetting) do
     def is_to_s(value)
       should_to_s(value)
     end
+  end
+
+  newparam(:insert_type) do
+    desc <<-eof
+Where the new subsetting item should be inserted?
+
+* :start  - insert at the beginning of the line.
+* :end    - insert at the end of the line (default).
+* :before - insert before the specified element if possible.
+* :after  - insert after the specified element if possible.
+* :index  - insert at the specified index number.
+    eof
+
+    newvalues(:start, :end, :before, :after, :index)
+    defaultto(:end)
+  end
+
+  newparam(:insert_value) do
+    desc 'The value for the insert types which require one.'
   end
 
 end
