@@ -15,7 +15,7 @@ describe provider_class do
   } }
 
   def validate_file(expected_content,tmpfile = tmpfile)
-    File.read(tmpfile).should == expected_content
+    expect(File.read(tmpfile)).to eq(expected_content)
   end
 
 
@@ -48,7 +48,7 @@ describe provider_class do
           end
         end
         child_one.stubs(:file_path).returns(emptyfile)
-        child_one.instances.should == []
+        expect(child_one.instances).to eq([])
       end
       it 'should override the provider instances file_path' do
         child_two = Class.new(provider_class) do
@@ -58,7 +58,7 @@ describe provider_class do
         end
         resource = Puppet::Type::Ini_setting.new(common_params)
         provider = child_two.new(resource)
-        provider.file_path.should == '/some/file/path'
+        expect(provider.file_path).to eq('/some/file/path')
       end
       context 'when file has contecnts' do
         let(:orig_content) {
@@ -89,7 +89,7 @@ subby=bar
             end
           end
           child_three.stubs(:file_path).returns(tmpfile)
-          child_three.instances.size.should eq(7)
+          expect(child_three.instances.size).to eq(7)
           expected_array = [
             {:name => 'section1/foo', :value => 'foovalue' },
             {:name => 'section1/bar', :value => 'barvalue' },
@@ -107,8 +107,8 @@ subby=bar
             ensure_array.push(ensure_value)
             real_array.push(prop_hash)
           end
-          ensure_array.uniq.should eq([:present])
-          ((real_array - expected_array) && (expected_array - real_array)).should == []
+          expect(ensure_array.uniq).to eq([:present])
+          expect((real_array - expected_array) && (expected_array - real_array)).to eq([])
 
         end
 
@@ -147,7 +147,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be_falsy
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -180,7 +180,7 @@ subby=bar
           :setting => 'yahoo', :value => 'yippee',
           :section_prefix => '-', :section_suffix => '-'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be_falsy
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -211,7 +211,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => 'section:sub', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be_falsy
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -242,7 +242,7 @@ yahoo = yippee
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :setting => 'baz', :value => 'bazvalue2'))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be_truthy
       provider.value=('bazvalue2')
       expected_content = <<-EOS
 # This is a comment
@@ -272,7 +272,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
         :section => 'section1', :setting => 'master', :value => false))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
       expect(Puppet::Transaction::ResourceHarness.new(nil).evaluate(provider.resource).out_of_sync).to eq(true)
       expected_content = <<-EOS
 # This is a comment
@@ -304,7 +304,7 @@ subby=bar
            :setting => 'shoes', :value => 'orange',
            :section_prefix => '-', :section_suffix => '-' ))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
       provider.value=('orange')
       expected_content = <<-EOS
 # This is a comment
@@ -334,8 +334,8 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :section => 'section:sub', :setting => 'subby', :value => 'foo'))
       provider = described_class.new(resource)
-      provider.exists?.should be true
-      provider.value.should eq('bar')
+      expect(provider.exists?).to be true
+      expect(provider.value).to eq('bar')
       provider.value=('foo')
       expected_content = <<-EOS
 # This is a comment
@@ -365,8 +365,8 @@ subby=foo
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :setting => 'url', :value => 'http://192.168.0.1:8080'))
       provider = described_class.new(resource)
-      provider.exists?.should be true
-      provider.value.should eq('http://192.168.1.1:8080')
+      expect(provider.exists?).to be true
+      expect(provider.value).to eq('http://192.168.1.1:8080')
       provider.value=('http://192.168.0.1:8080')
       expected_content = <<-EOS
 # This is a comment
@@ -398,8 +398,8 @@ subby=bar
            :setting => 'shoes', :value => 'http://192.168.0.1:8080',
            :section_prefix => '-', :section_suffix => '-' ))
       provider = described_class.new(resource)
-      provider.exists?.should be true
-      provider.value.should eq('purple')
+      expect(provider.exists?).to be true
+      expect(provider.value).to eq('purple')
       provider.value=('http://192.168.0.1:8080')
       expected_content = <<-EOS
 # This is a comment
@@ -429,7 +429,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :setting => 'baz', :value => 'bazvalue'))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
     end
 
     it "should recognize an existing setting with pre/suffix with the specified value" do
@@ -438,14 +438,14 @@ subby=bar
            :setting => 'shoes', :value => 'purple',
            :section_prefix => '-', :section_suffix => '-' ))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
     end
 
     it "should add a new section if the section does not exist" do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => "section3", :setting => 'huzzah', :value => 'shazaam'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -479,7 +479,7 @@ huzzah = shazaam
           :section => "section3", :setting => 'huzzah', :value => 'shazaam',
           :section_prefix => '-', :section_suffix => '-' ))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be_falsy
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -512,7 +512,7 @@ huzzah = shazaam
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => "section:subsection", :setting => 'huzzah', :value => 'shazaam'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -546,7 +546,7 @@ huzzah = shazaam
           :section => "section:subsection", :setting => 'huzzah', :value => 'shazaam',
           :section_prefix => '-', :section_suffix => '-' ))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -579,7 +579,7 @@ huzzah = shazaam
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => "section1", :setting => 'setting1', :value => 'hellowworld', :path => emptyfile))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       validate_file("
 [section1]
@@ -592,7 +592,7 @@ setting1 = hellowworld
           :section => "section1", :setting => 'setting1', :value => 'hellowworld', :path => emptyfile,
           :section_prefix => '-', :section_suffix => '-' ))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       validate_file("
 -section1-
@@ -604,7 +604,7 @@ setting1 = hellowworld
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => "section:subsection", :setting => 'setting1', :value => 'hellowworld', :path => emptyfile))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       validate_file("
 [section:subsection]
@@ -617,7 +617,7 @@ setting1 = hellowworld
           :section => "section:subsection", :setting => 'setting1', :value => 'hellowworld', :path => emptyfile,
           :section_prefix => '-', :section_suffix => '-' ))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       validate_file("
 -section:subsection-
@@ -628,8 +628,8 @@ setting1 = hellowworld
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => "section1", :setting => 'master', :value => true))
       provider = described_class.new(resource)
-      provider.exists?.should be true
-      provider.value.should == 'true'
+      expect(provider.exists?).to be true
+      expect(provider.value).to eq('true')
     end
 
   end
@@ -650,7 +650,7 @@ foo = http://192.168.1.1:8080
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => '', :setting => 'bar', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -667,8 +667,8 @@ foo = http://192.168.1.1:8080
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :section => '', :setting => 'foo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be true
-      provider.value.should eq('blah')
+      expect(provider.exists?).to be true
+      expect(provider.value).to eq('blah')
       provider.value=('yippee')
       expected_content = <<-EOS
 # This is a comment
@@ -684,7 +684,7 @@ foo = http://192.168.1.1:8080
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :section => '', :setting => 'foo', :value => 'blah'))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
     end
   end
 
@@ -700,7 +700,7 @@ foo = http://192.168.1.1:8080
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
            :section => '', :setting => 'foo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 foo = yippee
@@ -715,8 +715,8 @@ foo = http://192.168.1.1:8080
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => 'section2', :setting => 'foo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be true
-      provider.value.should eq('http://192.168.1.1:8080')
+      expect(provider.exists?).to be true
+      expect(provider.value).to eq('http://192.168.1.1:8080')
       provider.value=('yippee')
       expected_content = <<-EOS
 [section2]
@@ -729,7 +729,7 @@ foo = yippee
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => 'section2', :setting => 'bar', :value => 'baz'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 [section2]
@@ -755,8 +755,8 @@ foo=bar
                                                    :value             => 'yippee',
                                                    :key_val_separator => '='))
       provider = described_class.new(resource)
-      provider.exists?.should be true
-      provider.value.should eq('bar')
+      expect(provider.exists?).to be true
+      expect(provider.value).to eq('bar')
       provider.value=('yippee')
       expected_content = <<-EOS
 [section2]
@@ -782,8 +782,8 @@ foo: bar
                                                    :value             => 'yippee',
                                                    :key_val_separator => ': '))
       provider = described_class.new(resource)
-      provider.exists?.should be true
-      provider.value.should eq('bar')
+      expect(provider.exists?).to be true
+      expect(provider.value).to eq('bar')
       provider.value=('yippee')
       expected_content = <<-EOS
 [section2]
@@ -799,7 +799,7 @@ foo: yippee
                                                    :value             => 'baz',
                                                    :key_val_separator => ': '))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 [section2]
@@ -826,8 +826,8 @@ foo bar
                                                    :value             => 'yippee',
                                                    :key_val_separator => ' '))
       provider = described_class.new(resource)
-      provider.exists?.should be true
-      provider.value.should eq('bar')
+      expect(provider.exists?).to be true
+      expect(provider.value).to eq('bar')
       provider.value=('yippee')
       expected_content = <<-EOS
 [section2]
@@ -843,7 +843,7 @@ foo yippee
                                                    :value             => 'baz',
                                                    :key_val_separator => ' '))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 [section2]
@@ -887,7 +887,7 @@ EOS
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
       :section => 'section1', :setting => 'foo', :ensure => 'absent'))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
       provider.destroy
       expected_content = <<-EOS
 [section1]
@@ -921,7 +921,7 @@ subby=bar
       :section => 'nonstandard', :setting => 'shoes', :ensure => 'absent',
       :section_prefix => '-', :section_suffix => '-' ))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
       provider.destroy
       expected_content = <<-EOS
 [section1]
@@ -953,7 +953,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
                                                    :section => 'section:sub', :setting => 'foo', :ensure => 'absent'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.destroy
       expected_content = <<-EOS
 [section1]
@@ -988,7 +988,7 @@ subby=bar
          :section => 'nonstandard', :setting => 'foo', :ensure => 'absent',
          :section_prefix => '-', :section_suffix => '-' ))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.destroy
       expected_content = <<-EOS
 [section1]
@@ -1025,7 +1025,7 @@ subby=bar
         :ensure => 'absent',
       ))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
       provider.destroy
       expected_content = <<-EOS
 [section1]
@@ -1061,7 +1061,7 @@ subby=bar
         :ensure => 'absent',
       ))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
       provider.destroy
       expected_content = <<-EOS
 [section1]
@@ -1117,7 +1117,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
                     :section => 'section1', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -1146,7 +1146,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section1', :setting => 'bar', :value => 'barvalue2'))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -1174,7 +1174,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
                                                    :section => 'section2', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -1203,7 +1203,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section2', :setting => 'baz', :value => 'bazvalue2'))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -1231,7 +1231,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section:sub', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -1260,7 +1260,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section:sub', :setting => 'fleezy', :value => 'flam2'))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -1307,7 +1307,7 @@ blah = blah
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section2', :setting => 'foo', :value => 'foo3'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
      [section1]
@@ -1329,7 +1329,7 @@ blah = blah
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section1', :setting => 'foo', :value => 'foo3'))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
       provider.create
       expected_content = <<-EOS
      [section1]
@@ -1350,7 +1350,7 @@ blah = blah
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section2', :setting => 'bar', :value => 'bar3'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
      [section1]
@@ -1372,7 +1372,7 @@ blah = blah
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section2', :setting => 'baz', :value => 'bazvalue'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
      [section1]
@@ -1404,7 +1404,7 @@ EOS
           common_params.merge(:section => 'section1', :setting => 'foo', :value => 'foovalue2')
         )
         provider = described_class.new(resource)
-        provider.exists?.should be false
+        expect(provider.exists?).to be false
         provider.create
         expected_content = <<-EOS
 [section1]
@@ -1420,7 +1420,7 @@ foo=foovalue2
           common_params.merge(:section => 'section1', :setting => 'bar', :value => 'barvalue2')
         )
         provider = described_class.new(resource)
-        provider.exists?.should be false
+        expect(provider.exists?).to be false
         provider.create
         expected_content = <<-EOS
 [section1]
@@ -1458,7 +1458,7 @@ subby=bar
         resource = Puppet::Type::Ini_setting.new(common_params.merge(
             :section => 'section - two', :setting => 'yahoo', :value => 'yippee'))
         provider = described_class.new(resource)
-        provider.exists?.should be false
+        expect(provider.exists?).to be false
         provider.create
         expected_content = <<-EOS
 # This is a comment
@@ -1508,7 +1508,7 @@ to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/produc
         :value => 'bar'
       ))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 [branch "master"]
