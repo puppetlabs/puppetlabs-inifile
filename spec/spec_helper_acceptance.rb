@@ -5,6 +5,8 @@ require 'beaker/puppet_install_helper'
 run_puppet_install_helper
 
 RSpec.configure do |c|
+  c.filter_run :focus => true
+  c.run_all_when_everything_filtered = true
   # Project root
   proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 

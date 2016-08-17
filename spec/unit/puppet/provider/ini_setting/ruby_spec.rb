@@ -271,7 +271,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
         :section => 'section1', :setting => 'master', :value => false))
       provider = described_class.new(resource)
-      provider.exists?.should be true
+      expect(provider.exists?).to be true
       transaction = double('transaction', :persistence => true)
       expect(Puppet::Transaction::ResourceHarness.new(transaction).evaluate(provider.resource).out_of_sync).to eq(true)
       expected_content = <<-EOS
