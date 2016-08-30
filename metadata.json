@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-inifile",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "author": "Puppet Labs",
   "summary": "Resource types for managing settings in INI files",
   "license": "Apache-2.0",
@@ -64,7 +64,8 @@
       "operatingsystemrelease": [
         "10.04",
         "12.04",
-        "14.04"
+        "14.04",
+        "16.04"
       ]
     },
     {
@@ -94,10 +95,6 @@
     }
   ],
   "requirements": [
-    {
-      "name": "pe",
-      "version_requirement": ">= 3.0.0"
-    },
     {
       "name": "puppet",
       "version_requirement": ">= 3.0.0 < 5.0.0"
