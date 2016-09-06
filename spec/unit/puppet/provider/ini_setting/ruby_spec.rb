@@ -15,7 +15,7 @@ describe provider_class do
   } }
 
   def validate_file(expected_content,tmpfile = tmpfile)
-    File.read(tmpfile).should == expected_content
+    expect(File.read(tmpfile)).to eq(expected_content)
   end
 
 
@@ -48,7 +48,7 @@ describe provider_class do
           end
         end
         child_one.stubs(:file_path).returns(emptyfile)
-        child_one.instances.should == []
+        expect(child_one.instances).to eq([])
       end
       it 'should override the provider instances file_path' do
         child_two = Class.new(provider_class) do
@@ -58,7 +58,7 @@ describe provider_class do
         end
         resource = Puppet::Type::Ini_setting.new(common_params)
         provider = child_two.new(resource)
-        provider.file_path.should == '/some/file/path'
+        expect(provider.file_path).to eq('/some/file/path')
       end
       context 'when file has contecnts' do
         let(:orig_content) {
@@ -89,7 +89,7 @@ subby=bar
             end
           end
           child_three.stubs(:file_path).returns(tmpfile)
-          child_three.instances.size.should eq(7)
+          expect(child_three.instances.size).to eq(7)
           expected_array = [
             {:name => 'section1/foo', :value => 'foovalue' },
             {:name => 'section1/bar', :value => 'barvalue' },
@@ -107,8 +107,8 @@ subby=bar
             ensure_array.push(ensure_value)
             real_array.push(prop_hash)
           end
-          ensure_array.uniq.should eq([:present])
-          ((real_array - expected_array) && (expected_array - real_array)).should == []
+          expect(ensure_array.uniq).to eq([:present])
+          expect(((real_array - expected_array) && (expected_array - real_array))).to eq([])
 
         end
 
@@ -147,7 +147,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -180,7 +180,7 @@ subby=bar
           :setting => 'yahoo', :value => 'yippee',
           :section_prefix => '-', :section_suffix => '-'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -211,7 +211,7 @@ subby=bar
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => 'section:sub', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
-      provider.exists?.should be false
+      expect(provider.exists?).to be false
       provider.create
       expected_content = <<-EOS
 # This is a comment
@@ -273,7 +273,8 @@ subby=bar
         :section => 'section1', :setting => 'master', :value => false))
       provider = described_class.new(resource)
       provider.exists?.should be true
-      expect(Puppet::Transaction::ResourceHarness.new(nil).evaluate(provider.resource).out_of_sync).to eq(true)
+      transaction = double('transaction', :persistence => true)
+      expect(Puppet::Transaction::ResourceHarness.new(transaction).evaluate(provider.resource).out_of_sync).to eq(true)
       expected_content = <<-EOS
 # This is a comment
 [section1]

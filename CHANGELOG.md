@@ -1,3 +1,16 @@
+## Supported Release 1.6.0
+### Summary
+This release expands functionality around sub-settings and adds the `refreshonly` parameter so the user can specify whether a resource should or should not respond to a refresh event.
+
+### Features
+- `refreshonly` decide whether or not a value should be updated as part of a refresh
+- `insert_type` choose where the sub-setting is placed in the final string
+- `subsetting_key_val_separator` specify a key/value separator for sub-settings
+
+### Bugfixes
+- MODULES-3145 Cast values to strings before passing to provider
+
+
 ## Supported Release 1.5.0
 ### Summary
 This release adds the long-awaited `show_diff` parameter for diffing the complete file on changes (or can also just show the md5 sums).
