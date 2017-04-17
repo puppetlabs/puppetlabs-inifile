@@ -74,6 +74,11 @@ Puppet::Type.newtype(:ini_subsetting) do
     defaultto(" = ")
   end
 
+  newparam(:ensure_absent_val) do
+    desc 'A value that is specified as the value property will behave as if ensure => absent was specified'
+    defaultto('nil')
+  end
+
   newparam(:quote_char) do
     desc 'The character used to quote the entire value of the setting. ' +
         %q{Valid values are '', '"' and "'". Defaults to ''.}
