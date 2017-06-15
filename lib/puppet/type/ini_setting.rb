@@ -111,6 +111,12 @@ Puppet::Type.newtype(:ini_setting) do
     defaultto(']')
   end
 
+  newparam(:indent) do
+    desc 'The character to indent settings with.' +
+      'Defaults to \' \'.'
+    defaultto(' ')
+  end
+
   newparam(:refreshonly) do
     desc 'A flag indicating whether or not the ini_setting should be updated '+
          'only when called as part of a refresh event'

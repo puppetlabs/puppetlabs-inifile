@@ -206,6 +206,40 @@ subby=bar
       validate_file(expected_content, tmpfile)
     end
 
+    it "should add a missing setting to the correct section with indent" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+          :section => 'nonstandard',
+          :setting => 'indented', :value => 'weirdly',
+          :section_prefix => '-', :section_suffix => '-',
+          :indent => "\t"))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be false
+      provider.create
+      expected_content = <<-EOS
+# This is a comment
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+
+-nonstandard-
+  shoes = purple
+		indented = weirdly
+      EOS
+      validate_file(expected_content, tmpfile)
+    end
+
     it "should add a missing setting to the correct section with colon" do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => 'section:sub', :setting => 'yahoo', :value => 'yippee'))
@@ -1259,6 +1293,34 @@ subby=bar
     it "should update an existing setting at the previous indentation when the section is not aligned" do
       resource = Puppet::Type::Ini_setting.new(
           common_params.merge(:section => 'section:sub', :setting => 'fleezy', :value => 'flam2'))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be true
+      provider.create
+      expected_content = <<-EOS
+# This is a comment
+     [section1]
+     ; This is also a comment
+     foo=foovalue
+
+     bar = barvalue
+     master = true
+
+[section2]
+  foo= foovalue2
+  baz=bazvalue
+  url = http://192.168.1.1:8080
+[section:sub]
+ subby=bar
+    #another comment
+  fleezy = flam2
+ ; yet another comment
+      EOS
+      validate_file(expected_content, tmpfile)
+    end
+
+    it "should update an existing setting at the previous indentation regardless of indent setting" do
+      resource = Puppet::Type::Ini_setting.new(
+          common_params.merge(:section => 'section:sub', :setting => 'fleezy', :value => 'flam2', :indent => 'ignore this'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.create

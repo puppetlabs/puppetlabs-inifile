@@ -110,9 +110,17 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
     end
   end
 
+  def indent
+    if resource.class.validattr?(:indent)
+      resource[:indent] || ' '
+    else
+      ' '
+    end
+  end
+
   private
   def ini_file
-    @ini_file ||= Puppet::Util::IniFile.new(file_path, separator, section_prefix, section_suffix)
+    @ini_file ||= Puppet::Util::IniFile.new(file_path, separator, section_prefix, section_suffix, indent)
   end
 
 end

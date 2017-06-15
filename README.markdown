@@ -90,6 +90,26 @@ default:
    minage = 1
 ~~~
 
+### Use a non-standard indent character (or string) for added settings
+
+~~~puppet
+ini_setting { 'procedure cache size':
+  ensure         => present,
+  path           => '/var/lib/ase/config/ASE-16_0/SYBASE.cfg',
+  section        => 'SQL Server Administration',
+  setting        => 'procedure cache size',
+  value          => '15000',
+  indent         => "\t",
+}
+~~~
+
+Results in:
+
+~~~puppet
+[SQL Server Administration]
+	procedure cache size = 15000
+~~~
+
 ### Implement child providers
 
 You might want to create child providers that inherit the `ini_setting` provider, for one or both of these purposes:
@@ -330,6 +350,10 @@ Global show_diff configuraton takes priority over this one -
 ##### `section_suffix`
 
 *Optional.*  Designates the string that will appear after the section's name.  Default value: "]".
+
+##### `indent`
+
+*Optional.*  Designates the string that will be used to indent newly created settings. This will not affect settings which already exist in the file, even if they are changed. Default value: " ".
 
 ##### `refreshonly`
 
