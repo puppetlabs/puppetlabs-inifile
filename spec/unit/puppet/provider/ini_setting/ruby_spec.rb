@@ -1361,7 +1361,7 @@ blah = blah
 [section2]
 # foo = foovalue
 ;bar=barvalue
-bar=bar3
+bar = bar3
 blah = blah
 #baz=
       EOS
@@ -1385,7 +1385,7 @@ blah = blah
 ;bar=barvalue
 blah = blah
 #baz=
-baz=bazvalue
+baz = bazvalue
       EOS
       validate_file(expected_content, tmpfile)
     end
@@ -1409,7 +1409,7 @@ EOS
         expected_content = <<-EOS
 [section1]
 # foo=foovalue
-foo=foovalue2
+foo = foovalue2
 # bar=bar2
         EOS
         validate_file(expected_content, tmpfile)
@@ -1426,7 +1426,7 @@ foo=foovalue2
 [section1]
 # foo=foovalue
 # bar=bar2
-bar=barvalue2
+bar = barvalue2
         EOS
         validate_file(expected_content, tmpfile)
       end

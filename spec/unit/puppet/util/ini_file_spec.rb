@@ -130,22 +130,22 @@ foo=
 
     it "should properly update uncommented values" do
       expect(subject.get_value("section1", "far")).to eq(nil)
-      subject.set_value("section1", "foo", "foovalue")
+      subject.set_value("section1", "foo", " = ", "foovalue")
       expect(subject.get_value("section1", "foo")).to eq("foovalue")
     end
 
     it "should properly update commented values" do
       expect(subject.get_value("section1", "bar")).to eq(nil)
-      subject.set_value("section1", "bar", "barvalue")
+      subject.set_value("section1", "bar", " = ", "barvalue")
       expect(subject.get_value("section1", "bar")).to eq("barvalue")
       expect(subject.get_value("section1", "xyzzy['thing1']['thing2']")).to eq(nil)
-      subject.set_value("section1", "xyzzy['thing1']['thing2']", "xyzzyvalue")
+      subject.set_value("section1", "xyzzy['thing1']['thing2']", " = ", "xyzzyvalue")
       expect(subject.get_value("section1", "xyzzy['thing1']['thing2']")).to eq("xyzzyvalue")
     end
 
     it "should properly add new empty values" do
       expect(subject.get_value("section1", "baz")).to eq(nil)
-      subject.set_value("section1", "baz", "bazvalue")
+      subject.set_value("section1", "baz", " = ", "bazvalue")
       expect(subject.get_value("section1", "baz")).to eq("bazvalue")
     end
   end

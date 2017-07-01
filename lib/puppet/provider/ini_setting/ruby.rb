@@ -42,7 +42,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def create
-    ini_file.set_value(section, setting, resource[:value])
+    ini_file.set_value(section, setting, separator, resource[:value])
     ini_file.save
     @ini_file = nil
   end
@@ -58,7 +58,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def value=(value)
-    ini_file.set_value(section, setting, resource[:value])
+    ini_file.set_value(section, setting, separator, resource[:value])
     ini_file.save
   end
 

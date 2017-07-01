@@ -63,7 +63,12 @@ module Util
       end
     end
 
-    def set_value(section_name, setting, value)
+    def set_value(section_name, setting, separator, value)
+      complete_setting = {
+        :setting => setting,
+        :separator => separator,
+        :value => value
+      }
       unless (@sections_hash.has_key?(section_name))
         add_section(Section.new(section_name, nil, nil, nil, nil))
       end
@@ -83,7 +88,7 @@ module Util
 
         # If we get here then we found a commented line, so we
         # call "insert_inline_setting_line" to update the lines array
-        insert_inline_setting_line(result, section, setting, value)
+        insert_inline_setting_line(result, section, complete_setting)
 
         # Then, we need to tell the setting object that we hacked
         # in an inline setting
@@ -292,10 +297,11 @@ module Util
     # This utility method is for inserting a line into the existing
     # lines array.  The `result` argument is expected to be in the
     # format of the return value of `find_commented_setting`.
-    def insert_inline_setting_line(result, section, setting, value)
+    def insert_inline_setting_line(result, section, complete_setting)
       line_num = result[:line_num]
       match = result[:match]
-      lines.insert(line_num + 1, "#{' ' * (section.indentation || 0 )}#{setting}#{match[4]}#{value}")
+      s = complete_setting
+      lines.insert(line_num + 1, "#{' ' * (section.indentation || 0 )}#{s[:setting]}#{s[:separator]}#{s[:value]}")
     end
 
     # Utility method; given a section index (index into the @section_names
