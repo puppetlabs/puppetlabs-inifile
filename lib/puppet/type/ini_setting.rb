@@ -120,7 +120,6 @@ Puppet::Type.newtype(:ini_setting) do
   newparam(:indent_width) do
     desc 'The number of indent_chars to use to indent a new setting.' +
       'Defaults to undef (autodetect).'
-    defaultto(:undef)
   end
 
   newparam(:refreshonly) do

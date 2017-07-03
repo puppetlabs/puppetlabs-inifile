@@ -352,9 +352,13 @@ Global show_diff configuraton takes priority over this one -
 
 *Optional.*  Designates the string that will appear after the section's name.  Default value: "]".
 
-##### `indent`
+##### `indent_char`
 
-*Optional.*  Designates the string that will be used to indent newly created settings. This will not affect settings which already exist in the file, even if they are changed. Default value: " ".
+*Optional.*  Designates the character (or string) that will be used to indent newly created settings. This will not affect settings which already exist in the file, even if they are changed. Default value: " ".
+
+##### `indent_width`
+
+*Optional.*  Designates the number of `indent_char` to indent newly inserted settings by. If this is not defined, the default is to compute the indentation automatically from existing settings in the section, or no indent if the section does not yet exist. This will not affect settings which already exist in the file, even if they are changed.
 
 ##### `refreshonly`
 

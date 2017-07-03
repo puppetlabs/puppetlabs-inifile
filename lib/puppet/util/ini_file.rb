@@ -6,13 +6,14 @@ module Util
   class IniFile
 
     def initialize(path, key_val_separator = ' = ', section_prefix = '[', section_suffix = ']',
-                   indent = ' ')
+                   indent_char = ' ', indent_width = nil)
 
       k_v_s = key_val_separator =~ /^\s+$/ ? ' ' : key_val_separator.strip
 
       @section_prefix = section_prefix
       @section_suffix = section_suffix
-      @indent = indent
+      @indent_char = indent_char
+      @indent_width = indent_width
 
       @@SECTION_REGEX = section_regex
       @@SETTING_REGEX = /^(\s*)([^#;\s]|[^#;\s].*?[^\s#{k_v_s}])(\s*#{k_v_s}[ \t]*)(.*)\s*$/
@@ -176,7 +177,7 @@ module Util
 
           # write new settings, if there are any
           section.additional_settings.each_pair do |key, value|
-            fh.puts("#{@indent * (section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
+            fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
           end
 
           if (whitespace_buffer.length > 0)
@@ -311,7 +312,7 @@ module Util
       line_num = result[:line_num]
       match = result[:match]
       s = complete_setting
-      lines.insert(line_num + 1, "#{@indent * (section.indentation || 0 )}#{s[:setting]}#{s[:separator]}#{s[:value]}")
+      lines.insert(line_num + 1, "#{@indent_char * (@indent_width || section.indentation || 0 )}#{s[:setting]}#{s[:separator]}#{s[:value]}")
     end
 
     # Utility method; given a section index (index into the @section_names
