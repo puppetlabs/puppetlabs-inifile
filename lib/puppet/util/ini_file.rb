@@ -63,7 +63,15 @@ module Util
       end
     end
 
-    def set_value(section_name, setting, separator, value)
+    def set_value(*args)
+      case args.size
+      when 3
+        # Backwards compatible set_value function, See MODULES-5172
+        (section_name, setting, value) = args
+      when 4
+        (section_name, setting, separator, value) = args
+      end
+
       complete_setting = {
         :setting => setting,
         :separator => separator,
