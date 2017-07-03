@@ -274,6 +274,40 @@ subby=bar
       validate_file(expected_content, tmpfile)
     end
 
+    it "should treat a string indent_width as an integer" do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(
+          :section => 'nonstandard',
+          :setting => 'indented', :value => 'weirdly',
+          :section_prefix => '-', :section_suffix => '-',
+          :indent_char => "\t", :indent_width => '4'))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be false
+      provider.create
+      expected_content = <<-EOS
+# This is a comment
+[section1]
+; This is also a comment
+foo=foovalue
+
+bar = barvalue
+master = true
+[section2]
+
+foo= foovalue2
+baz=bazvalue
+url = http://192.168.1.1:8080
+[section:sub]
+subby=bar
+    #another comment
+ ; yet another comment
+
+-nonstandard-
+  shoes = purple
+				indented = weirdly
+      EOS
+      validate_file(expected_content, tmpfile)
+    end
+
     it "should add a missing setting to the correct section with colon" do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(
           :section => 'section:sub', :setting => 'yahoo', :value => 'yippee'))
