@@ -1352,9 +1352,9 @@ subby=bar
       validate_file(expected_content, tmpfile)
     end
 
-    it "should update an existing setting at the previous indentation regardless of indent_char setting" do
+    it "should update an existing setting at the previous indentation regardless of indent_char and indent_width settings" do
       resource = Puppet::Type::Ini_setting.new(
-          common_params.merge(:section => 'section:sub', :setting => 'fleezy', :value => 'flam2', :indent_char => 'ignore this'))
+          common_params.merge(:section => 'section:sub', :setting => 'fleezy', :value => 'flam2', :indent_char => 'ignore this', :indent_width => 10))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.create
