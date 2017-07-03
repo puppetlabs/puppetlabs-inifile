@@ -111,10 +111,16 @@ Puppet::Type.newtype(:ini_setting) do
     defaultto(']')
   end
 
-  newparam(:indent) do
-    desc 'The character to indent settings with.' +
+  newparam(:indent_char) do
+    desc 'The character to indent new settings with.' +
       'Defaults to \' \'.'
     defaultto(' ')
+  end
+
+  newparam(:indent_width) do
+    desc 'The number of indent_chars to use to indent a new setting.' +
+      'Defaults to undef (autodetect).'
+    defaultto(:undef)
   end
 
   newparam(:refreshonly) do
@@ -130,5 +136,4 @@ Puppet::Type.newtype(:ini_setting) do
       provider.value = self[:value]
     end
   end
-
 end

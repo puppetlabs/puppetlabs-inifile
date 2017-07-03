@@ -99,7 +99,8 @@ ini_setting { 'procedure cache size':
   section        => 'SQL Server Administration',
   setting        => 'procedure cache size',
   value          => '15000',
-  indent         => "\t",
+  indent_char    => "\t",
+  indent_width   => 2,
 }
 ~~~
 
@@ -107,7 +108,7 @@ Results in:
 
 ~~~puppet
 [SQL Server Administration]
-	procedure cache size = 15000
+		procedure cache size = 15000
 ~~~
 
 ### Implement child providers

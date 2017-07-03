@@ -110,11 +110,19 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
     end
   end
 
-  def indent
-    if resource.class.validattr?(:indent)
-      resource[:indent] || ' '
+  def indent_char
+    if resource.class.validattr?(:indent_char)
+      resource[:indent_char] || ' '
     else
       ' '
+    end
+  end
+
+  def indent_width
+    if resource.class.validattr?(:indent_width)
+      resource[:indent_width] || nil
+    else
+      nil
     end
   end
 
