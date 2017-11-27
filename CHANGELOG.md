@@ -1,3 +1,19 @@
+## Supported Release 2.1.0
+### Summary
+This is a clean release prior to the implementation of rubocop within the module.
+
+### Added
+- Several Modulesync updates have been made.
+- Indent Character can now be set.
+- Support for Debian 9 has been added.
+
+### Removed
+- Support for Ubuntu 1004 and 1204 has been removed.
+- Support for SLES 10 SP4 has been removed.
+- Support for Debian 6 has been removed.
+- Support for Solaris 12 has been removed.
+- Support for Windows Server 2003 R2 has been removed.
+
 ## Supported Release 2.0.0
 ### Summary
 This is a major release that includes a few bugfixes as well as some general module updates.
