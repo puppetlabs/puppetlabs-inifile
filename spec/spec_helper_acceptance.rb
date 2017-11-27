@@ -4,12 +4,12 @@ require 'beaker/puppet_install_helper'
 require 'beaker/module_install_helper'
 
 run_puppet_install_helper
-install_ca_certs unless ENV['PUPPET_INSTALL_TYPE'] =~ /pe/i
+install_ca_certs unless ENV['PUPPET_INSTALL_TYPE'] =~ %r{pe}i
 install_module_on(hosts)
 install_module_dependencies_on(hosts)
 
 RSpec.configure do |c|
-  c.filter_run :focus => true
+  c.filter_run focus: true
   c.run_all_when_everything_filtered = true
 
   # Readable test descriptions

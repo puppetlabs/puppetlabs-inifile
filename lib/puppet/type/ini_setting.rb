@@ -1,7 +1,6 @@
 require 'digest/md5'
 
 Puppet::Type.newtype(:ini_setting) do
-
   ensurable do
     defaultvalues
     defaultto :present
@@ -16,27 +15,27 @@ Puppet::Type.newtype(:ini_setting) do
     when :md5, 'md5'
       :md5
     else
-      fail('expected a boolean value or :md5')
+      raise('expected a boolean value or :md5')
     end
   end
 
-  newparam(:name, :namevar => true) do
+  newparam(:name, namevar: true) do
     desc 'An arbitrary name used as the identity of the resource.'
   end
 
   newparam(:section) do
-    desc 'The name of the section in the ini file in which the setting should be defined.' +
-      'If not provided, defaults to global, top of file, sections.'
-    defaultto("")
+    desc 'The name of the section in the ini file in which the setting should be defined.' \
+         'If not provided, defaults to global, top of file, sections.'
+    defaultto('')
   end
 
   newparam(:setting) do
     desc 'The name of the setting to be defined.'
     munge do |value|
-      if value =~ /(^\s|\s$)/
-        Puppet.warn("Settings should not have spaces in the value, we are going to strip the whitespace")
+      if value =~ %r{(^\s|\s$)}
+        Puppet.warn('Settings should not have spaces in the value, we are going to strip the whitespace')
       end
-      value.lstrip.rstrip
+      value.strip
     end
   end
 
@@ -62,10 +61,10 @@ Puppet::Type.newtype(:ini_setting) do
   end
 
   newparam(:key_val_separator) do
-    desc 'The separator string to use between each setting name and value. ' +
-        'Defaults to " = ", but you could use this to override e.g. ": ", or' +
-        'whether or not the separator should include whitespace.'
-    defaultto(" = ")
+    desc 'The separator string to use between each setting name and value. ' \
+         'Defaults to " = ", but you could use this to override e.g. ": ", or' \
+         'whether or not the separator should include whitespace.'
+    defaultto(' = ')
   end
 
   newproperty(:value) do
@@ -76,63 +75,60 @@ Puppet::Type.newtype(:ini_setting) do
     end
 
     def should_to_s(newvalue)
-      if (@resource[:show_diff] == :true && Puppet[:show_diff]) then
-        return newvalue
-      elsif (@resource[:show_diff] == :md5 && Puppet[:show_diff]) then
-        return '{md5}' + Digest::MD5.hexdigest(newvalue.to_s)
+      if @resource[:show_diff] == :true && Puppet[:show_diff]
+        newvalue
+      elsif @resource[:show_diff] == :md5 && Puppet[:show_diff]
+        '{md5}' + Digest::MD5.hexdigest(newvalue.to_s)
       else
-        return '[redacted sensitive information]'
+        '[redacted sensitive information]'
       end
     end
 
-    def is_to_s(value)
+    def is_to_s(value) # rubocop:disable Style/PredicateName : Changing breaks the code (./.bundle/gems/gems/puppet-5.3.3-universal-darwin/lib/puppet/parameter.rb:525:in `to_s')
       should_to_s(value)
     end
 
     def insync?(current)
-      if (@resource[:refreshonly]) then
+      if @resource[:refreshonly]
         true
       else
         current == should
       end
     end
-
   end
 
   newparam(:section_prefix) do
-    desc 'The prefix to the section name\'s header.' +
-      'Defaults to \'[\'.'
+    desc 'The prefix to the section name\'s header.' \
+         'Defaults to \'[\'.'
     defaultto('[')
   end
 
   newparam(:section_suffix) do
-    desc 'The suffix to the section name\'s header.' +
-      'Defaults to \']\'.'
+    desc 'The suffix to the section name\'s header.' \
+         'Defaults to \']\'.'
     defaultto(']')
   end
 
   newparam(:indent_char) do
-    desc 'The character to indent new settings with.' +
-      'Defaults to \' \'.'
+    desc 'The character to indent new settings with.' \
+         'Defaults to \' \'.'
     defaultto(' ')
   end
 
   newparam(:indent_width) do
-    desc 'The number of indent_chars to use to indent a new setting.' +
-      'Defaults to undef (autodetect).'
+    desc 'The number of indent_chars to use to indent a new setting.' \
+         'Defaults to undef (autodetect).'
   end
 
   newparam(:refreshonly) do
-    desc 'A flag indicating whether or not the ini_setting should be updated '+
+    desc 'A flag indicating whether or not the ini_setting should be updated ' \
          'only when called as part of a refresh event'
     defaultto false
-    newvalues(true,false)
+    newvalues(true, false)
   end
 
   def refresh
-    if self[:refreshonly] then
-      # update the value in the provider, which will save the value to the ini file
-      provider.value = self[:value]
-    end
+    # update the value in the provider, which will save the value to the ini file
+    provider.value = self[:value] if self[:refreshonly]
   end
 end
