@@ -90,9 +90,11 @@ default:
    minage = 1
 ~~~
 
-### Use a non-standard indent character (or string) for added settings
+### Use a non-standard indent character
 
-~~~puppet
+To use a non-standard indent character or string for added settings, set the `indent_char` and the `indent_width` parameters. The `indent_width` parameter controls how many `indent_char` should appear in the indent.
+
+~~puppet
 ini_setting { 'procedure cache size':
   ensure         => present,
   path           => '/var/lib/ase/config/ASE-16_0/SYBASE.cfg',
@@ -354,11 +356,11 @@ Global show_diff configuraton takes priority over this one -
 
 ##### `indent_char`
 
-*Optional.*  Designates the character (or string) that will be used to indent newly created settings. This will not affect settings which already exist in the file, even if they are changed. Default value: " ".
+*Optional.*  Designates the character (or string) to use to indent newly created settings. This does not affect settings that already exist in the file, even if they are changed. Default value: " ".
 
 ##### `indent_width`
 
-*Optional.*  Designates the number of `indent_char` to indent newly inserted settings by. If this is not defined, the default is to compute the indentation automatically from existing settings in the section, or no indent if the section does not yet exist. This will not affect settings which already exist in the file, even if they are changed.
+*Optional.*  Designates the number of `indent_char` with which to  indent newly inserted settings. If this is not defined, the indentation is automatically computed from existing settings in the section, or if the section does not yet exist, no indent is made. This does not affect settings that already exist in the file, even if they are changed.
 
 ##### `refreshonly`
 
