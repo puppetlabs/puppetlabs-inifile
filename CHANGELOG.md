@@ -1,3 +1,11 @@
+## Supported Release 2.1.1
+### Summary
+This release is in order to implement Rubocop within the module and includes a wide array of formatting changes throughout the code and the enabling of rubocop checks to be run against all pull requests against the module.
+
+### Changed
+- Rubocop checks will now be run against any PRs made towards the module.
+- The module has undergone a substantial reformatting in order to comply with the designated standards.
+
 ## Supported Release 2.1.0
 ### Summary
 This is a clean release prior to the implementation of rubocop within the module.
