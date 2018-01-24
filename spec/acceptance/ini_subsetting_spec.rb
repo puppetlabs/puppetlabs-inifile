@@ -81,7 +81,7 @@ describe 'ini_subsetting resource' do
     describe file("#{tmpdir}/ini_subsetting.ini") do
       it { is_expected.to be_file }
 
-      describe '#content' do # rubocop:disable RSpec/NestedGroups : Unable to reduce nesting further without affecting tests
+      describe '#content' do
         subject { super().content }
 
         it { is_expected.to match %r{\[one\]\nkey = alphabet betatrons} }
@@ -116,7 +116,7 @@ describe 'ini_subsetting resource' do
     describe file("#{tmpdir}/ini_subsetting.ini") do
       it { is_expected.to be_file }
 
-      describe '#content' do # rubocop:disable RSpec/NestedGroups : Unable to reduce nesting further without affecting tests
+      describe '#content' do
         subject { super().content }
 
         it { is_expected.to match %r{\[one\]} }
@@ -231,10 +231,10 @@ describe 'ini_subsetting resource' do
           apply_manifest(pp, catch_changes: true)
         end
 
-        describe file("#{tmpdir}/ini_subsetting.ini") do # rubocop:disable RSpec/NestedGroups : Unable to reduce nesting further without affecting tests
+        describe file("#{tmpdir}/ini_subsetting.ini") do
           it { is_expected.to be_file }
 
-          describe '#content' do # rubocop:disable RSpec/NestedGroups : Unable to reduce nesting further without affecting tests
+          describe '#content' do
             subject { super().content }
 
             it { is_expected.to match content }

@@ -137,7 +137,7 @@ describe 'ini_setting resource' do
     describe file("#{tmpdir}/ini_setting.ini") do
       it { is_expected.to be_file }
 
-      describe '#content' do # rubocop:disable RSpec/NestedGroups : Unable to reduce nesting further without affecting tests
+      describe '#content' do
         subject { super().content }
 
         it { is_expected.to match %r{four = five} }
@@ -178,7 +178,7 @@ describe 'ini_setting resource' do
     describe file("#{tmpdir}/ini_setting.ini") do
       it { is_expected.to be_file }
 
-      describe '#content' do # rubocop:disable RSpec/NestedGroups : Unable to reduce nesting further without affecting tests
+      describe '#content' do
         subject { super().content }
 
         it { is_expected.not_to match %r{four = five} }
