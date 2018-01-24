@@ -1,3 +1,4 @@
+# Manifest creating multiplr ini_settings
 class create_multiple_ini_settings {
 
 $defaults = { 'path' => '/tmp/foo.ini' }

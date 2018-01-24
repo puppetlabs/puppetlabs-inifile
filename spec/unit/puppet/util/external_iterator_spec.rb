@@ -25,7 +25,7 @@ describe Puppet::Util::ExternalIterator do
       end
     end
 
-    it 'does not advance the iterator, but should reflect calls to #next' do # rubocop:disable RSpec/MultipleExpectations : No neat way to further reduce expectations
+    it 'does not advance the iterator, but should reflect calls to #next' do
       expected_values.each do |expected_pair|
         expect(subject_class.peek).to eq(expected_pair)
         expect(subject_class.peek).to eq(expected_pair)
