@@ -335,7 +335,7 @@ Determines whether the specified setting should exist. Valid options: 'present' 
 
 *Optional.* Prevents outputting actual values to the logfile. Useful for handling of passwords and other sensitive information. Possible values are:
   * `true`: This allows all values to be passed to logfiles. (default)
-  * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`. 
+  * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`.
   * `md5`: The values in the logfiles will be replaced with their md5 hash.
 
 Global show_diff configuraton takes priority over this one -
@@ -425,7 +425,7 @@ Specifies whether the subsetting should be present. Valid options: 'present' and
 
 *Optional.* Prevents outputting actual values to the logfile. Useful for handling of passwords and other sensitive information. Possible values are:
   * `true`: This allows all values to be passed to logfiles. (default)
-  * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`. 
+  * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`.
   * `md5`: The values in the logfiles will be replaced with their md5 hash.
 
 Global show_diff configuraton takes priority over this one -
