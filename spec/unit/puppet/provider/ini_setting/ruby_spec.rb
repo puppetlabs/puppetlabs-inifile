@@ -84,8 +84,6 @@ describe provider_class do
         EOS
       end
 
-      # rubocop:disable RSpec/ExampleLength : Any alterations to test structure break the test
-      # rubocop:disable RSpec/MultipleExpectations
       it 'is able to parse the results' do
         child_three = Class.new(provider_class) do
           def self.file_path
@@ -257,7 +255,7 @@ subby=bar
   shoes = purple
 				indented = weirdly
     EOS
-    it 'adds a missing setting to the correct section indented by indent_char * indent_width' do # rubocop:disable RSpec/ExampleLength : Unable to reduce without violating other rubocop rules
+    it 'adds a missing setting to the correct section indented by indent_char * indent_width' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'indented', value: 'weirdly',
                                                                    section_prefix: '-', section_suffix: '-', indent_char: "\t", indent_width: 4))
       provider = described_class.new(resource)
@@ -288,7 +286,7 @@ subby=bar
   shoes = purple
 				indented = weirdly
     EOS
-    it 'treats a string indent_width as an integer' do # rubocop:disable RSpec/ExampleLength : Unable to reduce without violating other rubocop rules
+    it 'treats a string indent_width as an integer' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'indented', value: 'weirdly',
                                                                    section_prefix: '-', section_suffix: '-', indent_char: "\t", indent_width: '4'))
       provider = described_class.new(resource)
@@ -377,8 +375,7 @@ subby=bar
 -nonstandard-
   shoes = purple
     EOS
-    # rubocop:disable RSpec/MultipleExpectations : Unable to reduce without altering test
-    it 'modifies an existing setting with a different boolean value' do # rubocop:disable RSpec/ExampleLength : Unable to reduce without altering test
+    it 'modifies an existing setting with a different boolean value' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'master', value: false))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true

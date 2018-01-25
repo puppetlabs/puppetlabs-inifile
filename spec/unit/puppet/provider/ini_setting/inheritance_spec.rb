@@ -36,7 +36,7 @@ describe provider_class do
         EOS
       end
 
-      it 'parses the results' do # rubocop:disable RSpec/MultipleExpectations : Unable to separate expectations
+      it 'parses the results' do
         provider_class.stubs(:file_path).returns(tmpfile)
         instances = provider_class.instances
         expect(instances.size).to eq(2)

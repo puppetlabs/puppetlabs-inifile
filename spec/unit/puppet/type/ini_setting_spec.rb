@@ -5,7 +5,6 @@ ini_setting = Puppet::Type.type(:ini_setting)
 
 describe ini_setting do
   describe 'path validation' do
-    # rubocop:disable RSpec/NestedGroups : Reducing the level of nesting would reduce the quality of the code
     subject { -> { described_class.new(name: 'foo', path: path) } }
 
     context 'on posix platforms' do
