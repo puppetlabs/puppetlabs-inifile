@@ -1,4 +1,3 @@
-#! /usr/bin/env ruby # rubocop:disable Lint/ScriptPermission : Rubocop error?
 require 'spec_helper'
 
 ini_setting = Puppet::Type.type(:ini_setting)
