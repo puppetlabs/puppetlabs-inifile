@@ -7,7 +7,6 @@
 1. [Overview](#overview)
 2. [Module Description - What the module does and why it is useful](#module-description)
 3. [Setup - The basics of getting started with inifile module](#setup)
-    * [Beginning with inifile](#beginning-with-inifile)
 4. [Usage - Configuration options and additional functionality](#usage)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
@@ -40,11 +39,13 @@ ini_setting { "sample setting":
 ## Usage
 
 
-The inifile module tries hard not to manipulate your file any more than it needs to. In most cases, it doesn't affect the original whitespace, comments, ordering, etc.
+The inifile module is used to: 
 
- * Supports comments starting with either '#' or ';'.
- * Supports either whitespace or no whitespace around '='.
- * Adds any missing sections to the INI file.
+ * Support comments starting with either '#' or ';'.
+ * Support either whitespace or no whitespace around '='.
+ * Add any missing sections to the INI file.
+ 
+It does not manipulate your file any more than it needs to. In most cases, it doesn't affect the original whitespace, comments, ordering, etc. See the common usages below for examples.
 
 ### Manage multiple values in a setting
 
@@ -92,9 +93,10 @@ default:
 
 ### Use a non-standard indent character
 
-To use a non-standard indent character or string for added settings, set the `indent_char` and the `indent_width` parameters. The `indent_width` parameter controls how many `indent_char` should appear in the indent.
+To use a non-standard indent character or string for added settings, set the `indent_char` and the `indent_width` parameters. The `indent_width` parameter controls how many `indent_char` appear in the indent.
 
-~~puppet
+
+~~~puppet
 ini_setting { 'procedure cache size':
   ensure         => present,
   path           => '/var/lib/ase/config/ASE-16_0/SYBASE.cfg',
@@ -117,9 +119,8 @@ Results in:
 
 You might want to create child providers that inherit the `ini_setting` provider, for one or both of these purposes:
 
- * Make a custom resource to manage an application that stores its settings in INI files, without recreating the code to manage the files themselves.
-
- * [Purge all unmanaged settings](https://docs.puppetlabs.com/references/latest/type.html#resources-attribute-purge) from a managed INI file.
+ * To make a custom resource to manage an application that stores its settings in INI files, without recreating the code to manage the files themselves.
+ * To [Purge all unmanaged settings](https://docs.puppetlabs.com/references/latest/type.html#resources-attribute-purge) from a managed INI file.
 
 To implement child providers, first specify a custom type. Have it implement a namevar called `name` and a property called `value`:
 
@@ -165,7 +166,7 @@ Puppet::Type.type(:glance_api_config).provide(
 end
 ~~~
 
-Now the settings in /etc/glance/glance-api.conf file can be managed as individual resources:
+Now the settings in `/etc/glance/glance-api.conf` file can be managed as individual resources:
 
 ~~~puppet
 glance_api_config { 'HEADER/important_config':
@@ -173,7 +174,7 @@ glance_api_config { 'HEADER/important_config':
 }
 ~~~
 
-If you've implemented self.file_path, you can have Puppet purge the file of all lines that aren't implemented as Puppet resources:
+If you've implemented `self.file_path`, you can have Puppet purge the file of all lines that aren't implemented as Puppet resources:
 
 ~~~puppet
 resources { 'glance_api_config'
@@ -183,7 +184,7 @@ resources { 'glance_api_config'
 
 ### Manage multiple ini_settings
 
-To manage multiple ini_settings, use the [`create_ini_settings`](#function-create_ini_settings) function.
+To manage multiple `ini_settings`, use the [`create_ini_settings`](#function-create_ini_settings) function.
 
 ~~~puppet
 $defaults = { 'path' => '/tmp/foo.ini' }
@@ -191,7 +192,7 @@ $example = { 'section1' => { 'setting1' => 'value1' } }
 create_ini_settings($example, $defaults)
 ~~~
 
-results in:
+Results in:
 
 ~~~puppet
 ini_setting { '[section1] setting1':
@@ -203,7 +204,7 @@ ini_setting { '[section1] setting1':
 }
 ~~~
 
-To include special parameters, the following code:
+To include special parameters, use the following code:
 
 ~~~puppet
 $defaults = { 'path' => '/tmp/foo.ini' }
@@ -218,7 +219,7 @@ $example = {
 create_ini_settings($example, $defaults)
 ~~~
 
-results in:
+Results in:
 
 ~~~puppet
 ini_setting { '[section1] setting1':
@@ -309,62 +310,116 @@ Manages a setting within an INI file.
 
 ##### `ensure`
 
-Determines whether the specified setting should exist. Valid options: 'present' and 'absent'. Default value: 'present'.
+Determines whether the specified setting should exist. 
+
+Valid options: 'present' and 'absent'. 
+
+Default value: 'present'.
 
 ##### `key_val_separator`
 
-*Optional.* Specifies a string to use between each setting name and value (e.g., to determine whether the separator includes whitespace). Valid options: a string. Default value: ' = '.
+*Optional.* 
+
+Specifies a string to use between each setting name and value (e.g., to determine whether the separator includes whitespace). 
+
+Valid options: a string. 
+
+Default value: ' = '.
 
 ##### `name`
 
-*Optional.* Specifies an arbitrary name to identify the resource. Valid options: a string. Default value: the title of your declared resource.
+*Optional.* 
+
+Specifies an arbitrary name to identify the resource. 
+
+Valid options: a string. 
+
+Default value: the title of your declared resource.
 
 ##### `path`
 
-*Required.* Specifies an INI file containing the setting to manage. Valid options: a string containing an absolute path.
+*Required.* 
+
+Specifies an INI file containing the setting to manage. 
+
+Valid options: a string containing an absolute path.
 
 ##### `section`
 
-*Optional.* Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Defaults to "". Valid options: a string.
+*Optional.* 
+
+Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Defaults to "". 
+
+Valid options: a string.
 
 ##### `setting`
 
-*Required.* Designates a setting to manage within the specified INI file and section. Valid options: a string.
+*Required.* 
+
+Designates a setting to manage within the specified INI file and section. 
+
+Valid options: a string.
 
 ##### `show_diff`
 
-*Optional.* Prevents outputting actual values to the logfile. Useful for handling of passwords and other sensitive information. Possible values are:
+*Optional.* 
+
+Prevents outputting actual values to the logfile. Useful for the handling of passwords and other sensitive information. Possible values are:
   * `true`: This allows all values to be passed to logfiles. (default)
   * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`.
   * `md5`: The values in the logfiles will be replaced with their md5 hash.
 
-Global show_diff configuraton takes priority over this one -
+Global `show_diff` configuraton takes priority over this one:
 [https://docs.puppetlabs.com/references/latest/configuration.html#showdiff]([https://docs.puppetlabs.com/references/latest/configuration.html#showdiff].
-). Default value: 'true'.
+). Default value: `true`.
 
 ##### `value`
 
-*Optional.* Supplies a value for the specified setting. Valid options: a string. Default value: undefined.
+*Optional.* 
+
+Supplies a value for the specified setting. 
+
+Valid options: a string. 
+
+Default value: `undef`.
 
 ##### `section_prefix`
 
-*Optional.*  Designates the string that will appear before the section's name.  Default value: "["
+*Optional.*  
+
+Designates the string that will appear before the section's name.  
+
+Default value: "["
 
 ##### `section_suffix`
 
-*Optional.*  Designates the string that will appear after the section's name.  Default value: "]".
+*Optional.*  
+
+Designates the string that will appear after the section's name.  
+
+Default value: "]".
 
 ##### `indent_char`
 
-*Optional.*  Designates the character (or string) to use to indent newly created settings. This does not affect settings that already exist in the file, even if they are changed. Default value: " ".
+*Optional.*  
+
+Designates the character (or string) to use to indent newly created settings. This does not affect settings that already exist in the file, even if they are changed. 
+
+Default value: " ".
 
 ##### `indent_width`
 
-*Optional.*  Designates the number of `indent_char` with which to  indent newly inserted settings. If this is not defined, the indentation is automatically computed from existing settings in the section, or if the section does not yet exist, no indent is made. This does not affect settings that already exist in the file, even if they are changed.
+*Optional.*  
+
+Designates the number of `indent_char` with which to  indent newly inserted settings. If this is not defined, the indentation is automatically computed from existing settings in the section, or if the section does not yet exist, no indent is made. This does not affect settings that already exist in the file, even if they are changed.
 
 ##### `refreshonly`
 
-*Optional.*  A boolean to indicate whether or not the value associated with the setting should be updated if this resource is only part of a refresh event.  Default value: **false**.
+*Optional.*  
+
+A boolean to indicate whether or not the value associated with the setting should be updated if this resource is only part of a refresh event.  
+
+Default value: `false`.
 
 For example, if we want a timestamp associated with the last time a setting's value was updated, we could do something like this:
 
@@ -399,31 +454,61 @@ Manages multiple values within the same INI setting.
 
 ##### `ensure`
 
-Specifies whether the subsetting should be present. Valid options: 'present' and 'absent'. Default value: 'present'.
+Specifies whether the subsetting should be present. 
+
+Valid options: 'present' and 'absent'. 
+
+Default value: 'present'.
 
 ##### `key_val_separator`
 
-*Optional.* Specifies a string to use between setting name and value (e.g., to determine whether the separator includes whitespace). Valid options: a string. Default value: ' = '.
+*Optional.* 
+
+Specifies a string to use between setting name and value (e.g., to determine whether the separator includes whitespace). 
+
+Valid options: a string. 
+
+Default value: ' = '.
 
 ##### `path`
 
-*Required.* Specifies an INI file containing the subsetting to manage. Valid options: a string containing an absolute path.
+*Required.* 
+
+Specifies an INI file containing the subsetting to manage. 
+
+Valid options: a string containing an absolute path.
 
 ##### `quote_char`
 
-*Optional.* The character used to quote the entire value of the setting. Valid values are '', '"', and "'". Defaults to ''. Valid options: '', '"' and "'". Default value: ''.
+*Optional.* 
+
+The character used to quote the entire value of the setting. Valid values are '', '"', and "'". Defaults to ''. 
+
+Valid options: '', '"' and "'". 
+
+Default value: ''.
 
 ##### `section`
 
-*Optional.* Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Defaults to "". Valid options: a string.
+*Optional.* 
+
+Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Defaults to "". 
+
+Valid options: a string.
 
 ##### `setting`
 
-*Required.* Designates a setting within the specified section containing the subsetting to manage. Valid options: a string.
+*Required.* 
+
+Designates a setting within the specified section containing the subsetting to manage. 
+
+Valid options: a string.
 
 ##### `show_diff`
 
-*Optional.* Prevents outputting actual values to the logfile. Useful for handling of passwords and other sensitive information. Possible values are:
+*Optional.* 
+
+Prevents outputting actual values to the logfile. Useful for handling of passwords and other sensitive information. Possible values are:
   * `true`: This allows all values to be passed to logfiles. (default)
   * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`.
   * `md5`: The values in the logfiles will be replaced with their md5 hash.
@@ -434,27 +519,57 @@ Global show_diff configuraton takes priority over this one -
 
 ##### `subsetting`
 
-*Required.* Designates a subsetting to manage within the specified setting. Valid options: a string.
+*Required.* 
+
+Designates a subsetting to manage within the specified setting. 
+
+Valid options: a string.
 
 ##### `subsetting_separator`
 
-*Optional.* Specifies a string to use between subsettings. Valid options: a string. Default value: " ".
+*Optional.* 
+
+Specifies a string to use between subsettings. 
+
+Valid options: a string. 
+
+Default value: " ".
 
 ##### `subsetting_key_val_separator`
 
-*Optional.* Specifies a string to use between subsetting name and value (if there is a separator between the subsetting name and its value). Valid options: a string. Default value: empty string.
+*Optional.* 
+
+Specifies a string to use between subsetting name and value (if there is a separator between the subsetting name and its value). 
+
+Valid options: a string. 
+
+Default value: empty string.
 
 ##### `use_exact_match`
 
-*Optional.* Whether to use partial or exact matching for subsetting. Should be set to true if the subsettings do not have values. Valid options: true, false. Default value: false.
+*Optional.* 
+
+Whether to use partial or exact matching for subsetting. Should be set to `true` if the subsettings do not have values. 
+
+Valid options: `true`, `false`. 
+
+Default value: `false`.
 
 ##### `value`
 
-*Optional.* Supplies a value for the specified subsetting. Valid options: a string. Default value: undefined.
+*Optional.* 
+
+Supplies a value for the specified subsetting. 
+
+Valid options: a string. 
+
+Default value: `undef`.
 
 ##### `insert_type`
 
-*Optional.* Selects where a new subsetting item should be inserted.
+*Optional.* 
+
+Selects where a new subsetting item should be inserted.
 
 * *start*  - insert at the beginning of the line.
 * *end*    - insert at the end of the line (default).
@@ -464,9 +579,11 @@ Global show_diff configuraton takes priority over this one -
 
 ##### `insert_value`
 
-*Optional.* The value for the insert type if the value if required.
+*Optional.* 
 
-### Function: create_ini_settings
+The value for the insert type if the value if required.
+
+### Function: `create_ini_settings`
 
 Manages multiple `ini_setting` resources from a hash. Note that this cannot be used with ini_subsettings.
 
@@ -476,11 +593,15 @@ Manages multiple `ini_setting` resources from a hash. Note that this cannot be u
 
 ##### First argument: `settings`
 
-*Required.* Specify a hash representing the `ini_setting` resources you want to create.
+*Required.* 
+
+Specify a hash representing the `ini_setting` resources you want to create.
 
 ##### Second argument: `defaults`
 
-*Optional.* Accepts a hash to be used as the values for any attributes not defined in the first argument.
+*Optional.* 
+
+Accepts a hash to be used as the values for any attributes not defined in the first argument.
 
 ~~~puppet
 $example = {
