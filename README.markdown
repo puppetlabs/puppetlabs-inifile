@@ -45,7 +45,7 @@ The inifile module is used to:
  * Support either whitespace or no whitespace around '='.
  * Add any missing sections to the INI file.
  
-It does not manipulate your file any more than it needs to. In most cases, it doesn't affect the original whitespace, comments, ordering, etc. See the common usages below for examples.
+It does not manipulate your file any more than it needs to. In most cases, it doesn't affect the original whitespace, comments, or ordering. See the common usages below for examples.
 
 ### Manage multiple values in a setting
 
@@ -117,10 +117,10 @@ Results in:
 
 ### Implement child providers
 
-You might want to create child providers that inherit the `ini_setting` provider, for one or both of these purposes:
+You might want to create child providers that inherit the `ini_setting` provider, for one of the following reasons:
 
  * To make a custom resource to manage an application that stores its settings in INI files, without recreating the code to manage the files themselves.
- * To [Purge all unmanaged settings](https://docs.puppetlabs.com/references/latest/type.html#resources-attribute-purge) from a managed INI file.
+ * To [purge all unmanaged settings](https://docs.puppetlabs.com/references/latest/type.html#resources-attribute-purge) from a managed INI file.
 
 To implement child providers, first specify a custom type. Have it implement a namevar called `name` and a property called `value`:
 
@@ -166,7 +166,7 @@ Puppet::Type.type(:glance_api_config).provide(
 end
 ~~~
 
-Now the settings in `/etc/glance/glance-api.conf` file can be managed as individual resources:
+Now you can manage the settings in the `/etc/glance/glance-api.conf` file as individual resources:
 
 ~~~puppet
 glance_api_config { 'HEADER/important_config':
@@ -308,6 +308,8 @@ Manages a setting within an INI file.
 
 #### Parameters
 
+All parameters are optional unless specified as required.
+
 ##### `ensure`
 
 Determines whether the specified setting should exist. 
@@ -318,17 +320,13 @@ Default value: 'present'.
 
 ##### `key_val_separator`
 
-*Optional.* 
-
-Specifies a string to use between each setting name and value (e.g., to determine whether the separator includes whitespace). 
+Specifies a string to use between each setting name and value, for example, to determine whether the separator includes whitespace. 
 
 Valid options: a string. 
 
 Default value: ' = '.
 
 ##### `name`
-
-*Optional.* 
 
 Specifies an arbitrary name to identify the resource. 
 
@@ -346,8 +344,6 @@ Valid options: a string containing an absolute path.
 
 ##### `section`
 
-*Optional.* 
-
 Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Defaults to "". 
 
 Valid options: a string.
@@ -362,20 +358,16 @@ Valid options: a string.
 
 ##### `show_diff`
 
-*Optional.* 
-
 Prevents outputting actual values to the logfile. Useful for the handling of passwords and other sensitive information. Possible values are:
   * `true`: This allows all values to be passed to logfiles. (default)
   * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`.
   * `md5`: The values in the logfiles will be replaced with their md5 hash.
 
-Global `show_diff` configuraton takes priority over this one:
+Global `show_diff` configuration takes priority over this one:
 [https://docs.puppetlabs.com/references/latest/configuration.html#showdiff]([https://docs.puppetlabs.com/references/latest/configuration.html#showdiff].
 ). Default value: `true`.
 
 ##### `value`
-
-*Optional.* 
 
 Supplies a value for the specified setting. 
 
@@ -385,39 +377,29 @@ Default value: `undef`.
 
 ##### `section_prefix`
 
-*Optional.*  
-
-Designates the string that will appear before the section's name.  
+Designates the string to appear before the section's name.  
 
 Default value: "["
 
 ##### `section_suffix`
-
-*Optional.*  
-
-Designates the string that will appear after the section's name.  
+  
+Designates the string to appear after the section's name.  
 
 Default value: "]".
 
 ##### `indent_char`
 
-*Optional.*  
-
-Designates the character (or string) to use to indent newly created settings. This does not affect settings that already exist in the file, even if they are changed. 
+Designates the character (or string) to indent newly created settings. This does not affect settings that already exist in the file, even if they are changed. 
 
 Default value: " ".
 
 ##### `indent_width`
-
-*Optional.*  
-
-Designates the number of `indent_char` with which to  indent newly inserted settings. If this is not defined, the indentation is automatically computed from existing settings in the section, or if the section does not yet exist, no indent is made. This does not affect settings that already exist in the file, even if they are changed.
+ 
+Designates the number of `indent_char` with which to indent newly inserted settings. If this is not defined, the indentation is automatically computed from existing settings in the section, or if the section does not yet exist, no indent is made. This does not affect settings that already exist in the file, even if they are changed.
 
 ##### `refreshonly`
 
-*Optional.*  
-
-A boolean to indicate whether or not the value associated with the setting should be updated if this resource is only part of a refresh event.  
+A Boolean to indicate whether or not the value associated with the setting should be updated if this resource is only part of a refresh event.  
 
 Default value: `false`.
 
@@ -452,6 +434,8 @@ Manages multiple values within the same INI setting.
 
 #### Parameters
 
+All parameters are optional unless specified as required.
+
 ##### `ensure`
 
 Specifies whether the subsetting should be present. 
@@ -462,9 +446,7 @@ Default value: 'present'.
 
 ##### `key_val_separator`
 
-*Optional.* 
-
-Specifies a string to use between setting name and value (e.g., to determine whether the separator includes whitespace). 
+Specifies a string to use between setting name and value, for example, to determine whether the separator includes whitespace. 
 
 Valid options: a string. 
 
@@ -480,8 +462,6 @@ Valid options: a string containing an absolute path.
 
 ##### `quote_char`
 
-*Optional.* 
-
 The character used to quote the entire value of the setting. Valid values are '', '"', and "'". Defaults to ''. 
 
 Valid options: '', '"' and "'". 
@@ -490,9 +470,7 @@ Default value: ''.
 
 ##### `section`
 
-*Optional.* 
-
-Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Defaults to "". 
+Designates a section of the specified INI file containing the setting to manage. You can manage a global setting by putting it at the beginning of the file, before any named sections, and entering "". Defaults to "". 
 
 Valid options: a string.
 
@@ -505,8 +483,6 @@ Designates a setting within the specified section containing the subsetting to m
 Valid options: a string.
 
 ##### `show_diff`
-
-*Optional.* 
 
 Prevents outputting actual values to the logfile. Useful for handling of passwords and other sensitive information. Possible values are:
   * `true`: This allows all values to be passed to logfiles. (default)
@@ -527,8 +503,6 @@ Valid options: a string.
 
 ##### `subsetting_separator`
 
-*Optional.* 
-
 Specifies a string to use between subsettings. 
 
 Valid options: a string. 
@@ -536,8 +510,6 @@ Valid options: a string.
 Default value: " ".
 
 ##### `subsetting_key_val_separator`
-
-*Optional.* 
 
 Specifies a string to use between subsetting name and value (if there is a separator between the subsetting name and its value). 
 
@@ -547,8 +519,6 @@ Default value: empty string.
 
 ##### `use_exact_match`
 
-*Optional.* 
-
 Whether to use partial or exact matching for subsetting. Should be set to `true` if the subsettings do not have values. 
 
 Valid options: `true`, `false`. 
@@ -557,8 +527,6 @@ Default value: `false`.
 
 ##### `value`
 
-*Optional.* 
-
 Supplies a value for the specified subsetting. 
 
 Valid options: a string. 
@@ -566,8 +534,6 @@ Valid options: a string.
 Default value: `undef`.
 
 ##### `insert_type`
-
-*Optional.* 
 
 Selects where a new subsetting item should be inserted.
 
@@ -578,8 +544,6 @@ Selects where a new subsetting item should be inserted.
 * *index*  - insert at the specified index number.
 
 ##### `insert_value`
-
-*Optional.* 
 
 The value for the insert type if the value if required.
 
@@ -598,8 +562,6 @@ Manages multiple `ini_setting` resources from a hash. Note that this cannot be u
 Specify a hash representing the `ini_setting` resources you want to create.
 
 ##### Second argument: `defaults`
-
-*Optional.* 
 
 Accepts a hash to be used as the values for any attributes not defined in the first argument.
 
