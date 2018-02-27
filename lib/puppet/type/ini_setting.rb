@@ -89,7 +89,7 @@ Puppet::Type.newtype(:ini_setting) do
     end
 
     def insync?(current)
-      if @resource[:refreshonly]
+      if @resource[:refreshonly] && @resource[:refreshonly] != :false
         true
       else
         current == should
