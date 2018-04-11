@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
+## Supported Release [2.2.1]
+### Summary
+This is a bug fix release for a problem with managing existing lines in Puppet > 5.4.0
+
+### Fixed
+- issue with ini_setting's :refreshonly parameter validation ([MODULES-6687](https://tickets.puppet.com/browse/MODULES-6687))
+
 ## Supported Release [2.2.0]
 ### Summary
 This release uses the PDK convert functionality which in return makes the module PDK compliant. It also includes a roll up of maintenance changes.
