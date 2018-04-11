@@ -1,6 +1,6 @@
 # Manifest creating multiple ini_settings
 class create_multiple_ini_settings {
-  if $facts['os']['family'] == 'windows' {
+  if $facts['osfamily'] == 'windows' {
     $defaults = { 'path' => 'C:/tmp/foo.ini' }
   } else {
     $defaults = { 'path' => '/tmp/foo.ini' }
