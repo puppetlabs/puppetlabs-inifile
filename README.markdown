@@ -476,7 +476,7 @@ Designates a section of the specified INI file containing the setting to manage.
 
 Valid options: a string.
 
-Defaults value: "".
+Default value: "".
 
 ##### `setting`
 
