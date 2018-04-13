@@ -117,7 +117,7 @@ Results in:
 
 ### Implement child providers
 
-You might want to create child providers that inherit the `ini_setting` provider, for one of the following reasons:
+You might want to create child providers that inherit the `ini_setting` provider for one of the following reasons:
 
  * To make a custom resource to manage an application that stores its settings in INI files, without recreating the code to manage the files themselves.
  * To [purge all unmanaged settings](https://docs.puppetlabs.com/references/latest/type.html#resources-attribute-purge) from a managed INI file.
@@ -174,7 +174,7 @@ glance_api_config { 'HEADER/important_config':
 }
 ~~~
 
-If you've implemented `self.file_path`, you can have Puppet purge the file of all lines that aren't implemented as Puppet resources:
+If you've implemented `self.file_path`, you can have Puppet purge the file of the all lines that aren't implemented as Puppet resources:
 
 ~~~puppet
 resources { 'glance_api_config'
@@ -344,9 +344,11 @@ Valid options: a string containing an absolute path.
 
 ##### `section`
 
-Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". Defaults to "". 
+Designates a section of the specified INI file containing the setting to manage. To manage a global setting (at the beginning of the file, before any named sections) enter "". 
 
 Valid options: a string.
+
+Default value: "". 
 
 ##### `setting`
 
@@ -358,7 +360,7 @@ Valid options: a string.
 
 ##### `show_diff`
 
-Prevents outputting actual values to the logfile. Useful for the handling of passwords and other sensitive information. Possible values are:
+Prevents outputting actual values to the logfile. This is useful for the handling of passwords and other sensitive information. Possible values are:
   * `true`: This allows all values to be passed to logfiles. (default)
   * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`.
   * `md5`: The values in the logfiles will be replaced with their md5 hash.
@@ -389,17 +391,17 @@ Default value: "]".
 
 ##### `indent_char`
 
-Designates the character (or string) to indent newly created settings. This does not affect settings that already exist in the file, even if they are changed. 
+Designates the character (or string) to indent newly created settings. This does not affect settings that already exist in the file, even if they change. 
 
 Default value: " ".
 
 ##### `indent_width`
  
-Designates the number of `indent_char` with which to indent newly inserted settings. If this is not defined, the indentation is automatically computed from existing settings in the section, or if the section does not yet exist, no indent is made. This does not affect settings that already exist in the file, even if they are changed.
+Designates the number of `indent_char` with which to indent newly inserted settings. If this is not defined, the indentation is automatically computed from existing settings in the section, or if the section does not yet exist, no indent is made. This does not affect settings that already exist in the file, even if they change.
 
 ##### `refreshonly`
 
-A Boolean to indicate whether or not the value associated with the setting should be updated if this resource is only part of a refresh event.  
+A Boolean to indicate whether the value associated with the setting should be updated, if this resource is only part of a refresh event.  
 
 Default value: `false`.
 
@@ -462,7 +464,7 @@ Valid options: a string containing an absolute path.
 
 ##### `quote_char`
 
-The character used to quote the entire value of the setting. Valid values are '', '"', and "'". Defaults to ''. 
+The character used to quote the entire value of the setting.
 
 Valid options: '', '"' and "'". 
 
@@ -470,9 +472,11 @@ Default value: ''.
 
 ##### `section`
 
-Designates a section of the specified INI file containing the setting to manage. You can manage a global setting by putting it at the beginning of the file, before any named sections, and entering "". Defaults to "". 
+Designates a section of the specified INI file containing the setting to manage. You can manage a global setting by putting it at the beginning of the file, before any named sections, and entering "".  
 
 Valid options: a string.
+
+Defaults value: "".
 
 ##### `setting`
 
@@ -484,7 +488,7 @@ Valid options: a string.
 
 ##### `show_diff`
 
-Prevents outputting actual values to the logfile. Useful for handling of passwords and other sensitive information. Possible values are:
+Prevents outputting actual values to the logfile. This is useful for the handling of passwords and other sensitive information. Possible values are:
   * `true`: This allows all values to be passed to logfiles. (default)
   * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`.
   * `md5`: The values in the logfiles will be replaced with their md5 hash.
@@ -511,7 +515,7 @@ Default value: " ".
 
 ##### `subsetting_key_val_separator`
 
-Specifies a string to use between subsetting name and value (if there is a separator between the subsetting name and its value). 
+Specifies a string to use between the subsetting name and value (if there is a separator between the subsetting name and its value). 
 
 Valid options: a string. 
 
@@ -519,7 +523,7 @@ Default value: empty string.
 
 ##### `use_exact_match`
 
-Whether to use partial or exact matching for subsetting. Should be set to `true` if the subsettings do not have values. 
+Whether to use partial or exact matching for subsetting. This should be set to `true` if the subsettings do not have values. 
 
 Valid options: `true`, `false`. 
 
@@ -545,7 +549,7 @@ Selects where a new subsetting item should be inserted.
 
 ##### `insert_value`
 
-The value for the insert type if the value if required.
+The value for the insert type, if the value is required.
 
 ### Function: `create_ini_settings`
 
@@ -559,11 +563,11 @@ Manages multiple `ini_setting` resources from a hash. Note that this cannot be u
 
 *Required.* 
 
-Specify a hash representing the `ini_setting` resources you want to create.
+Specifies a hash representing the `ini_setting` resources you want to create.
 
 ##### Second argument: `defaults`
 
-Accepts a hash to be used as the values for any attributes not defined in the first argument.
+Accepts a hash to be used as the values for attributes not defined in the first argument.
 
 ~~~puppet
 $example = {
