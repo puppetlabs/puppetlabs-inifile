@@ -641,11 +641,23 @@ huzzah = shazaam
       validate_file(expected_content_sixteen, tmpfile)
     end
 
+    it 'is able to handle variables of any type' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'master', value: true))
+      provider = described_class.new(resource)
+      expect(provider.value).to eq('true')
+    end
+  end
+
+  context 'when no sections exist' do
+    let(:orig_content) do
+      ''
+    end
+
     validate_one = '
 [section1]
 setting1 = hellowworld
 '
-    it 'adds a new section if no sections exists' do
+    it 'adds a new section' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'setting1', value: 'hellowworld', path: emptyfile))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
@@ -657,7 +669,7 @@ setting1 = hellowworld
 -section1-
 setting1 = hellowworld
 '
-    it 'adds a new section with pre/suffix if no sections exists' do
+    it 'adds a new section with pre/suffix' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'setting1', value: 'hellowworld', path: emptyfile, section_prefix: '-', section_suffix: '-'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
@@ -669,7 +681,7 @@ setting1 = hellowworld
 [section:subsection]
 setting1 = hellowworld
 '
-    it 'adds a new section with colon if no sections exists' do
+    it 'adds a new section with colon' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:subsection', setting: 'setting1', value: 'hellowworld', path: emptyfile))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
@@ -681,18 +693,12 @@ setting1 = hellowworld
 -section:subsection-
 setting1 = hellowworld
 '
-    it 'adds a new section with pre/suffix with colon if no sections exists' do
+    it 'adds a new section with pre/suffix with colon' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:subsection', setting: 'setting1', value: 'hellowworld', path: emptyfile, section_prefix: '-', section_suffix: '-'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
       validate_file(validate_four, emptyfile)
-    end
-
-    it 'is able to handle variables of any type' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'master', value: true))
-      provider = described_class.new(resource)
-      expect(provider.value).to eq('true')
     end
   end
 
