@@ -653,6 +653,16 @@ huzzah = shazaam
       ''
     end
 
+    validate_zero = "section\n"
+
+    it 'adds an empty section' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section'))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be false
+      provider.create
+      validate_file(validate_zero, emptyfile)
+    end
+
     validate_one = '
 [section1]
 setting1 = hellowworld
