@@ -13,7 +13,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
     # the catalog.
     raise(Puppet::Error, 'Ini_settings only support collecting instances when a file path is hard coded') unless respond_to?(:file_path)
 
-    # figure out what to do about the seperator
+    # figure out what to do about the separator
     ini_file  = Puppet::Util::IniFile.new(file_path, '=')
     resources = []
     ini_file.section_names.each do |section_name|
