@@ -656,7 +656,7 @@ huzzah = shazaam
     validate_zero = "[section]\n"
 
     it 'adds an empty section' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section', path: emptyfile))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
