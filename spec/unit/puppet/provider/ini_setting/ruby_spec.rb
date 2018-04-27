@@ -641,11 +641,40 @@ huzzah = shazaam
       validate_file(expected_content_sixteen, tmpfile)
     end
 
-    validate_one = '
-[section1]
+    it 'adds a new empty section' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section'))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be false
+      provider.create
+      validate_file(orig_content + "\n[section]\n", tmpfile)
+    end
+
+    it 'is able to handle variables of any type' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'master', value: true))
+      provider = described_class.new(resource)
+      expect(provider.value).to eq('true')
+    end
+  end
+
+  context 'when no sections exist' do
+    let(:orig_content) do
+      ''
+    end
+
+    validate_zero = "[section]\n"
+
+    it 'adds an empty section' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section', path: emptyfile))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be false
+      provider.create
+      validate_file(validate_zero, emptyfile)
+    end
+
+    validate_one = '[section1]
 setting1 = hellowworld
 '
-    it 'adds a new section if no sections exists' do
+    it 'adds a new section' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'setting1', value: 'hellowworld', path: emptyfile))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
@@ -653,11 +682,10 @@ setting1 = hellowworld
       validate_file(validate_one, emptyfile)
     end
 
-    validate_two = '
--section1-
+    validate_two = '-section1-
 setting1 = hellowworld
 '
-    it 'adds a new section with pre/suffix if no sections exists' do
+    it 'adds a new section with pre/suffix' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'setting1', value: 'hellowworld', path: emptyfile, section_prefix: '-', section_suffix: '-'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
@@ -665,11 +693,10 @@ setting1 = hellowworld
       validate_file(validate_two, emptyfile)
     end
 
-    validate_three = '
-[section:subsection]
+    validate_three = '[section:subsection]
 setting1 = hellowworld
 '
-    it 'adds a new section with colon if no sections exists' do
+    it 'adds a new section with colon' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:subsection', setting: 'setting1', value: 'hellowworld', path: emptyfile))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
@@ -677,22 +704,36 @@ setting1 = hellowworld
       validate_file(validate_three, emptyfile)
     end
 
-    validate_four = '
--section:subsection-
+    validate_four = '-section:subsection-
 setting1 = hellowworld
 '
-    it 'adds a new section with pre/suffix with colon if no sections exists' do
+    it 'adds a new section with pre/suffix with colon' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:subsection', setting: 'setting1', value: 'hellowworld', path: emptyfile, section_prefix: '-', section_suffix: '-'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
       validate_file(validate_four, emptyfile)
     end
+  end
 
-    it 'is able to handle variables of any type' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'master', value: true))
-      provider = described_class.new(resource)
-      expect(provider.value).to eq('true')
+  context 'when only an empty section exists' do
+    let(:orig_content) do
+      "[section]\n"
+    end
+
+    it 'adds a new setting' do
+      expected = orig_content
+      { 'section' => { 'first' => 1 } }.each_pair do |section, settings|
+        settings.each_pair do |setting, value|
+          resource = Puppet::Type::Ini_setting.new(common_params.merge(section: section, setting: setting, value: value))
+          provider = described_class.new(resource)
+          expect(provider.exists?).to be false
+          # byebug
+          provider.create
+          expected += "#{setting} = #{value}\n"
+        end
+      end
+      validate_file(expected, tmpfile)
     end
   end
 

@@ -13,7 +13,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
     # the catalog.
     raise(Puppet::Error, 'Ini_settings only support collecting instances when a file path is hard coded') unless respond_to?(:file_path)
 
-    # figure out what to do about the seperator
+    # figure out what to do about the separator
     ini_file  = Puppet::Util::IniFile.new(file_path, '=')
     resources = []
     ini_file.section_names.each do |section_name|
@@ -31,10 +31,11 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def self.namevar(section_name, setting)
-    "#{section_name}/#{setting}"
+    setting.nil? ? section_name : "#{section_name}/#{setting}"
   end
 
   def exists?
+    setting.nil? && ini_file.section_names.include?(section) || !ini_file.get_value(section, setting).nil?
     if ini_file.section?(section)
       !ini_file.get_value(section, setting).nil?
     elsif resource.parameters.keys.include?(:force_new_section_creation) && !resource[:force_new_section_creation]
@@ -54,7 +55,11 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def create
-    ini_file.set_value(section, setting, separator, resource[:value])
+    if setting.nil? && resource[:value].nil?
+      ini_file.set_value(section)
+    else
+      ini_file.set_value(section, setting, separator, resource[:value])
+    end
     ini_file.save
     @ini_file = nil
   end
@@ -70,7 +75,11 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def value=(_value)
-    ini_file.set_value(section, setting, separator, resource[:value])
+    if setting.nil? && resource[:value].nil?
+      ini_file.set_value(section)
+    else
+      ini_file.set_value(section, setting, separator, resource[:value])
+    end
     ini_file.save
   end
 
