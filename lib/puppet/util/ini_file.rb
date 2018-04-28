@@ -230,7 +230,7 @@ module Puppet::Util
         if line_num.nil? || @section_regex.match(line)
           # the global section always exists, even when it's empty;
           # when it's empty, we must be sure it's thought of as new,
-	  # which is signalled with a nil ending line
+          # which is signalled with a nil ending line
           end_line_num = nil if name == '' && empty
           return Section.new(name, start_line, end_line_num, settings, min_indentation)
         end
@@ -240,7 +240,7 @@ module Puppet::Util
           min_indentation = [indentation, min_indentation || indentation].min
         end
         end_line_num = line_num
-	empty = false
+        empty = false
         line_iter.next
       end
     end
