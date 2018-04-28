@@ -55,7 +55,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def create
-    if setting.nil? and resource[:value].nil?
+    if setting.nil? && resource[:value].nil?
       ini_file.set_value(section)
     else
       ini_file.set_value(section, setting, separator, resource[:value])
@@ -75,7 +75,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def value=(_value)
-    if setting.nil? and resource[:value].nil?
+    if setting.nil? && resource[:value].nil?
       ini_file.set_value(section)
     else
       ini_file.set_value(section, setting, separator, resource[:value])
