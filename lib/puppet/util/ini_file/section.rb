@@ -45,8 +45,10 @@ class Puppet::Util::IniFile
       @existing_settings.key?(setting_name)
     end
 
+    # the global section is empty whenever it's new;
+    # other sections are empty when they have no lines
     def empty?
-      start_line == end_line
+      global? ? new_section? : start_line == end_line
     end
 
     def update_existing_setting(setting_name, value)

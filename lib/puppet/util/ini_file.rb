@@ -24,7 +24,7 @@ module Puppet::Util
       @key_val_separator = key_val_separator
       @section_names = []
       @sections_hash = {}
-      parse_file if File.file?(@path)
+      parse_file
     end
 
     def section_regex
@@ -66,6 +66,8 @@ module Puppet::Util
 
     def set_value(*args) # rubocop:disable Style/AccessorMethodName : Recomended alternative is a common value name
       case args.size
+      when 1
+        section_name = args[0]
       when 3
         # Backwards compatible set_value function, See MODULES-5172
         (section_name, setting, value) = args
@@ -108,7 +110,7 @@ module Puppet::Util
         # was modified.
         section_index = @section_names.index(section_name)
         increment_section_line_numbers(section_index + 1)
-      else
+      elsif !setting.nil? or !value.nil?
         section.set_additional_setting(setting, value)
       end
     end
@@ -220,17 +222,25 @@ module Puppet::Util
 
     def read_section(name, start_line, line_iter)
       settings = {}
-      end_line_num = nil
+      end_line_num = start_line
       min_indentation = nil
+      empty = true
       loop do
         line, line_num = line_iter.peek
-        return Section.new(name, start_line, end_line_num, settings, min_indentation) if line_num.nil? || @section_regex.match(line)
+        if line_num.nil? || @section_regex.match(line)
+          # the global section always exists, even when it's empty;
+          # when it's empty, we must be sure it's thought of as new,
+	  # which is signalled with a nil ending line
+          end_line_num = nil if name == '' && empty
+          return Section.new(name, start_line, end_line_num, settings, min_indentation)
+        end
         if (match = @setting_regex.match(line))
           settings[match[2]] = match[4]
           indentation = match[1].length
           min_indentation = [indentation, min_indentation || indentation].min
         end
         end_line_num = line_num
+	empty = false
         line_iter.next
       end
     end
@@ -269,7 +279,7 @@ module Puppet::Util
       #  file; for now assuming that this type is only used on
       #  small-ish config files that can fit into memory without
       #  too much trouble.
-      File.readlines(path)
+      File.file?(path) ? File.readlines(path) : []
     end
 
     # This utility method scans through the lines for a section looking for
