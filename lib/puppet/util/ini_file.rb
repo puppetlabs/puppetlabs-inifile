@@ -134,6 +134,7 @@ module Puppet::Util
     end
 
     def save
+      global_empty = @sections_hash[''].empty? && @sections_hash[''].additional_settings.empty?
       File.open(@path, 'w') do |fh|
         @section_names.each_index do |index|
           name = @section_names[index]
@@ -144,15 +145,14 @@ module Puppet::Util
           whitespace_buffer = []
 
           if section.new_section? && !section.global?
-            fh.puts("\n#{@section_prefix}#{section.name}#{@section_suffix}")
-          end
-
-          unless section.new_section?
-            # don't add empty sections
-            if section.empty? && !section.global?
-              next
+            if index == 1 && !global_empty || index > 1
+              fh.puts('')
             end
 
+            fh.puts("#{@section_prefix}#{section.name}#{@section_suffix}")
+          end
+
+          if !section.new_section? && !section.empty?
             # write all of the pre-existing settings
             (section.start_line..section.end_line).each do |line_num|
               line = lines[line_num]
