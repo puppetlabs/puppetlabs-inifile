@@ -641,6 +641,14 @@ huzzah = shazaam
       validate_file(expected_content_sixteen, tmpfile)
     end
 
+    it 'adds a new empty section' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section'))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be false
+      provider.create
+      validate_file(orig_content + "\n[section]\n", tmpfile)
+    end
+
     it 'is able to handle variables of any type' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'master', value: true))
       provider = described_class.new(resource)
