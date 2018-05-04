@@ -152,8 +152,8 @@ module Puppet::Util
             fh.puts("#{@section_prefix}#{section.name}#{@section_suffix}")
           end
 
-          if !section.new_section? && !section.empty?
-            # write all of the pre-existing settings
+          if !section.new_section?
+            # write all of the pre-existing lines
             (section.start_line..section.end_line).each do |line_num|
               line = lines[line_num]
 
