@@ -131,6 +131,14 @@ module Puppet::Util
       # was modified.
       section_index = @section_names.index(section_name)
       decrement_section_line_numbers(section_index + 1)
+
+      if section.empty?
+	# By convention, it's time to remove this newly emptied out section
+	lines.delete_at(section.start_line)
+	decrement_section_line_numbers(section_index + 1)
+	@section_names.delete_at(section_index)
+	@sections_hash.delete(section.name)
+      end
     end
 
     def save
