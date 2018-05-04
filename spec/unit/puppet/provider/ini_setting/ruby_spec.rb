@@ -720,6 +720,27 @@ setting1 = hellowworld
     end
   end
 
+  context 'when only an empty section exists' do
+    let(:orig_content) do
+      "[section]\n"
+    end
+
+    it "adds a new setting" do
+      expected = orig_content
+      { 'section' => { 'first' => 1 } }.each_pair { |section, settings|
+	settings.each_pair { |setting, value|
+	  resource = Puppet::Type::Ini_setting.new(common_params.merge(section: section, setting: setting, value: value))
+	  provider = described_class.new(resource)
+	  expect(provider.exists?).to be false
+	  #byebug
+	  provider.create
+	  expected += "#{setting} = #{value}\n"
+	}
+      }
+      validate_file(expected, tmpfile)
+    end
+  end
+
   context 'when dealing with a global section' do
     let(:orig_content) do
       <<-EOS
