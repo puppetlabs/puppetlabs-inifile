@@ -1,4 +1,5 @@
 require 'digest/md5'
+require 'puppet/parameter/boolean'
 
 Puppet::Type.newtype(:ini_setting) do
   ensurable do
