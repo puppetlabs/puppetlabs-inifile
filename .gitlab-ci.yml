@@ -1,0 +1,74 @@
+---
+stages:
+  - syntax
+  - unit
+
+
+
+before_script:
+  - bundle -v
+  - rm Gemfile.lock || true
+  - gem update --system
+  - gem update bundler
+  - gem --version
+  - bundle -v
+  - bundle install --without system_tests
+
+lint validate metadata_lint-2.1.9:
+  stage: syntax
+  image: ruby:2.1.9
+  script:
+    - bundle exec rake lint validate metadata_lint
+  variables:
+    PUPPET_GEM_VERSION: '~> 4.0'
+
+spec-2.1.9:
+  stage: unit
+  image: ruby:2.1.9
+  script:
+    - bundle exec rake spec
+  variables:
+    PUPPET_GEM_VERSION: '~> 4.0'
+
+lint validate metadata_lint-2.4.1:
+  stage: syntax
+  image: ruby:2.4.1
+  script:
+    - bundle exec rake lint validate metadata_lint
+  variables:
+    PUPPET_GEM_VERSION: '~> 5.0'
+
+rubocop-2.4.1:
+  stage: syntax
+  image: ruby:2.4.1
+  script:
+    - bundle exec rake rubocop
+  variables:
+    PUPPET_GEM_VERSION: '~> 5.0'
+
+spec-2.4.1:
+  stage: unit
+  image: ruby:2.4.1
+  script:
+    - bundle exec rake spec
+  variables:
+    PUPPET_GEM_VERSION: '~> 5.0'
+
+lint validate metadata_lint-2.4.4:
+  stage: syntax
+  image: ruby:2.4.4
+  script:
+    - bundle exec rake lint validate metadata_lint
+  variables:
+    PUPPET_GEM_VERSION: '~> 5.5'
+
+spec-2.4.4:
+  stage: unit
+  image: ruby:2.4.4
+  script:
+    - bundle exec rake spec
+  variables:
+    PUPPET_GEM_VERSION: '~> 5.5'
+
+
+
