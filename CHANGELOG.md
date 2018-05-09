@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
+## Supported Release [2.2.2]
+### Summary
+This is a bug fix release that corrects type autoloading.
+
+### Fixed
+- Correct type autoload ([FM-6932](https://tickets.puppet.com/browse/FM-6932)).
+
 ## Supported Release [2.2.1]
 ### Summary
 This is a bug fix release for a problem with managing existing lines in Puppet > 5.4.0
