@@ -6,7 +6,7 @@ describe Puppet::Util::ExternalIterator do
   expected_values = nil
 
   before(:each) do
-    subject_class = described_class.new(%w[a b c])
+    subject_class = described_class.new(['a', 'b', 'c'])
     expected_values = [['a', 0], ['b', 1], ['c', 2]]
   end
 
