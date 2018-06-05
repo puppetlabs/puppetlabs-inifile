@@ -56,10 +56,10 @@ module Puppet::Util
       end
     end
 
-    def has_section(section_name)
-      @sections_hash.has_key?(section_name)
+    def section?(section_name)
+      @sections_hash.key?(section_name)
     end
-    
+
     def get_value(section_name, setting)
       @sections_hash[section_name].get_value(setting) if @sections_hash.key?(section_name)
     end

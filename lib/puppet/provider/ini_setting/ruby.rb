@@ -35,12 +35,12 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def exists?
-    if ini_file.has_section(section)
+    if ini_file.section?(section)
       !ini_file.get_value(section, setting).nil?
     elsif !resource[:force_new_section_creation]
-        resource[:ensure] = :absent
-        resource[:force_new_section_creation]
-    else        
+      resource[:ensure] = :absent
+      resource[:force_new_section_creation]
+    else
       !resource[:force_new_section_creation]
     end
   end
