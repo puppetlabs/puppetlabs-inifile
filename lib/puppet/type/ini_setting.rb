@@ -39,7 +39,7 @@ Puppet::Type.newtype(:ini_setting) do
     end
   end
 
-  newparam(:force_new_section_creation, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+  newparam(:force_new_section_creation, boolean: true, parent: Puppet::Parameter::Boolean) do
     desc 'Create setting only if the section exists'
     defaultto(true)
   end
