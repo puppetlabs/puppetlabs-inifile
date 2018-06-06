@@ -318,6 +318,16 @@ Valid options: 'present' and 'absent'.
 
 Default value: 'present'.
 
+##### `force_new_section_creation`
+
+Use the parameter if you want to control setting creation should the section not exist. 
+Setting the value to false will not create new section if the setting does not exist.
+Setting the value to true will create new section if the setting does not exist.
+
+Valid options: `true` and `false`. 
+
+Default value: `true`.
+
 ##### `key_val_separator`
 
 Specifies a string to use between each setting name and value, for example, to determine whether the separator includes whitespace. 
