@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'stringio'
 require 'puppet/util/ini_file'
-require 'pry'
 
 describe Puppet::Util::IniFile do
   subject(:ini_sub) { described_class.new('/my/ini/file/path') }
