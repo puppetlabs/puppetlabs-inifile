@@ -37,11 +37,19 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   def exists?
     if ini_file.section?(section)
       !ini_file.get_value(section, setting).nil?
-    elsif !resource[:force_new_section_creation]
+    elsif resource.parameters.keys.include?(:force_new_section_creation) && !resource[:force_new_section_creation]
+      # for backwards compatibility, if a user is using their own ini_setting
+      # types but does not have this parameter, we need to fall back to the
+      # previous functionality which was to create the section.  Anyone
+      # wishing to leverage this setting must define it in their provider
+      # type. See comments on
+      # https://github.com/puppetlabs/puppetlabs-inifile/pull/286
       resource[:ensure] = :absent
       resource[:force_new_section_creation]
-    else
+    elsif resource.parameters.keys.include?(:force_new_section_creation) && resource[:force_new_section_creation]
       !resource[:force_new_section_creation]
+    else
+      false
     end
   end
 
