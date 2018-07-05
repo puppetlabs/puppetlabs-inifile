@@ -671,8 +671,7 @@ huzzah = shazaam
       validate_file(validate_zero, emptyfile)
     end
 
-    validate_one =
-'[section1]
+    validate_one = '[section1]
 setting1 = hellowworld
 '
     it 'adds a new section' do
@@ -683,8 +682,7 @@ setting1 = hellowworld
       validate_file(validate_one, emptyfile)
     end
 
-    validate_two =
-'-section1-
+    validate_two = '-section1-
 setting1 = hellowworld
 '
     it 'adds a new section with pre/suffix' do
@@ -695,8 +693,7 @@ setting1 = hellowworld
       validate_file(validate_two, emptyfile)
     end
 
-    validate_three =
-'[section:subsection]
+    validate_three = '[section:subsection]
 setting1 = hellowworld
 '
     it 'adds a new section with colon' do
@@ -707,8 +704,7 @@ setting1 = hellowworld
       validate_file(validate_three, emptyfile)
     end
 
-    validate_four =
-'-section:subsection-
+    validate_four = '-section:subsection-
 setting1 = hellowworld
 '
     it 'adds a new section with pre/suffix with colon' do
