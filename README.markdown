@@ -320,9 +320,7 @@ Default value: 'present'.
 
 ##### `force_new_section_creation`
 
-Use the parameter if you want to control setting creation should the section not exist. 
-Setting the value to false will not create new section if the setting does not exist.
-Setting the value to true will create new section if the setting does not exist.
+To create a new section and control it, set the parameter to true.
 
 Valid options: `true` and `false`. 
 

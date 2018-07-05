@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
+## Supported Release [2.3.0]
+### Summary
+This release uses the PDK convert functionality which in return makes the module PDK compliant. It also includes a feature for `force_new_section_creation` and a roll up of maintenance changes.
+
+### Added
+- Added `force_new_section_creation` parameter.
+- PDK convert and update to use pdk 1.5.0 (MODULES-6326).
+
+### Removed
+- Support for Scientific Linux 5
+- Support for Debian 7
+
 ## Supported Release [2.2.2]
 ### Summary
 This is a bug fix release that corrects type autoloading.
@@ -337,4 +349,7 @@ them.
 ##2012-08-17 - Chris Price <chris@pupppetlabs.com> - 0.0.2
  * Add support for "global" section at beginning of file (c57dab4)
 
- [2.2.0]:https://github.com/puppetlabs/puppetlabs-apt/compare/2.1.1...2.2.0
+[2.3.0]:https://github.com/puppetlabs/puppetlabs-apt/compare/2.2.2...2.3.0
+[2.2.2]:https://github.com/puppetlabs/puppetlabs-apt/compare/2.2.1...2.2.2
+[2.2.1]:https://github.com/puppetlabs/puppetlabs-apt/compare/2.2.0...2.2.1
+[2.2.0]:https://github.com/puppetlabs/puppetlabs-apt/compare/2.1.1...2.2.0
