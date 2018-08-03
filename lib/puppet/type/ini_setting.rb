@@ -136,4 +136,8 @@ Puppet::Type.newtype(:ini_setting) do
     # update the value in the provider, which will save the value to the ini file
     provider.value = self[:value] if self[:refreshonly]
   end
+
+  autorequire(:file) do
+    Pathname.new(self[:path]).parent.to_s
+  end
 end

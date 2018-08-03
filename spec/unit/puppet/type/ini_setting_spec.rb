@@ -135,4 +135,37 @@ describe ini_setting do
       end
     end
   end
+
+  describe 'when parent of :path is in the catalog' do
+    ['posix', 'windows'].each do |platform|
+      context "on #{platform} platforms" do
+        before(:each) do
+          Puppet.features.stub(:posix?) { platform == 'posix' }
+          Puppet.features.stub(:microsoft_windows?) { platform == 'windows' }
+          Puppet::Util::Platform.stub(:windows?) { platform == 'windows' }
+        end
+
+        let(:file_path) { (platform == 'posix') ? '/tmp' : 'c:/tmp' }
+        let(:file_resource) { Puppet::Type.type(:file).new(name: file_path) }
+        let(:ini_setting_resource) { described_class.new(name: 'foo', path: "#{file_path}/foo.ini") }
+        let(:auto_req) do
+          catalog = Puppet::Resource::Catalog.new
+          catalog.add_resource(file_resource)
+          catalog.add_resource(ini_setting_resource)
+
+          ini_setting_resource.autorequire
+        end
+
+        it 'creates relationship' do
+          expect(auto_req.size).to be 1
+        end
+        it 'links to ini_setting resource' do
+          expect(auto_req[0].target).to eq(ini_setting_resource)
+        end
+        it 'autorequires parent directory' do
+          expect(auto_req[0].source).to eq(file_resource)
+        end
+      end
+    end
+  end
 end
