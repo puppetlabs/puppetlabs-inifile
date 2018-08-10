@@ -10,6 +10,13 @@
     - release
 
 Gemfile:
+  optional:
+    ':development':
+      - gem: net-telnet
+        version: '0.1.0'
+        condition: "Gem::Version.new(RUBY_VERSION.dup) < Gem::Version.new('2.3.0')"
+      - gem: net-telnet
+        condition: "Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new('2.3.0')"
   required:
     ':system_tests':
       - gem: 'puppet-module-posix-system-r#{minor_version}'
