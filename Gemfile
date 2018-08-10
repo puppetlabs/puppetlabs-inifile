@@ -33,7 +33,8 @@ group :development do
   gem "puppet-module-posix-dev-r#{minor_version}",     require: false, platforms: [:ruby]
   gem "puppet-module-win-default-r#{minor_version}",   require: false, platforms: [:mswin, :mingw, :x64_mingw]
   gem "puppet-module-win-dev-r#{minor_version}",       require: false, platforms: [:mswin, :mingw, :x64_mingw]
-  gem "puppet-blacksmith", '~> 3.4',                   require: false, platforms: [:ruby]
+  gem "net-telnet", '0.1.0',                           require: false if Gem::Version.new(RUBY_VERSION.dup) < Gem::Version.new('2.3.0')
+  gem "net-telnet",                                    require: false if Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new('2.3.0')
 end
 group :system_tests do
   gem "puppet-module-posix-system-r#{minor_version}",                            require: false, platforms: [:ruby]
