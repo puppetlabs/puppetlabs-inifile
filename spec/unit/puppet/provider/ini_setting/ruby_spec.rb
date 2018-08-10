@@ -117,7 +117,6 @@ describe provider_class do
     end
   end
 
-  # rubocop:disable Layout/IndentHeredoc : Altering the Indent causes test failures
   context 'when ensuring that a setting is present' do
     let(:orig_content) do
       <<-EOS
