@@ -19,8 +19,6 @@ Puppet::Type.newtype(:ini_setting) do
       raise(_('expected a boolean value or :md5'))
     end
   end
-
-  # rubocop:disable GetText/DecorateString
   newparam(:name, namevar: true) do
     desc 'An arbitrary name used as the identity of the resource.'
   end
