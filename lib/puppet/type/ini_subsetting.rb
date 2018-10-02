@@ -15,10 +15,9 @@ Puppet::Type.newtype(:ini_subsetting) do
     when :md5, 'md5'
       :md5
     else
-      raise('expected a boolean value or :md5')
+      raise(_('expected a boolean value or :md5'))
     end
   end
-
   newparam(:name, namevar: true) do
     desc 'An arbitrary name used as the identity of the resource.'
   end
@@ -51,11 +50,10 @@ Puppet::Type.newtype(:ini_subsetting) do
     desc 'The ini file Puppet will ensure contains the specified setting.'
     validate do |value|
       unless (Puppet.features.posix? && value =~ %r{^\/}) || (Puppet.features.microsoft_windows? && (value =~ %r{^.:\/} || value =~ %r{^\/\/[^\/]+\/[^\/]+}))
-        raise(Puppet::Error, "File paths must be fully qualified, not '#{value}'")
+        raise(Puppet::Error, _("File paths must be fully qualified, not '%{value}'") % { value: value })
       end
     end
   end
-
   newparam(:show_diff) do
     desc 'Whether to display differences when the setting changes.'
     defaultto :true
@@ -80,7 +78,7 @@ Puppet::Type.newtype(:ini_subsetting) do
 
     validate do |value|
       unless value =~ %r{^["']?$}
-        raise Puppet::Error, %q(:quote_char valid values are '', '"' and "'")
+        raise Puppet::Error, _(%q(:quote_char valid values are '', '"' and "'"))
       end
     end
   end

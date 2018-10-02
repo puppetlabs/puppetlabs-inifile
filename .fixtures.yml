@@ -5,3 +5,6 @@ fixtures:
     create_multiple_ini_settings: "#{source_dir}/spec/fixtures/create_multiple_ini_settings"
     inherit_ini_setting: "#{source_dir}/spec/fixtures/inherit_ini_setting"
     inherit_test1: "#{source_dir}/spec/fixtures/inherit_test1"
+  repositories:
+    "translate": "https://github.com/puppetlabs/puppetlabs-translate"
+    

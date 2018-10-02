@@ -22,6 +22,8 @@ Gemfile:
         ref: '20ee04ba1234e9e83eb2ffb5056e23d641c7a018'
         condition: "Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new('2.2.2')"
   required:
+    ':development':
+      - gem: puppet-lint-i18n
     ':system_tests':
       - gem: 'puppet-module-posix-system-r#{minor_version}'
         platforms: ruby
@@ -33,3 +35,13 @@ Gemfile:
 
 .gitlab-ci.yml:
   unmanaged: true
+
+Rakefile:
+  requires:
+    - puppet_pot_generator/rake_tasks
+     
+.rubocop.yml:
+    require:
+      - rubocop-i18n
+      - rubocop-rspec
+      
