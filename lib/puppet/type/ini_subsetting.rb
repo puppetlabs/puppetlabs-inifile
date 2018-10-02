@@ -47,9 +47,10 @@ Puppet::Type.newtype(:ini_subsetting) do
     desc 'The separator string between the subsetting name and its value. Defaults to the empty string.'
     defaultto('')
   end
+  # rubocop:enable GetText/DecorateString
 
   newparam(:path) do
-    desc 'The ini file Puppet will ensure contains the specified setting.'
+    desc 'The ini file Puppet will ensure contains the specified setting.' # rubocop:disable GetText/DecorateString
     validate do |value|
       unless (Puppet.features.posix? && value =~ %r{^\/}) || (Puppet.features.microsoft_windows? && (value =~ %r{^.:\/} || value =~ %r{^\/\/[^\/]+\/[^\/]+}))
         raise(Puppet::Error, _("File paths must be fully qualified, not '%{value}'")) % { value: value }
@@ -57,6 +58,7 @@ Puppet::Type.newtype(:ini_subsetting) do
     end
   end
 
+  # rubocop:disable GetText/DecorateString
   newparam(:show_diff) do
     desc 'Whether to display differences when the setting changes.'
     defaultto :true

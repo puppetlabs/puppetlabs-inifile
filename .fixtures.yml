@@ -6,5 +6,5 @@ fixtures:
     inherit_ini_setting: "#{source_dir}/spec/fixtures/inherit_ini_setting"
     inherit_test1: "#{source_dir}/spec/fixtures/inherit_test1"
   repositories:
-    "stdlib": "https://github.com/puppetlabs/puppetlabs-stdlib"
     "translate": "https://github.com/puppetlabs/puppetlabs-translate"
+    
