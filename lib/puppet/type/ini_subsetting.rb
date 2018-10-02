@@ -19,6 +19,7 @@ Puppet::Type.newtype(:ini_subsetting) do
     end
   end
 
+  # rubocop:disable GetText/DecorateString
   newparam(:name, namevar: true) do
     desc 'An arbitrary name used as the identity of the resource.'
   end
@@ -128,3 +129,4 @@ Puppet::Type.newtype(:ini_subsetting) do
     desc 'The value for the insert types which require one.'
   end
 end
+# rubocop:enable GetText/DecorateString

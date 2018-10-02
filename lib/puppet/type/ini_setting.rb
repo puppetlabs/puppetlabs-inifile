@@ -20,6 +20,7 @@ Puppet::Type.newtype(:ini_setting) do
     end
   end
 
+  # rubocop:disable GetText/DecorateString
   newparam(:name, namevar: true) do
     desc 'An arbitrary name used as the identity of the resource.'
   end
@@ -131,6 +132,8 @@ Puppet::Type.newtype(:ini_setting) do
          'only when called as part of a refresh event'
     defaultto false
   end
+
+  # rubocop:enable GetText/DecorateString
 
   def refresh
     # update the value in the provider, which will save the value to the ini file
