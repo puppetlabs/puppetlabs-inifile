@@ -41,8 +41,7 @@ Rakefile:
     - puppet_pot_generator/rake_tasks
      
 .rubocop.yml:
-   default_configs:
-    inherit_from: .rubocop_todo.yml
     require:
       - rubocop-i18n
       - rubocop-rspec
+      
