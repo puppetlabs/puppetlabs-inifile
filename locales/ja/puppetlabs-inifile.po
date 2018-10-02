@@ -38,34 +38,39 @@ msgid ""
 "create_ini_settings(): Wrong number of arguments given (%{arguments_size} "
 "for 1 or 2)"
 msgstr ""
+"ƈřḗȧŧḗ_īƞī_şḗŧŧīƞɠş(): Ẇřǿƞɠ ƞŭḿƀḗř ǿƒ ȧřɠŭḿḗƞŧş ɠīṽḗƞ (%{arguments_size} "
+"ƒǿř 1 ǿř 2)"
 
 #: ../lib/puppet/parser/functions/create_ini_settings.rb:60
 msgid "create_ini_settings(): Requires all arguments to be a Hash"
-msgstr ""
+msgstr "ƈřḗȧŧḗ_īƞī_şḗŧŧīƞɠş(): Řḗɋŭīřḗş ȧŀŀ ȧřɠŭḿḗƞŧş ŧǿ ƀḗ ȧ Ħȧşħ"
 
 #: ../lib/puppet/parser/functions/create_ini_settings.rb:66
 msgid "create_ini_settings(): Section %{section} must contain a Hash"
-msgstr ""
+msgstr "ƈřḗȧŧḗ_īƞī_şḗŧŧīƞɠş(): Şḗƈŧīǿƞ %{section} ḿŭşŧ ƈǿƞŧȧīƞ ȧ Ħȧşħ"
 
 #: ../lib/puppet/parser/functions/create_ini_settings.rb:70
 msgid ""
 "create_ini_settings(): must pass the path parameter to the Ini_setting "
 "resource!"
 msgstr ""
+"ƈřḗȧŧḗ_īƞī_şḗŧŧīƞɠş(): ḿŭşŧ ƥȧşş ŧħḗ ƥȧŧħ ƥȧřȧḿḗŧḗř ŧǿ ŧħḗ Īƞī_şḗŧŧīƞɠ "
+"řḗşǿŭřƈḗ!"
 
 #: ../lib/puppet/provider/ini_setting/ruby.rb:14
 msgid ""
 "Ini_settings only support collecting instances when a file path is hard coded"
 msgstr ""
+"Īƞī_şḗŧŧīƞɠş ǿƞŀẏ şŭƥƥǿřŧ ƈǿŀŀḗƈŧīƞɠ īƞşŧȧƞƈḗş ẇħḗƞ ȧ ƒīŀḗ ƥȧŧħ īş ħȧřḓ ƈǿḓḗḓ"
 
 #: ../lib/puppet/type/ini_setting.rb:19 ../lib/puppet/type/ini_subsetting.rb:18
 msgid "expected a boolean value or :md5"
-msgstr ""
+msgstr "ḗẋƥḗƈŧḗḓ ȧ ƀǿǿŀḗȧƞ ṽȧŀŭḗ ǿř :ḿḓ5"
 
 #: ../lib/puppet/type/ini_setting.rb:51 ../lib/puppet/type/ini_subsetting.rb:54
 msgid "File paths must be fully qualified, not '%{value}'"
-msgstr ""
+msgstr "Ƒīŀḗ ƥȧŧħş ḿŭşŧ ƀḗ ƒŭŀŀẏ ɋŭȧŀīƒīḗḓ, ƞǿŧ '%{value}'"
 
 #: ../lib/puppet/type/ini_subsetting.rb:82
 msgid ":quote_char valid values are '', '\"' and \"'\""
-msgstr ""
+msgstr ":ɋŭǿŧḗ_ƈħȧř ṽȧŀīḓ ṽȧŀŭḗş ȧřḗ '', '\"' ȧƞḓ \"'\""
