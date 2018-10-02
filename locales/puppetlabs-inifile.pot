@@ -1,6 +1,6 @@
 # #-#-#-#-#  puppetlabs-inifile_metadata.pot (PACKAGE VERSION)  #-#-#-#-#
 #
-# #-#-#-#-#  puppetlabs-inifile.pot (puppetlabs-inifile 2.4.0-3-g289b262)  #-#-#-#-#
+# #-#-#-#-#  puppetlabs-inifile.pot (puppetlabs-inifile 2.4.0-4-g8cdf832)  #-#-#-#-#
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2018 Puppet, Inc.
 # This file is distributed under the same license as the puppetlabs-inifile package.
@@ -20,13 +20,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 2.0.0\n"
-"#-#-#-#-#  puppetlabs-inifile.pot (puppetlabs-inifile 2.4.0-3-g289b262)  #-#-"
+"#-#-#-#-#  puppetlabs-inifile.pot (puppetlabs-inifile 2.4.0-4-g8cdf832)  #-#-"
 "#-#-#\n"
-"Project-Id-Version: puppetlabs-inifile 2.4.0-3-g289b262\n"
+"Project-Id-Version: puppetlabs-inifile 2.4.0-4-g8cdf832\n"
 "\n"
 "Report-Msgid-Bugs-To: docs@puppet.com\n"
-"POT-Creation-Date: 2018-10-02 11:35+0300\n"
-"PO-Revision-Date: 2018-10-02 11:35+0300\n"
+"POT-Creation-Date: 2018-10-02 11:41+0300\n"
+"PO-Revision-Date: 2018-10-02 11:41+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -62,7 +62,7 @@ msgid "create_ini_settings(): Requires all arguments to be a Hash"
 msgstr ""
 
 #: ../lib/puppet/parser/functions/create_ini_settings.rb:66
-msgid "create_ini_settings(): Section #{section} must contain a Hash"
+msgid "create_ini_settings(): Section %{section} must contain a Hash"
 msgstr ""
 
 #: ../lib/puppet/parser/functions/create_ini_settings.rb:70
@@ -81,7 +81,7 @@ msgid "expected a boolean value or :md5"
 msgstr ""
 
 #: ../lib/puppet/type/ini_setting.rb:53 ../lib/puppet/type/ini_subsetting.rb:55
-msgid "File paths must be fully qualified, not '#{value}'"
+msgid "File paths must be fully qualified, not '%{value}'"
 msgstr ""
 
 #: ../lib/puppet/type/ini_subsetting.rb:84

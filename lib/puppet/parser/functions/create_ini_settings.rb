@@ -63,7 +63,7 @@ module Puppet::Parser::Functions
     resources = settings.keys.each_with_object({}) do |section, res|
       unless settings[section].is_a?(Hash)
         raise(Puppet::ParseError,
-              _('create_ini_settings(): Section #{section} must contain a Hash'))
+              _('create_ini_settings(): Section %{section} must contain a Hash')) % { section: section }
       end
 
       path = defaults.merge(settings)['path']

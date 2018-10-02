@@ -50,7 +50,7 @@ Puppet::Type.newtype(:ini_setting) do
     desc 'The ini file Puppet will ensure contains the specified setting.'
     validate do |value|
       unless Puppet::Util.absolute_path?(value)
-        raise(Puppet::Error, _("File paths must be fully qualified, not '#{value}'"))
+        raise(Puppet::Error, _("File paths must be fully qualified, not '%{value}'")) % { value: value }
       end
     end
   end
