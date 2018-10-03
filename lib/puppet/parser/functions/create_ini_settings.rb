@@ -49,7 +49,7 @@ module Puppet::Parser::Functions
 
     unless arguments.size.between?(1, 2)
       raise(Puppet::ParseError, _('create_ini_settings(): Wrong number of arguments ' \
-        'given (%{arguments_size} for 1 or 2)')) % { arguments_size: arguments.size }
+        'given (%{arguments_size} for 1 or 2)') % { arguments_size: arguments.size })
     end
 
     settings = arguments[0]
@@ -63,7 +63,7 @@ module Puppet::Parser::Functions
     resources = settings.keys.each_with_object({}) do |section, res|
       unless settings[section].is_a?(Hash)
         raise(Puppet::ParseError,
-              _('create_ini_settings(): Section %{section} must contain a Hash')) % { section: section }
+              _('create_ini_settings(): Section %{section} must contain a Hash') % { section: section })
       end
 
       path = defaults.merge(settings)['path']
