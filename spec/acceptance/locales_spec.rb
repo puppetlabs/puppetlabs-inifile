@@ -1,6 +1,5 @@
 require 'spec_helper_acceptance'
 require 'beaker/i18n_helper'
-require 'pry'
 
 tmpdir = default.tmpdir('tmp')
 
@@ -23,7 +22,6 @@ describe 'i18n Testing', if: (fact('osfamily') == 'Debian' || fact('osfamily') =
 
     it 'applies the manifest and gets a failure message' do
       expect(apply_manifest(pp, expect_failures: true).stderr).to match(error)
-      binding.pry
     end
 
     describe file(path) do
