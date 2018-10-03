@@ -9,8 +9,20 @@ describe 'i18n Testing', if: (fact('osfamily') == 'Debian' || fact('osfamily') =
     end
   end
 
-  it 'applies the manifest and gets a failure message' do
-    expect(apply_manifest(pp, expect_failures: true).stderr).to match(error)
+  context 'path => foo' do
+    pp = <<-EOS
+      ini_setting { 'path => foo':
+        ensure     => present,
+        section    => 'one',
+        setting    => 'two',
+        value      => 'three',
+        path       => 'foo',
+      }
+    EOS
+
+    apply_manifest(pp, catch_failures: true) do |r|
+      expect(r.stderr).to match(%r{Ƒīŀḗ ƥȧŧħş ḿŭşŧ ƀḗ ƒŭŀŀẏ ɋŭȧŀīƒīḗḓ, ƞǿŧ})
+    end
   end
 
   after :all do
