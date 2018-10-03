@@ -1,8 +1,6 @@
 require 'spec_helper_acceptance'
 require 'beaker/i18n_helper'
 
-tmpdir = default.tmpdir('tmp')
-
 describe 'i18n Testing', if: (fact('osfamily') == 'Debian' || fact('osfamily') == 'RedHat') && (Gem::Version.new(puppet_version) >= Gem::Version.new('4.10.5')) do
   before :all do
     hosts.each do |host|
