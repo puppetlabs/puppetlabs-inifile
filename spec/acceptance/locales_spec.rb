@@ -38,11 +38,10 @@ describe 'i18n Testing', if: (fact('osfamily') == 'Debian' || fact('osfamily') =
         value      => 'three',
         path       => 'foo',
       }
-    EOS
+      EOS
 
     it_behaves_like 'has_error', 'foo', pp, %r{Ƒīŀḗ ƥȧŧħş ḿŭşŧ ƀḗ ƒŭŀŀẏ ɋŭȧŀīƒīḗḓ, ƞǿŧ}
-    end
-
+  end
 
   after :all do
     hosts.each do |host|
