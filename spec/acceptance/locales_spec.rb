@@ -50,8 +50,8 @@ describe 'i18n Testing', if: (fact('osfamily') == 'Debian' || fact('osfamily') =
       }
       EOS
 
-      it 'displays Japanese failure' do
-        apply_manifest(pp, expect_failures: true) do |r|
+    it 'displays Japanese failure' do
+      apply_manifest(pp, expect_failures: true) do |r|
         expect(r.stderr).to match(%r{Ƒīŀḗ ƥȧŧħş ḿŭşŧ ƀḗ ƒŭŀŀẏ ɋŭȧŀīƒīḗḓ, ƞǿŧ '%{value}'})
       end
     end
