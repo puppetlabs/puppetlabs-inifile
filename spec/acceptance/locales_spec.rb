@@ -3,6 +3,8 @@ require 'spec_helper_acceptance'
 require 'beaker/i18n_helper'
 require 'pry'
 
+tmpdir = default.tmpdir('tmp')
+
 describe 'i18n Testing', if: (fact('osfamily') == 'Debian' || fact('osfamily') == 'RedHat') && (Gem::Version.new(puppet_version) >= Gem::Version.new('4.10.5')) do
   before :all do
     hosts.each do |host|
@@ -19,38 +21,36 @@ describe 'i18n Testing', if: (fact('osfamily') == 'Debian' || fact('osfamily') =
       shell("cat #{path}", acceptable_exit_codes: [0, 1, 2])
       shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
     end
-
-    it 'applies the manifest and gets a failure message' do
-      expect(apply_manifest(pp, expect_failures: true).stderr).to match(error)
-    end
   end
 
   context 'display Japanese error' do
     pp = <<-EOS
-      ini_setting { 'path => foo':
-        ensure     => present,
-        section    => 'one',
-        setting    => 'two',
-        value      => 'three',
-        path       => 'foo',
-      }
-      EOS
+        ini_subsetting { '-Xmx':
+          ensure     => present,
+          path       => "#{tmpdir}/ini_subsetting.ini",
+          section    => 'java',
+          setting    => 'args',
+          quote_char => 'test',
+          subsetting => '-Xmx',
+        }
+        EOS
 
-    it_behaves_like 'has_error', 'foo', pp, %r{Ƒīŀḗ ƥȧŧħş ḿŭşŧ ƀḗ ƒŭŀŀẏ ɋŭȧŀīƒīḗḓ, ƞǿŧ}
+    it 'applies the manifest and gets a failure message - invalid quote_char' do
+      expect(apply_manifest(pp, expect_failures: true).stderr).to match(%r{ɋŭǿŧḗ_ƈħȧř ṽȧŀīḓ ṽȧŀŭḗş ȧřḗ '', '"' ȧƞḓ "'"})
+    end
   end
 
   context 'display interpolated Japanese error' do
     pp = <<-EOS
-      ini_setting { 'path => test':
-        ensure     => present,
-        section    => 'section',
-        setting    => 'setting',
-        value      => 'three',
-        path       => 'test',
-      }
-      EOS
+    ini_subsetting { 'path: test':
+      ensure     => present,
+      path       => 'test',
+      section    => 'java',
+      setting    => 'args',
+    }
+    EOS
 
-    it 'displays Japanese failure' do
+    it 'applies the manifest and gets a failure message - invalid path' do
       apply_manifest(pp, expect_failures: true) do |r|
         expect(r.stderr).to match(%r{Ƒīŀḗ ƥȧŧħş ḿŭşŧ ƀḗ ƒŭŀŀẏ ɋŭȧŀīƒīḗḓ, ƞǿŧ 'test'})
       end
