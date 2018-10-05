@@ -48,7 +48,7 @@ Puppet::Type.newtype(:ini_setting) do
     desc 'The ini file Puppet will ensure contains the specified setting.'
     validate do |value|
       unless Puppet::Util.absolute_path?(value)
-        raise(Puppet::Error, _("File paths must be fully qualified, not '%{value}'")) % { value: value }
+        raise(Puppet::Error, _("File paths must be fully qualified, not '%{value}'") % { value: value })
       end
     end
   end
@@ -130,8 +130,6 @@ Puppet::Type.newtype(:ini_setting) do
          'only when called as part of a refresh event'
     defaultto false
   end
-
-  # rubocop:enable GetText/DecorateString
 
   def refresh
     # update the value in the provider, which will save the value to the ini file
