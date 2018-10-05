@@ -13,9 +13,7 @@ describe 'i18n Testing', if: (fact('osfamily') == 'Debian' || fact('osfamily') =
 
   shared_examples 'has_error' do |path, pp, error|
     before :all do
-      if Dir.exists?(path)
-        shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
-      end
+      shell("rm #{path}", acceptable_exit_codes: [0, 1, 2]) if Dir.exist?(path)
     end
     after :all do
       shell("cat #{path}", acceptable_exit_codes: [0, 1, 2])
