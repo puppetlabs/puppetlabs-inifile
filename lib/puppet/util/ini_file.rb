@@ -110,7 +110,7 @@ module Puppet::Util
         # was modified.
         section_index = @section_names.index(section_name)
         increment_section_line_numbers(section_index + 1)
-      elsif !setting.nil? or !value.nil?
+      elsif !setting.nil? || !value.nil?
         section.set_additional_setting(setting, value)
       end
     end
@@ -133,11 +133,11 @@ module Puppet::Util
       decrement_section_line_numbers(section_index + 1)
 
       if section.empty?
-	# By convention, it's time to remove this newly emptied out section
-	lines.delete_at(section.start_line)
-	decrement_section_line_numbers(section_index + 1)
-	@section_names.delete_at(section_index)
-	@sections_hash.delete(section.name)
+        # By convention, it's time to remove this newly emptied out section
+        lines.delete_at(section.start_line)
+        decrement_section_line_numbers(section_index + 1)
+        @section_names.delete_at(section_index)
+        @sections_hash.delete(section.name)
       end
     end
 
@@ -160,7 +160,7 @@ module Puppet::Util
             fh.puts("#{@section_prefix}#{section.name}#{@section_suffix}")
           end
 
-          if !section.new_section?
+          unless section.new_section?
             # write all of the pre-existing lines
             (section.start_line..section.end_line).each do |line_num|
               line = lines[line_num]

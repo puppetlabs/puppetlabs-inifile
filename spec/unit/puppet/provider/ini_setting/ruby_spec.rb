@@ -721,18 +721,18 @@ setting1 = hellowworld
       "[section]\n"
     end
 
-    it "adds a new setting" do
+    it 'adds a new setting' do
       expected = orig_content
-      { 'section' => { 'first' => 1 } }.each_pair { |section, settings|
-	settings.each_pair { |setting, value|
-	  resource = Puppet::Type::Ini_setting.new(common_params.merge(section: section, setting: setting, value: value))
-	  provider = described_class.new(resource)
-	  expect(provider.exists?).to be false
-	  #byebug
-	  provider.create
-	  expected += "#{setting} = #{value}\n"
-	}
-      }
+      { 'section' => { 'first' => 1 } }.each_pair do |section, settings|
+        settings.each_pair do |setting, value|
+          resource = Puppet::Type::Ini_setting.new(common_params.merge(section: section, setting: setting, value: value))
+          provider = described_class.new(resource)
+          expect(provider.exists?).to be false
+          # byebug
+          provider.create
+          expected += "#{setting} = #{value}\n"
+        end
+      end
       validate_file(expected, tmpfile)
     end
   end
