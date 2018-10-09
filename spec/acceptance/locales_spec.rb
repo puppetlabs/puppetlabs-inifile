@@ -13,7 +13,7 @@ describe 'i18n Testing', if: (fact('osfamily') == 'Debian' || fact('osfamily') =
     end
   end
 
-  context 'display Japanese error' do
+  context 'display Japanese error message' do
     pp = <<-EOS
         ini_subsetting { '-Xmx':
           ensure     => present,
@@ -30,7 +30,7 @@ describe 'i18n Testing', if: (fact('osfamily') == 'Debian' || fact('osfamily') =
     end
   end
 
-  context 'display interpolated Japanese error' do
+  context 'display interpolated Japanese error message' do
     pp = <<-EOS
     ini_subsetting { 'path: test':
       ensure     => present,
