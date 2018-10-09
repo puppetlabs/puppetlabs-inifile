@@ -16,10 +16,9 @@ Puppet::Type.newtype(:ini_setting) do
     when :md5, 'md5'
       :md5
     else
-      raise('expected a boolean value or :md5')
+      raise(_('expected a boolean value or :md5'))
     end
   end
-
   newparam(:name, namevar: true) do
     desc 'An arbitrary name used as the identity of the resource.'
   end
@@ -49,7 +48,7 @@ Puppet::Type.newtype(:ini_setting) do
     desc 'The ini file Puppet will ensure contains the specified setting.'
     validate do |value|
       unless Puppet::Util.absolute_path?(value)
-        raise(Puppet::Error, "File paths must be fully qualified, not '#{value}'")
+        raise(Puppet::Error, _("File paths must be fully qualified, not '%{value}'") % { value: value })
       end
     end
   end

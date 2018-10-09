@@ -11,7 +11,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
     # declaration).  This allows 'purging' to be used to clear out
     # all settings from a particular ini file except those included in
     # the catalog.
-    raise(Puppet::Error, 'Ini_settings only support collecting instances when a file path is hard coded') unless respond_to?(:file_path)
+    raise(Puppet::Error, _('Ini_settings only support collecting instances when a file path is hard coded')) unless respond_to?(:file_path)
 
     # figure out what to do about the separator
     ini_file  = Puppet::Util::IniFile.new(file_path, '=')
