@@ -45,6 +45,7 @@ Puppet::Type.newtype(:ini_subsetting) do
     desc 'The separator string between the subsetting name and its value. Defaults to the empty string.'
     defaultto('')
   end
+  # rubocop:enable GetText/DecorateString
 
   newparam(:path) do
     desc 'The ini file Puppet will ensure contains the specified setting.'
@@ -126,3 +127,4 @@ Puppet::Type.newtype(:ini_subsetting) do
     desc 'The value for the insert types which require one.'
   end
 end
+# rubocop:enable GetText/DecorateString
