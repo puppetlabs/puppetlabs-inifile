@@ -32,17 +32,25 @@ describe 'i18n Testing', if: (fact('osfamily') == 'Debian' || fact('osfamily') =
 
   context 'display interpolated Japanese error' do
     pp = <<-EOS
-    ini_subsetting { 'path: test':
-      ensure     => present,
-      path       => 'test',
-      section    => 'java',
-      setting    => 'args',
+    $settings = {  section1 => {
+      setting1 => val1
+      },
+      section2 => {
+        setting2 => val2,
+        setting3 => {
+          ensure => absent
+        }
+      }
     }
+    $defaults = {
+      path => '/tmp/foo.ini'
+    }
+    create_ini_settings($settings, $defaults, $defaults)
     EOS
 
-    it 'applies the manifest and gets a failure message - invalid path' do
+    it 'applies the manifest and gets a failure message - wrong number of arguments' do
       apply_manifest(pp, expect_failures: true) do |r|
-        expect(r.stderr).to match(%r{Ƒīŀḗ ƥȧŧħş ḿŭşŧ ƀḗ ƒŭŀŀẏ ɋŭȧŀīƒīḗḓ, ƞǿŧ 'test'})
+        expect(r.stderr).to match(%r{Ẇřǿƞɠ ƞŭḿƀḗř ǿƒ ȧřɠŭḿḗƞŧş ɠīṽḗƞ})
       end
     end
   end
