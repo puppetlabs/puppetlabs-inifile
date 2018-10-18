@@ -5,18 +5,18 @@
 
 **Resource types**
 
-* [`ini_setting`](#ini_setting): An arbitrary name used as the identity of the resource.
-* [`ini_subsetting`](#ini_subsetting): An arbitrary name used as the identity of the resource.
+* [`ini_setting`](#ini_setting): ini_settings is used to manage a single setting in an INI file
+* [`ini_subsetting`](#ini_subsetting): ini_subsettings is used to manage multiple values in a setting in an INI file
 
 **Functions**
 
-* [`create_ini_settings`](#create_ini_settings): Uses create_resources to create a set of ini_setting resources from a hash:      $settings = {  section1 => {         setting1 => val1       
+* [`create_ini_settings`](#create_ini_settings): create_resources is used to create a set of ini_setting resources from a hash
 
 ## Resource types
 
 ### ini_setting
 
-An arbitrary name used as the identity of the resource.
+ini_settings is used to manage a single setting in an INI file
 
 #### Properties
 
@@ -26,7 +26,7 @@ The following properties are available in the `ini_setting` type.
 
 Valid values: present, absent
 
-The basic property that the resource should be in.
+Ensurable method handles modeling creation. It creates an ensure property
 
 Default value: present
 
@@ -46,7 +46,7 @@ An arbitrary name used as the identity of the resource.
 
 ##### `section`
 
-
+The name of the section in the ini file in which the setting should be defined.
 
 Default value: ''
 
@@ -76,43 +76,43 @@ Default value: `true`
 
 ##### `key_val_separator`
 
-
+The separator string to use between each setting name and value.
 
 Default value:  = 
 
 ##### `section_prefix`
 
-
+The prefix to the section name\'s header.
 
 Default value: [
 
 ##### `section_suffix`
 
-
+The suffix to the section name\'s header.
 
 Default value: ]
 
 ##### `indent_char`
 
-
+The character to indent new settings with.
 
 Default value:  
 
 ##### `indent_width`
 
-
+The number of indent_chars to use to indent a new setting.
 
 ##### `refreshonly`
 
 Valid values: `true`, `false`, yes, no
 
-
+A flag indicating whether or not the ini_setting should be updated only when called as part of a refresh event
 
 Default value: `false`
 
 ### ini_subsetting
 
-An arbitrary name used as the identity of the resource.
+ini_subsettings is used to manage multiple values in a setting in an INI file
 
 #### Properties
 
@@ -122,7 +122,7 @@ The following properties are available in the `ini_subsetting` type.
 
 Valid values: present, absent
 
-The basic property that the resource should be in.
+Ensurable method handles modeling creation. It creates an ensure property
 
 Default value: present
 
@@ -142,7 +142,7 @@ An arbitrary name used as the identity of the resource.
 
 ##### `section`
 
-
+The name of the section in the ini file in which the setting should be defined.
 
 Default value: ''
 
@@ -156,7 +156,7 @@ The name of the subsetting to be defined.
 
 ##### `subsetting_separator`
 
-The separator string between subsettings. Defaults to " "
+The separator string between subsettings. Defaults to the empty string.
 
 Default value:  
 
@@ -180,13 +180,13 @@ Default value: `true`
 
 ##### `key_val_separator`
 
-
+The separator string to use between each setting name and value.
 
 Default value:  = 
 
 ##### `quote_char`
 
-
+The character used to quote the entire value of the setting.
 
 Default value: ''
 
@@ -194,7 +194,7 @@ Default value: ''
 
 Valid values: `true`, `false`
 
-Set to true if your subsettings don\'t have values and you want to use exact matches to determine if the subsetting exists. See MODULES-2212
+Set to true if your subsettings don\'t have values and you want to use exact matches to determine if the subsetting exists.
 
 Default value: `false`
 
@@ -202,7 +202,7 @@ Default value: `false`
 
 Valid values: start, end, before, after, index
 
-Where the new subsetting item should be inserted?
+Where the new subsetting item should be inserted
 
 * :start  - insert at the beginning of the line.
 * :end    - insert at the end of the line (default).
@@ -222,89 +222,11 @@ The value for the insert types which require one.
 
 Type: Ruby 3.x API
 
-Uses create_resources to create a set of ini_setting resources from a hash:
-
-    $settings = {  section1 => {
-        setting1 => val1
-      },
-      section2 => {
-        setting2 => val2,
-        setting3 => {
-          ensure => absent
-        }
-      }
-    }
-    $defaults = {
-      path => '/tmp/foo.ini'
-    }
-    create_ini_settings($settings,$defaults)
-
-
-Will create the following resources
-
-    ini_setting{'/tmp/foo.ini [section1] setting1':
-      ensure  => present,
-      section => 'section1',
-      setting => 'setting1',
-      value   => 'val1',
-      path    => '/tmp/foo.ini',
-    }
-    ini_setting{'/tmp/foo.ini [section2] setting2':
-      ensure  => present,
-      section => 'section2',
-      setting => 'setting2',
-      value   => 'val2',
-      path    => '/tmp/foo.ini',
-    }
-    ini_setting{'/tmp/foo.ini [section2] setting3':
-      ensure  => absent,
-      section => 'section2',
-      setting => 'setting3',
-      path    => '/tmp/foo.ini',
-    }
+create_resources is used to create a set of ini_setting resources from a hash
 
 #### `create_ini_settings()`
 
-Uses create_resources to create a set of ini_setting resources from a hash:
+create_resources is used to create a set of ini_setting resources from a hash
 
-    $settings = {  section1 => {
-        setting1 => val1
-      },
-      section2 => {
-        setting2 => val2,
-        setting3 => {
-          ensure => absent
-        }
-      }
-    }
-    $defaults = {
-      path => '/tmp/foo.ini'
-    }
-    create_ini_settings($settings,$defaults)
-
-
-Will create the following resources
-
-    ini_setting{'/tmp/foo.ini [section1] setting1':
-      ensure  => present,
-      section => 'section1',
-      setting => 'setting1',
-      value   => 'val1',
-      path    => '/tmp/foo.ini',
-    }
-    ini_setting{'/tmp/foo.ini [section2] setting2':
-      ensure  => present,
-      section => 'section2',
-      setting => 'setting2',
-      value   => 'val2',
-      path    => '/tmp/foo.ini',
-    }
-    ini_setting{'/tmp/foo.ini [section2] setting3':
-      ensure  => absent,
-      section => 'section2',
-      setting => 'setting3',
-      path    => '/tmp/foo.ini',
-    }
-
-Returns: `Any`
+Returns: `String` Returns a string.
 

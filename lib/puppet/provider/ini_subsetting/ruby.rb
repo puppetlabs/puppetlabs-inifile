@@ -3,15 +3,10 @@ require File.expand_path('../../../util/setting_value', __FILE__)
 
 Puppet::Type.type(:ini_subsetting).provide(:ruby) do
   desc '
-  this code is here to support purging and the query-all functionality of the
-  puppet resource command, on a per-file basis.  Users
-  can create a type for a specific config file with a provider that uses
+  Creates new ini_subsetting file, a specific config file with a provider that uses
   this as its parent and implements the method
   self.file_path, and that will provide the value for the path to the
-  ini file (rather than needing to specify it on each ini setting
-  declaration).  This allows purging to be used to clear out
-  all settings from a particular ini file except those included in
-  the catalog.'
+  ini file.'
   def exists?
     setting_value.get_subsetting_value(subsetting, resource[:use_exact_match])
   end
