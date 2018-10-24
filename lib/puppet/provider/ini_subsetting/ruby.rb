@@ -2,6 +2,11 @@ require File.expand_path('../../../util/ini_file', __FILE__)
 require File.expand_path('../../../util/setting_value', __FILE__)
 
 Puppet::Type.type(:ini_subsetting).provide(:ruby) do
+  desc '
+  Creates new ini_subsetting file, a specific config file with a provider that uses
+  this as its parent and implements the method
+  self.file_path, and that will provide the value for the path to the
+  ini file.'
   def exists?
     setting_value.get_subsetting_value(subsetting, resource[:use_exact_match])
   end

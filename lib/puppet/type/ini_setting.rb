@@ -2,7 +2,9 @@ require 'digest/md5'
 require 'puppet/parameter/boolean'
 
 Puppet::Type.newtype(:ini_setting) do
+  desc 'ini_settings is used to manage a single setting in an INI file'
   ensurable do
+    desc 'Ensurable method handles modeling creation. It creates an ensure property'
     defaultvalues
     defaultto :present
   end
@@ -24,8 +26,7 @@ Puppet::Type.newtype(:ini_setting) do
   end
 
   newparam(:section) do
-    desc 'The name of the section in the ini file in which the setting should be defined.' \
-         'If not provided, defaults to global, top of file, sections.'
+    desc 'The name of the section in the ini file in which the setting should be defined.'
     defaultto('')
   end
 
@@ -66,9 +67,7 @@ Puppet::Type.newtype(:ini_setting) do
   end
 
   newparam(:key_val_separator) do
-    desc 'The separator string to use between each setting name and value. ' \
-         'Defaults to " = ", but you could use this to override e.g. ": ", or' \
-         'whether or not the separator should include whitespace.'
+    desc 'The separator string to use between each setting name and value.'
     defaultto(' = ')
   end
 
@@ -103,31 +102,26 @@ Puppet::Type.newtype(:ini_setting) do
   end
 
   newparam(:section_prefix) do
-    desc 'The prefix to the section name\'s header.' \
-         'Defaults to \'[\'.'
+    desc 'The prefix to the section name\'s header.'
     defaultto('[')
   end
 
   newparam(:section_suffix) do
-    desc 'The suffix to the section name\'s header.' \
-         'Defaults to \']\'.'
+    desc 'The suffix to the section name\'s header.'
     defaultto(']')
   end
 
   newparam(:indent_char) do
-    desc 'The character to indent new settings with.' \
-         'Defaults to \' \'.'
+    desc 'The character to indent new settings with.'
     defaultto(' ')
   end
 
   newparam(:indent_width) do
-    desc 'The number of indent_chars to use to indent a new setting.' \
-         'Defaults to undef (autodetect).'
+    desc 'The number of indent_chars to use to indent a new setting.'
   end
 
   newparam(:refreshonly, boolean: true, parent: Puppet::Parameter::Boolean) do
-    desc 'A flag indicating whether or not the ini_setting should be updated ' \
-         'only when called as part of a refresh event'
+    desc 'A flag indicating whether or not the ini_setting should be updated only when called as part of a refresh event'
     defaultto false
   end
 

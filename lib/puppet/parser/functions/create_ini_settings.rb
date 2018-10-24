@@ -3,47 +3,8 @@
 #
 module Puppet::Parser::Functions
   newfunction(:create_ini_settings, type: :statement, doc: <<-EOS
-    Uses create_resources to create a set of ini_setting resources from a hash:
-
-        $settings = {  section1 => {
-            setting1 => val1
-          },
-          section2 => {
-            setting2 => val2,
-            setting3 => {
-              ensure => absent
-            }
-          }
-        }
-        $defaults = {
-          path => '/tmp/foo.ini'
-        }
-        create_ini_settings($settings,$defaults)
-
-
-    Will create the following resources
-
-        ini_setting{'/tmp/foo.ini [section1] setting1':
-          ensure  => present,
-          section => 'section1',
-          setting => 'setting1',
-          value   => 'val1',
-          path    => '/tmp/foo.ini',
-        }
-        ini_setting{'/tmp/foo.ini [section2] setting2':
-          ensure  => present,
-          section => 'section2',
-          setting => 'setting2',
-          value   => 'val2',
-          path    => '/tmp/foo.ini',
-        }
-        ini_setting{'/tmp/foo.ini [section2] setting3':
-          ensure  => absent,
-          section => 'section2',
-          setting => 'setting3',
-          path    => '/tmp/foo.ini',
-        }
-
+    @return [String] Returns a string.
+    create_resources is used to create a set of ini_setting resources from a hash
     EOS
              ) do |arguments|
 
