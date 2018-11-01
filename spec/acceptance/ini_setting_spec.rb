@@ -322,4 +322,18 @@ describe 'ini_setting resource' do
       end
     end
   end
+
+  describe 'values with spaces in the value part at the beginning or at the end' do
+    pp = <<-EOS
+      ini_setting { 'path => foo':
+          ensure     => present,
+          section    => 'one',
+          setting    => 'two',
+          value      => '               123',
+          path       => '#{tmpdir}/ini_setting.ini',
+        }
+    EOS
+
+    it_behaves_like 'has_content', "#{tmpdir}/ini_setting.ini", pp, %r{\[one\]\ntwo = 123}
+  end
 end
