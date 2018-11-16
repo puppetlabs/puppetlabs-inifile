@@ -87,14 +87,23 @@ module Puppet::Util
       section = @sections_hash[section_name]
 
       if section.existing_setting?(setting)
-        update_line(section, setting, value)
-        section.update_existing_setting(setting, value)
+        if value.is_a?(Array) && value.size.eql?(1)
+          update_line(section, setting, value)
+          section.update_existing_setting(setting, value)
+        else
+          puts "remove"
+          #remove_line(section, setting, value)
+          remove_line(section, setting, value)
+          section.remove_existing_setting(setting)
+          section.set_additional_setting(setting, value)
+        end
       elsif find_commented_setting(section, setting)
+
         # So, this stanza is a bit of a hack.  What we're trying
         # to do here is this: for settings that don't already
         # exist, we want to take a quick peek to see if there
         # is a commented-out version of them in the section.
-        # If so, we'd prefer to add the setting directly after
+        # If so, we'd prefer to add the setting direcqtly after
         # the commented line, rather than at the end of the section.
 
         # If we get here then we found a commented line, so we
@@ -115,12 +124,13 @@ module Puppet::Util
       end
     end
 
-    def remove_setting(section_name, setting)
+    def remove_setting(section_name, setting, value)
       section = @sections_hash[section_name]
+      puts section
       return unless section.existing_setting?(setting)
       # If the setting is found, we have some work to do.
       # First, we remove the line from our array of lines:
-      remove_line(section, setting)
+      remove_line(section, setting, value)
 
       # Then, we need to tell the setting object to remove
       # the setting from its state:
@@ -135,7 +145,9 @@ module Puppet::Util
       return unless section.empty?
       # By convention, it's time to remove this newly emptied out section
       lines.delete_at(section.start_line)
-      decrement_section_line_numbers(section_index + 1)
+
+       decrement_section_line_numbers(section_index + 1)
+
       @section_names.delete_at(section_index)
       @sections_hash.delete(section.name)
     end
@@ -182,8 +194,17 @@ module Puppet::Util
 
           # write new settings, if there are any
           section.additional_settings.each_pair do |key, value|
-            fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
-          end
+            #fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
+            #section.additional_settings.each_pair do |key, value|
+              if value.is_a?(Array)
+                value.each do |item|
+                  fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{item}")
+                end
+              else
+                fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
+              end
+            end
+
 
           if !whitespace_buffer.empty?
             flush_buffer_to_file(whitespace_buffer, fh)
@@ -256,16 +277,23 @@ module Puppet::Util
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
         if match[2] == setting
-          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}"
+          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[0]}"
         end
       end
     end
 
-    def remove_line(section, setting)
+    def remove_line(section, setting, value)
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
         if match[2] == setting
-          lines.delete_at(line_num)
+          if value.is_a?(Array) && value.size.eql?(1)
+            lines.delete_at(line_num)
+          else
+            value.each_index do |index|
+              lines.delete_at(line_num)
+              lines[line_num].strip
+            end
+          end
         end
       end
     end
