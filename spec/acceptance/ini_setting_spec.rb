@@ -17,7 +17,9 @@ describe 'ini_setting resource' do
     end
 
     it 'applies the manifest twice' do
+
       apply_manifest(pp, catch_failures: true)
+      binding.pry
       apply_manifest(pp, catch_changes: true)
     end
 
@@ -335,5 +337,19 @@ describe 'ini_setting resource' do
     EOS
 
     it_behaves_like 'has_content', "#{tmpdir}/ini_setting.ini", pp, %r{\[one\]\ntwo = 123}
+  end
+
+  describe 'add multiple entries for the same key' do
+    pp = <<-EOS
+      ini_setting {'path => foo':
+          ensure     => present,
+          section    => 'one',
+          setting    => 'two',
+          value      => ['test1','test2'],
+          path       => '#{tmpdir}/ini_setting.ini',
+        }
+    EOS
+
+    it_behaves_like 'has_content', "#{tmpdir}/ini_setting.ini", pp, %r{\[one\]\n\n\ntwo = test1\ntwo = test2}
   end
 end
