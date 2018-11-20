@@ -96,7 +96,7 @@ module Puppet::Util
           # if existing entries < new array items -> the existing lines are removed and new ones are added
           # if existing entries > new array items -> NOK the edit is not correct
           # to summarize all these - we need a method to verify existing setting with multiple lines, to remove all, to decrement section line and to add new setting
-          remove_line(section, setting, value)
+          remove_line(section, setting)
           section.remove_existing_setting(setting)
           section.set_additional_setting(setting, value)
         end
@@ -277,22 +277,16 @@ module Puppet::Util
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
         if match[2] == setting
-          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[0]}"
+          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}"
         end
       end
     end
 
-    def remove_line(section, setting, value)
+    def remove_line(section, setting)
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
         if match[2] == setting
-          if value.is_a?(Array) && value.size.eql?(1)
             lines.delete_at(line_num)
-          else
-            value.each do |item|
-              lines.delete_at(line_num)
-            end
-          end
         end
       end
     end
