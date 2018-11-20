@@ -87,8 +87,16 @@ Puppet::Type.newtype(:ini_setting) do
     desc 'The value of the setting to be defined.'
 
     munge do |value|
+      puts "value type=#{value.class}"
       if ([true, false].include? value) || value.is_a?(Numeric)
         value.to_s
+      elsif value.is_a?(Array)
+        puts "is Array"
+        if value.size.eql?(1)
+          value[0].to_s
+        else
+          value
+          end
       else
         value.strip.to_s
       end
