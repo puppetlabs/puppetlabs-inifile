@@ -91,8 +91,11 @@ module Puppet::Util
           update_line(section, setting, value)
           section.update_existing_setting(setting, value)
         else
-          puts "remove"
-          #remove_line(section, setting, value)
+          # when setting has multiples entries then first remove the line, remove existing setting and recreate it.
+          # if existing setting entries = number of values -> all the lines are removed
+          # if existing entries < new array items -> the existing lines are removed and new ones are added
+          # if existing entries > new array items -> NOK the edit is not correct
+          # to summarize all these - we need a method to verify existing setting with multiple lines, to remove all, to decrement section line and to add new setting
           remove_line(section, setting, value)
           section.remove_existing_setting(setting)
           section.set_additional_setting(setting, value)
@@ -126,7 +129,6 @@ module Puppet::Util
 
     def remove_setting(section_name, setting, value)
       section = @sections_hash[section_name]
-      puts section
       return unless section.existing_setting?(setting)
       # If the setting is found, we have some work to do.
       # First, we remove the line from our array of lines:
@@ -145,9 +147,7 @@ module Puppet::Util
       return unless section.empty?
       # By convention, it's time to remove this newly emptied out section
       lines.delete_at(section.start_line)
-
-       decrement_section_line_numbers(section_index + 1)
-
+      decrement_section_line_numbers(section_index + 1)
       @section_names.delete_at(section_index)
       @sections_hash.delete(section.name)
     end
@@ -193,18 +193,18 @@ module Puppet::Util
           end
 
           # write new settings, if there are any
+          # this is OK. When value is array, then new lines are added with the same setting
           section.additional_settings.each_pair do |key, value|
-            #fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
-            #section.additional_settings.each_pair do |key, value|
-              if value.is_a?(Array)
-                value.each do |item|
-                  fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{item}")
-                end
-              else
-                fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
+            # fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
+            # section.additional_settings.each_pair do |key, value|
+            if value.is_a?(Array)
+              value.each do |item|
+                fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{item}")
               end
+            else
+              fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
             end
-
+          end
 
           if !whitespace_buffer.empty?
             flush_buffer_to_file(whitespace_buffer, fh)
@@ -289,9 +289,8 @@ module Puppet::Util
           if value.is_a?(Array) && value.size.eql?(1)
             lines.delete_at(line_num)
           else
-            value.each_index do |index|
+            value.each do |item|
               lines.delete_at(line_num)
-              lines[line_num].strip
             end
           end
         end
