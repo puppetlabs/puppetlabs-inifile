@@ -277,7 +277,7 @@ module Puppet::Util
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
         if match[2] == setting
-          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}"
+          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[0]}"
         end
       end
     end
