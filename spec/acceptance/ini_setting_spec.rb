@@ -336,4 +336,149 @@ describe 'ini_setting resource' do
 
     it_behaves_like 'has_content', "#{tmpdir}/ini_setting.ini", pp, %r{\[one\]\ntwo = 123}
   end
+
+  describe 'refreshonly' do
+    path = File.join(tmpdir, 'test.txt')
+    before :each do
+      shell("echo \"[section1]\nvalueinsection1 = 123\" > #{path}")
+    end
+    after :each do
+      shell("cat #{path}", acceptable_exit_codes: [0, 1, 2])
+      shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
+    end
+    context 'when event is triggered' do
+      context 'update setting value' do
+        let(:update_value_manifest) do
+          <<-EOS
+          notify { foo:
+            notify => Ini_Setting['updateSetting'],
+          }
+
+          ini_setting { "updateSetting":
+            ensure => present,
+            path => "#{path}",
+            section => 'section1',
+            setting => 'valueinsection1',
+            value   => "newValue",
+            refreshonly => true,
+          }
+          EOS
+        end
+
+        before(:each) do
+          apply_manifest(update_value_manifest, expect_changes: true)
+        end
+
+        describe file(path) do
+          it { is_expected.to be_file }
+          describe '#content' do
+            subject { super().content }
+
+            it { is_expected.to match %r{valueinsection1 = newValue} }
+          end
+        end
+      end
+
+      context 'remove setting value' do
+        let(:remove_setting_manifest) do
+          <<-EOS
+          notify { foo:
+            notify => Ini_Setting['removeSetting'],
+          }
+
+          ini_setting { "removeSetting":
+            ensure => absent,
+            path => "#{path}",
+            section => 'section1',
+            setting => 'valueinsection1',
+            refreshonly => true,
+          }
+          EOS
+        end
+
+        before(:each) do
+          apply_manifest(remove_setting_manifest, expect_changes: true)
+        end
+
+        describe file(path) do
+          it { is_expected.to be_file }
+          describe '#content' do
+            subject { super().content }
+
+            it { is_expected.to be_empty }
+          end
+        end
+      end
+    end
+
+    context 'when not receiving an event' do
+      context 'does not update setting' do
+        let(:does_not_update_value_manifest) do
+          <<-EOS
+          file { "#{path}":
+            ensure => present,
+            notify => Ini_Setting['updateSetting'],
+          }
+
+          ini_setting { "updateSetting":
+            ensure => present,
+            path => "#{path}",
+            section => 'section1',
+            setting => 'valueinsection1',
+            value   => "newValue",
+            refreshonly => true,
+          }
+          EOS
+        end
+
+        before(:each) do
+          apply_manifest(does_not_update_value_manifest, expect_changes: false)
+        end
+
+        describe file(path) do
+          it { is_expected.to be_file }
+          describe '#content' do
+            subject { super().content }
+
+            it { is_expected.to match %r{valueinsection1 = 123} }
+            it { is_expected.to match %r{\[section1\]} }
+          end
+        end
+      end
+
+      context 'does not remove setting' do
+        let(:does_not_remove_setting_manifest) do
+          <<-EOS
+          file { "#{path}":
+            ensure => present,
+            notify => Ini_Setting['removeSetting'],
+          }
+
+          ini_setting { "removeSetting":
+            ensure => absent,
+            path => "#{path}",
+            section => 'section1',
+            setting => 'valueinsection1',
+            refreshonly => true,
+          }
+          EOS
+        end
+
+        before(:each) do
+          apply_manifest(does_not_remove_setting_manifest, expect_changes: false)
+        end
+
+        describe file(path) do
+          it { is_expected.to be_file }
+          describe '#content' do
+            subject { super().content }
+
+            it { is_expected.not_to be_empty }
+            it { is_expected.to match %r{valueinsection1 = 123} }
+            it { is_expected.to match %r{\[section1\]} }
+          end
+        end
+      end
+    end
+  end
 end

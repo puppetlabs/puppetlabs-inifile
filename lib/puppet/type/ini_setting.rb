@@ -5,7 +5,19 @@ Puppet::Type.newtype(:ini_setting) do
   desc 'ini_settings is used to manage a single setting in an INI file'
   ensurable do
     desc 'Ensurable method handles modeling creation. It creates an ensure property'
-    defaultvalues
+    newvalue(:present) do
+      provider.create
+    end
+    newvalue(:absent) do
+      provider.destroy
+    end
+    def insync?(current)
+      if @resource[:refreshonly]
+        true
+      else
+        current == should
+      end
+    end
     defaultto :present
   end
 
@@ -130,6 +142,9 @@ Puppet::Type.newtype(:ini_setting) do
   end
 
   def refresh
+    if self[:ensure] == :absent && self[:refreshonly]
+      return provider.destroy
+    end
     # update the value in the provider, which will save the value to the ini file
     provider.value = self[:value] if self[:refreshonly]
   end
