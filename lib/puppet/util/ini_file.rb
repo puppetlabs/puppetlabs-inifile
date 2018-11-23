@@ -87,18 +87,17 @@ module Puppet::Util
       section = @sections_hash[section_name]
 
       if section.existing_setting?(setting)
-        if value.is_a?(Array) && value.size.eql?(1)
+        #case01: if old value has multiple items, new value 1 item/ case02: new value has multiple items and old value multiple items/
+        if $duplicated
+          puts "old value multiple items, new value 1 item"
+          remove_existing_multiple_setting(value, section, setting, section_name)
+          puts "set additional setting=#{setting}"
+          section.set_additional_setting(setting, value)
+        else #case02: new value has 1 item and old value 1 item
+          value.size.eql?(1) && !$duplicated
+          puts "old value 1 item, new value 1 item"
           update_line(section, setting, value)
           section.update_existing_setting(setting, value)
-        else
-          # when setting has multiples entries then first remove the line, remove existing setting and recreate it.
-          # if existing setting entries = number of values -> all the lines are removed
-          # if existing entries < new array items -> the existing lines are removed and new ones are added
-          # if existing entries > new array items -> NOK the edit is not correct
-          # to summarize all these - we need a method to verify existing setting with multiple lines, to remove all, to decrement section line and to add new setting
-          remove_line(section, setting)
-          section.remove_existing_setting(setting)
-          section.set_additional_setting(setting, value)
         end
       elsif find_commented_setting(section, setting)
 
@@ -127,12 +126,12 @@ module Puppet::Util
       end
     end
 
-    def remove_setting(section_name, setting, value)
+    def remove_setting(section_name, setting)
       section = @sections_hash[section_name]
       return unless section.existing_setting?(setting)
       # If the setting is found, we have some work to do.
       # First, we remove the line from our array of lines:
-      remove_line(section, setting, value)
+      remove_line(section, setting)
 
       # Then, we need to tell the setting object to remove
       # the setting from its state:
@@ -150,6 +149,7 @@ module Puppet::Util
       decrement_section_line_numbers(section_index + 1)
       @section_names.delete_at(section_index)
       @sections_hash.delete(section.name)
+
     end
 
     def save
@@ -253,6 +253,9 @@ module Puppet::Util
       end_line_num = start_line
       min_indentation = nil
       empty = true
+      $duplicated=false
+      $appearences_number=1
+      previous_value="this_variable_will be_updated_with_the_setting"
       loop do
         line, line_num = line_iter.peek
         if line_num.nil? || @section_regex.match(line)
@@ -266,6 +269,12 @@ module Puppet::Util
           settings[match[2]] = match[4]
           indentation = match[1].length
           min_indentation = [indentation, min_indentation || indentation].min
+          if previous_value == match[2]
+            $duplicated=true
+            $appearences_number=$appearences_number+1
+          end
+          previous_value=""
+          previous_value=match[2]
         end
         end_line_num = line_num
         empty = false
@@ -273,11 +282,26 @@ module Puppet::Util
       end
     end
 
+    def remove_existing_multiple_setting(value, section, setting, section_name)
+      puts "$duplicated=${duplicated}"
+      #case1: old value multiple items
+      if !value.size.eql?(1) && $duplicated
+        puts "setting appearances=#{$appearences_number}"
+        for index in 1..$appearences_number do
+          puts "index=#{index}"
+          remove_line(section, setting)
+          section.remove_existing_setting(setting)
+          section.decrement_line_nums
+          remove_setting(section_name, setting)
+        end
+      end
+    end
+
     def update_line(section, setting, value)
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
         if match[2] == setting
-          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}"
+          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[0]}"
         end
       end
     end
@@ -286,7 +310,8 @@ module Puppet::Util
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
         if match[2] == setting
-            lines.delete_at(line_num)
+          puts "removed line: #{line_num} and content=#{lines[line_num]}"
+          lines.delete_at(line_num)
         end
       end
     end

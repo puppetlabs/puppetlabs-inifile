@@ -17,6 +17,7 @@ describe 'ini_setting resource' do
     end
 
     it 'applies the manifest twice' do
+      binding.pry
       apply_manifest(pp, catch_failures: true)
       apply_manifest(pp, catch_changes: true)
     end
@@ -482,15 +483,20 @@ describe 'ini_setting resource' do
     end
   describe 'add multiple entries for the same key' do
     pp = <<-EOS
-      ini_setting {'path => foo':
-          ensure     => present,
-          section    => 'one',
-          setting    => 'two',
-          value      => ['test1','test2'],
-          path       => '#{tmpdir}/ini_setting.ini',
-        }
+    $autofs_config_defaults = {
+         'path' => '/tmp/test1.ini'
+       }
+     
+      $autofs_config = {
+         '' => {
+           'SEARCH_BASE' => ['”ddd”', '”cccc”','”www”'],
+           'APPEND_OPTIONS' => '"yes"',
+         }
+       }
+     
+       create_ini_settings($autofs_config, $autofs_config_defaults)
     EOS
 
-    it_behaves_like 'has_content', "#{tmpdir}/ini_setting.ini", pp, %r{\[one\]\n\ntwo = test1\ntwo = test2}
+    it_behaves_like 'has_content', "/tmp/test1.ini", pp, %r{\[one\]\n\ntwo = test1\ntwo = test2}
   end
 end
