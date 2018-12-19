@@ -19,7 +19,7 @@ describe 'ini_setting resource' do
     it 'applies the manifest twice' do
       binding.pry
       apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      apply_manifest(pp)
     end
 
     describe file(path) do
@@ -488,15 +488,16 @@ describe 'ini_setting resource' do
        }
      
       $autofs_config = {
-         '' => {
-           'SEARCH_BASE' => ['”ddd”', '”cccc”','”www”'],
-           'APPEND_OPTIONS' => '"yes"',
+         'test' => {
+          'x0' => 'tx0',
+           'x1' => ['t1', 't2','t3'],
+           'x2' => 'tx2',
          }
        }
      
        create_ini_settings($autofs_config, $autofs_config_defaults)
     EOS
 
-    it_behaves_like 'has_content', "/tmp/test1.ini", pp, %r{\[one\]\n\ntwo = test1\ntwo = test2}
+    it_behaves_like 'has_content', '/tmp/test1.ini', pp, %r{\[test\]\nx0 = tx0\nx1 = t1\nx1 = t2\nx1 = t3\nx2 = tx2}
   end
 end
