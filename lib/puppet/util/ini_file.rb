@@ -107,28 +107,25 @@ module Puppet::Util
                 puts 'matched <<<<<< value.size'
                 lines[line_num + 1] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
                 i += 1
-              elsif
-                matched > value.size
+              elsif matched > value.size
                 puts 'matched >>>>> value.size'
                 puts 'delete line'
                 lines.delete_at(line_num)
-            end
+              end
             else
               puts 'ELSE update existing line'
               lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
               i += 1
-          end
+            end
           end
 
+        elsif value.size.eql?(1)
+          puts 'old value 1 item, new value 1 item'
+          update_line(section, setting, value)
+          section.update_existing_setting(setting, value)
         else
-          if value.size.eql?(1)
-            puts 'old value 1 item, new value 1 item'
-            update_line(section, setting, value)
-            section.update_existing_setting(setting, value)
-          else
-            remove_setting(section_name, setting)
-            section.set_additional_setting(setting, value)
-          end
+          remove_setting(section_name, setting)
+          section.set_additional_setting(setting, value)
         end
       elsif find_commented_setting(section, setting)
 
