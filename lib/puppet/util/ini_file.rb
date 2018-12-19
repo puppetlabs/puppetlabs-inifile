@@ -88,45 +88,43 @@ module Puppet::Util
 
       if section.existing_setting?(setting)
         if !$duplicated_settings.size.eql?(0)
-          puts "old value multiple items, new value 1 item"
+          puts 'old value multiple items, new value 1 item'
           $duplicated_settings.each do |setting_duplicated, val|
-          if setting_duplicated.eql?(setting)
-            $nb_appears=val
+            if setting_duplicated.eql?(setting)
+              $nb_appears = val
+            end
           end
-        end
-        i=0
-        matched=0
-        (section.start_line..section.end_line).each do |line_num|
-        next unless (match = @setting_regex.match(lines[line_num]))
-if match[2] == setting
-  puts "-"*10
-  matched += 1
-  if matched == $nb_appears
-  lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
-  if matched < value.size
-  puts "matched <<<<<< value.size"
-  lines[line_num+1] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
-  i += 1
-  elsif
-  matched > value.size
-  puts "matched >>>>> value.size"
-  puts "delete line"
-  lines.delete_at(line_num)
-  end
-  else
-  puts "ELSE update existing line"
-  lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
-i += 1
-end
-
-end
-end
+          i = 0
+          matched = 0
+          (section.start_line..section.end_line).each do |line_num|
+            next unless (match = @setting_regex.match(lines[line_num]))
+            next unless match[2] == setting
+            puts '-' * 10
+            matched += 1
+            if matched == $nb_appears
+              lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
+              if matched < value.size
+                puts 'matched <<<<<< value.size'
+                lines[line_num + 1] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
+                i += 1
+              elsif
+                matched > value.size
+                puts 'matched >>>>> value.size'
+                puts 'delete line'
+                lines.delete_at(line_num)
+            end
+            else
+              puts 'ELSE update existing line'
+              lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
+              i += 1
+          end
+          end
 
         else
           if value.size.eql?(1)
-          puts "old value 1 item, new value 1 item"
-          update_line(section, setting, value)
-          section.update_existing_setting(setting, value)
+            puts 'old value 1 item, new value 1 item'
+            update_line(section, setting, value)
+            section.update_existing_setting(setting, value)
           else
             remove_setting(section_name, setting)
             section.set_additional_setting(setting, value)
@@ -182,7 +180,6 @@ end
       decrement_section_line_numbers(section_index + 1)
       @section_names.delete_at(section_index)
       @sections_hash.delete(section.name)
-
     end
 
     def save
@@ -281,15 +278,15 @@ end
       end
     end
 
-    $duplicated_settings={}
+    $duplicated_settings = {}
     def read_section(name, start_line, line_iter)
       settings = {}
       end_line_num = start_line
       min_indentation = nil
       empty = true
 
-      $appearences_number=1
-      previous_value="this_variable_will be_updated_with_the_setting"
+      $appearences_number = 1
+      previous_value = 'this_variable_will be_updated_with_the_setting'
       loop do
         line, line_num = line_iter.peek
         if line_num.nil? || @section_regex.match(line)
@@ -304,11 +301,11 @@ end
           indentation = match[1].length
           min_indentation = [indentation, min_indentation || indentation].min
           if previous_value == match[2]
-            $appearences_number=$appearences_number+1
+            $appearences_number = $appearences_number + 1
             $duplicated_settings.store(match[2], $appearences_number)
           end
-          previous_value=""
-          previous_value=match[2]
+          previous_value = ''
+          previous_value = match[2]
         end
         end_line_num = line_num
         empty = false
