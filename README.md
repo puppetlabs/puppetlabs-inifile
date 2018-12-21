@@ -5,21 +5,24 @@
 #### Table of Contents
 
 1. [Overview](#overview)
-2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Setup - The basics of getting started with inifile module](#setup)
-4. [Usage - Configuration options and additional functionality](#usage)
-5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Development - Guide for contributing to the module](#development)
+1. [Module Description - What the module does and why it is useful](#module-description)
+1. [Setup - The basics of getting started with inifile module](#setup)
+1. [Usage - Configuration options and additional functionality](#usage)
+1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+1. [Limitations - OS compatibility, etc.](#limitations)
+1. [Development - Guide for contributing to the module](#development)
 
+<a id="overview"></a>
 ## Overview
 
 The inifile module lets Puppet manage settings stored in INI-style configuration files.
 
+<a id="module-description"></a>
 ## Module Description
 
 Many applications use INI-style configuration files to store their settings. This module supplies two custom resource types to let you manage those settings through Puppet.
 
+<a id="setup"></a>
 ## Setup
 
 ### Beginning with inifile
@@ -36,6 +39,7 @@ ini_setting { "sample setting":
 }
 ~~~
 
+<a id="usage"></a>
 ## Usage
 
 
@@ -289,16 +293,18 @@ ini_setting { '[section1] setting3':
 }
 ~~~
 
-
+<a id="reference"></a> 
 ## Reference
 See [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-inifile/blob/master/REFERENCE.md)
 
+<a id="limitations"></a>
 ## Limitations
 
 Due to (PUP-4709) the create_ini_settings function will cause errors when attempting to create multiple ini_settings in one go when using Puppet 4.0.x or 4.1.x. If needed, the temporary fix for this can be found here: https://github.com/puppetlabs/puppetlabs-inifile/pull/196.
 
 For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-inifile/blob/master/metadata.json)
 
+<a id="development"></a> 
 ## Development
 
 Puppet Labs modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. We can't access the huge number of platforms and myriad of hardware, software, and deployment configurations that Puppet is intended to serve.
