@@ -87,53 +87,72 @@ module Puppet::Util
       section = @sections_hash[section_name]
 
       if section.existing_setting?(setting)
-        if !$duplicated_settings.size.eql?(0)
-          puts 'old value multiple items, new value 1 item'
-          $duplicated_settings.each do |setting_duplicated, val|
-            if setting_duplicated.eql?(setting)
-              $nb_appears = val
-            end
-          end
-          i = 0
-          matched = 0
-          (section.start_line..section.end_line).each do |line_num|
-            next unless (match = @setting_regex.match(lines[line_num]))
-            next unless match[2] == setting
-            puts '-' * 10
-            matched += 1
-            if matched == $nb_appears
-              lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
-              if matched < value.size
-                puts 'matched <<<<<< value.size'
-                lines[line_num + 1] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
-                i += 1
-              elsif matched > value.size
-                puts 'matched >>>>> value.size'
-                puts 'delete line'
-                lines.delete_at(line_num)
-              end
-            else
-              puts 'ELSE update existing line'
-              lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
-              i += 1
-            end
-          end
+        puts "INTRA PE AICI "
+        puts "setting=#{setting}"
+        puts "value is array =#{value.is_a?(Array)}"
+        puts "$duplicated_settings.size=#{$duplicated_settings.size}"
+        puts "$duplicated_settings=#{$duplicated_settings}"
+        # if !$duplicated_settings.size.eql?(1)
+        #   puts "$duplicated_settings.size=#{$duplicated_settings.size}"
+        #   puts 'old value multiple items, new value 1 item'
+        #   $duplicated_settings.each do |setting_duplicated, val|
+        #     if setting_duplicated.eql?(setting)
+        #       puts "setting=#{setting} si setting_duplicated=#{setting_duplicated}"
+        #       $nb_appears = val
+        #     end
+        #   end
+        #   i = 0
+        #   matched = 0
+        #   (section.start_line..section.end_line).each do |line_num|
+        #     puts "X" * 100
+        #     puts [lines[line_num]]
+        #     next unless (match = @setting_regex.match(lines[line_num]))
+        #    # next unless match[2] == setting
+        #     puts '-' * 10
+        #     matched += 1
+        #     if matched == $nb_appears
+        #       lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
+        #       if matched < value.size
+        #         puts 'matched <<<<<< value.size'
+        #         lines[line_num + 1] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
+        #         i += 1
+        #       elsif matched > value.size
+        #         puts 'matched >>>>> value.size'
+        #         puts 'delete line'
+        #         lines.delete_at(line_num)
+        #       end
+        #     else
+        #       puts 'ELSE update existing line'
+        #       puts $duplicated_settings
+        #       #lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
+        #       update_line(section, setting, value[i])
+        #       section.update_existing_setting(setting, value[i])
+        #       i += 1
+        #     end
+        #   end
 
-        elsif value.size.eql?(1)
+        # elsif value.size.eql?(1)
           puts 'old value 1 item, new value 1 item'
           update_line(section, setting, value)
           section.update_existing_setting(setting, value)
-        else
-          remove_setting(section_name, setting)
-          section.set_additional_setting(setting, value)
-        end
-      elsif find_commented_setting(section, setting)
+        # # else value.is_a?(Array) && !value.size.eql?(1)
+        # #   puts "TESTTTTT #{value.size} = #{value}"
+        # #   remove_setting(section_name, setting)
+        # #   section.set_additional_setting(setting, value)
+        # # end
 
+
+        # puts "ˆ" * 100
+        # puts value
+        # update_line(section, setting, value)
+        # section.update_existing_setting(setting, value)
+      elsif find_commented_setting(section, setting)
+        puts "AAAAAAA"
         # So, this stanza is a bit of a hack.  What we're trying
         # to do here is this: for settings that don't already
         # exist, we want to take a quick peek to see if there
         # is a commented-out version of them in the section.
-        # If so, we'd prefer to add the setting direcqtly after
+        # If so, we'd prefer to add the setting directly after
         # the commented line, rather than at the end of the section.
 
         # If we get here then we found a commented line, so we
@@ -142,6 +161,7 @@ module Puppet::Util
 
         # Then, we need to tell the setting object that we hacked
         # in an inline setting
+
         section.insert_inline_setting(setting, value)
 
         # Finally, we need to update all of the start/end line
@@ -150,14 +170,12 @@ module Puppet::Util
         section_index = @section_names.index(section_name)
         increment_section_line_numbers(section_index + 1)
       elsif !setting.nil? || !value.nil?
-
-        if value.is_a?(Array) && value.size.eql(1)
-          section.set_additional_setting(setting, value[0])
+        if value.is_a?(Array)
+          value=value[0].to_s
+          section.set_additional_setting(setting, value)
         else
           section.set_additional_setting(setting, value)
         end
-
-        section.set_additional_setting(setting, value)
       end
     end
 
@@ -227,17 +245,8 @@ module Puppet::Util
           end
 
           # write new settings, if there are any
-          # this is OK. When value is array, then new lines are added with the same setting
           section.additional_settings.each_pair do |key, value|
-            # fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
-            # section.additional_settings.each_pair do |key, value|
-            if value.is_a?(Array)
-              value.each do |item|
-                fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{item}")
-              end
-            else
-              fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
-            end
+            fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
           end
 
           if !whitespace_buffer.empty?
@@ -284,13 +293,13 @@ module Puppet::Util
 
     $duplicated_settings = {}
     def read_section(name, start_line, line_iter)
+      $appearences_number = 1
       settings = {}
       end_line_num = start_line
       min_indentation = nil
       empty = true
-
       $appearences_number = 1
-      previous_value = 'this_variable_will be_updated_with_the_setting'
+       previous_value = 'this_variable_will be_updated_with_the_setting'
       loop do
         line, line_num = line_iter.peek
         if line_num.nil? || @section_regex.match(line)
@@ -318,20 +327,15 @@ module Puppet::Util
     end
 
     def update_line(section, setting, value)
-      i=0
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
         if match[2] == setting
-
-          if value.is_a?(Array) && value.size.eql(1)
-            lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[0]}"
+          if value.is_a?(Array)
+            xxx=value[0].to_s
+          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{xxx}"
           else
-            lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
-            i+1
+          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}"
           end
-
-
-          #lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[0]}"
         end
       end
     end
@@ -340,7 +344,7 @@ module Puppet::Util
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
         if match[2] == setting
-          puts "removed line: #{line_num} and content=#{lines[line_num]}"
+          puts "removed line #{line_num} #{lines[line_num]}"
           lines.delete_at(line_num)
         end
       end
@@ -391,7 +395,13 @@ module Puppet::Util
     def insert_inline_setting_line(result, section, complete_setting)
       line_num = result[:line_num]
       s = complete_setting
-      lines.insert(line_num + 1, "#{@indent_char * (@indent_width || section.indentation || 0)}#{s[:setting]}#{s[:separator]}#{s[:value]}")
+      puts "INSERT INLINE !!!!! #{s[:value]}"
+      xxx=s[:value]
+      puts xxx.inspect
+      puts "value is array #{xxx.is_a?(Array)}"
+      test=xxx[0].to_s
+      puts "test is array #{test.is_a?(Array)}"
+      lines.insert(line_num + 1, "#{@indent_char * (@indent_width || section.indentation || 0)}#{s[:setting]}#{s[:separator]}#{test}")
     end
 
     # Utility method; given a section index (index into the @section_names
