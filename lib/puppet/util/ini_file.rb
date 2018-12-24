@@ -150,6 +150,13 @@ module Puppet::Util
         section_index = @section_names.index(section_name)
         increment_section_line_numbers(section_index + 1)
       elsif !setting.nil? || !value.nil?
+
+        if value.is_a?(Array) && value.size.eql(1)
+          section.set_additional_setting(setting, value[0])
+        else
+          section.set_additional_setting(setting, value)
+        end
+
         section.set_additional_setting(setting, value)
       end
     end
@@ -311,10 +318,20 @@ module Puppet::Util
     end
 
     def update_line(section, setting, value)
+      i=0
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
         if match[2] == setting
-          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[0]}"
+
+          if value.is_a?(Array) && value.size.eql(1)
+            lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[0]}"
+          else
+            lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[i]}"
+            i+1
+          end
+
+
+          #lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value[0]}"
         end
       end
     end
