@@ -52,7 +52,16 @@ class Puppet::Util::IniFile
     end
 
     def update_existing_setting(setting_name, value)
-      @existing_settings[setting_name] = value
+      puts "UPDATE VALUE=#{value}"
+      puts "value is array=#{value.is_a?(Array)}"
+      if value.is_a?(Array) && value.size == 1
+        xxx=value[0].to_s
+        puts "xxx=#{xxx} is array?=#{xxx.is_a?(Array)}"
+        @existing_settings[setting_name] = xxx
+      else
+        puts "UPDATE EXISTING VALUE #{value}"
+        @existing_settings[setting_name] = value
+      end
     end
 
     def remove_existing_setting(setting_name)
