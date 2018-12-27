@@ -17,7 +17,6 @@ describe 'ini_setting resource' do
     end
 
     it 'applies the manifest twice' do
-      binding.pry
       apply_manifest(pp, catch_failures: true)
       apply_manifest(pp)
     end
@@ -481,6 +480,8 @@ describe 'ini_setting resource' do
         end
       end
     end
+  end
+
   describe 'add multiple entries for the same key' do
     pp = <<-EOS
     $autofs_config_defaults = {
