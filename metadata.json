@@ -78,8 +78,8 @@
     {
       "operatingsystem": "Windows",
       "operatingsystemrelease": [
-        "2008 R2",
-        "2012 R2",
+        "2008",
+        "2012",
         "2016",
         "10"
       ]
