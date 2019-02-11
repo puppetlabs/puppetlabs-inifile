@@ -1,10 +1,18 @@
+---
 HOSTS:
-  ubuntu-1404-x64:
+  cem3kkb0hryozvs.delivery.puppetlabs.net:
+    pe_dir:
+    pe_ver:
+    pe_upgrade_dir:
+    pe_upgrade_ver:
+    platform: el-6-x86_64
+    packaging_platform: el-6-x86_64
+    template: centos-6-x86_64
+    hypervisor: vmpooler
     roles:
-      - agent
-      - default
-    platform: ubuntu-14.04-amd64
-    hypervisor: vagrant
-    box: puppetlabs/ubuntu-14.04-64-nocm
+    - agent
+    - default
 CONFIG:
-  type: foss
+  nfs_server: none
+  consoleport: 443
+  pooling_api: http://vmpooler.delivery.puppetlabs.net/

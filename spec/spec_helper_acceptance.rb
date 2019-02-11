@@ -13,6 +13,21 @@ install_ca_certs unless ENV['PUPPET_INSTALL_TYPE'] =~ %r{pe}i
 install_module_on(hosts)
 install_module_dependencies_on(hosts)
 
+def idempotent_apply(host, manifest, opts = {}, &block)
+  block_on host, opts do | host |
+    file_path = host.tmpfile('apply_manifest.pp')
+    create_remote_file(host, file_path, manifest + "\n")
+
+    puppet_apply_opts = {:verbose=>nil, "detailed-exitcodes"=>nil}
+    on_options = {:acceptable_exit_codes=>[0, 2]}
+    on host, puppet('apply', file_path, puppet_apply_opts), on_options, &block
+    puppet_apply_opts2 =  {:verbose=>nil, "detailed-exitcodes"=>nil}
+    on_options2 = {:acceptable_exit_codes=>[0]}
+    on host, puppet('apply', file_path, puppet_apply_opts2), on_options2, &block
+  end
+end
+
+
 RSpec.configure do |c|
   c.filter_run focus: true
   c.run_all_when_everything_filtered = true
