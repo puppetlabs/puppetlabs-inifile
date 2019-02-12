@@ -64,19 +64,8 @@ describe 'ini_subsetting resource' do
     }
     EOS
 
-    it 'applies the manifest twice' do
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
-    end
-
     describe file("#{tmpdir}/ini_subsetting.ini") do
-      it { is_expected.to be_file }
-
-      describe '#content' do
-        subject { super().content }
-
-        it { is_expected.to match %r{\[one\]\nkey = alphabet betatrons} }
-      end
+      it_behaves_like 'has_content', "#{tmpdir}/ini_subsetting.ini", pp, %r{\[one\]\nkey = alphabet betatrons}
     end
   end
 
@@ -110,10 +99,10 @@ describe 'ini_subsetting resource' do
 
   describe 'quote_char' do
     {
-        ['-Xmx'] => %r{args=""},
-        ['-Xmx', '256m'] => %r{args=-Xmx256m},
-        ['-Xmx', '512m'] => %r{args="-Xmx512m"},
-        ['-Xms', '256m'] => %r{args="-Xmx256m -Xms256m"},
+      ['-Xmx'] => %r{args=""},
+      ['-Xmx', '256m'] => %r{args=-Xmx256m},
+      ['-Xmx', '512m'] => %r{args="-Xmx512m"},
+      ['-Xms', '256m'] => %r{args="-Xmx256m -Xms256m"},
     }.each do |parameter, content|
       context %(with '#{parameter.first}' #{(parameter.length > 1) ? '=> \'' << parameter[1] << '\'' : 'absent'} makes '#{content}') do
         path = File.join(tmpdir, 'ini_subsetting.ini')
@@ -189,29 +178,29 @@ describe 'ini_subsetting resource' do
 
   describe 'insert types:' do
     [
-        {
-            insert_type: :start,
-            content: %r{d a b c},
-        },
-        {
-            insert_type: :end,
-            content: %r{a b c d},
-        },
-        {
-            insert_type: :before,
-            insert_value: 'c',
-            content: %r{a b d c},
-        },
-        {
-            insert_type: :after,
-            insert_value: 'a',
-            content: %r{a d b c},
-        },
-        {
-            insert_type: :index,
-            insert_value: 2,
-            content: %r{a b d c},
-        },
+      {
+        insert_type: :start,
+        content: %r{d a b c},
+      },
+      {
+        insert_type: :end,
+        content: %r{a b c d},
+      },
+      {
+        insert_type: :before,
+        insert_value: 'c',
+        content: %r{a b d c},
+      },
+      {
+        insert_type: :after,
+        insert_value: 'a',
+        content: %r{a d b c},
+      },
+      {
+        insert_type: :index,
+        insert_value: 2,
+        content: %r{a b d c},
+      },
     ].each do |params|
       context "with '#{params[:insert_type]}' makes '#{params[:content]}'" do
         pp = <<-EOS
