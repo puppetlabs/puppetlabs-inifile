@@ -11,14 +11,9 @@ describe 'ini_subsetting resource' do
     before :all do
       shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
     end
-    after :all do
-      shell("cat #{path}", acceptable_exit_codes: [0, 1, 2])
-      shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
-    end
 
     it 'applies the manifest twice' do
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      idempotent_apply(default, pp, {})
     end
 
     describe file(path) do
@@ -36,10 +31,6 @@ describe 'ini_subsetting resource' do
 
   shared_examples 'has_error' do |path, pp, error|
     before :all do
-      shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
-    end
-    after :all do
-      shell("cat #{path}", acceptable_exit_codes: [0, 1, 2])
       shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
     end
 
@@ -90,14 +81,6 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'ensure => absent' do
-    before :all do
-      if fact('osfamily') == 'Darwin'
-        shell("echo \"[one]\nkey = alphabet betatrons\" > #{tmpdir}/ini_subsetting.ini")
-      else
-        shell("echo -e \"[one]\nkey = alphabet betatrons\" > #{tmpdir}/ini_subsetting.ini")
-      end
-    end
-
     pp = <<-EOS
     ini_subsetting { 'ensure => absent for subsetting':
       ensure     => absent,
@@ -109,8 +92,7 @@ describe 'ini_subsetting resource' do
     EOS
 
     it 'applies the manifest twice' do
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      idempotent_apply(default, pp, {})
     end
 
     describe file("#{tmpdir}/ini_subsetting.ini") do
@@ -126,82 +108,12 @@ describe 'ini_subsetting resource' do
     end
   end
 
-  describe 'subsetting_separator' do
-    {
-      '' => %r{two = twinethree foobar},
-      "subsetting_separator => ',',"    => %r{two = twinethree,foobar},
-      "subsetting_separator => '   ',"  => %r{two = twinethree   foobar},
-      "subsetting_separator => ' == '," => %r{two = twinethree == foobar},
-      "subsetting_separator => '=',"    => %r{two = twinethree=foobar},
-    }.each do |parameter, content|
-      context "with \"#{parameter}\" makes \"#{content}\"" do
-        pp = <<-EOS
-        ini_subsetting { "with #{parameter} makes #{content}":
-          ensure     => present,
-          section    => 'one',
-          setting    => 'two',
-          subsetting => 'twine',
-          value      => 'three',
-          path       => "#{tmpdir}/subsetting_separator.ini",
-          before     => Ini_subsetting['foobar'],
-          #{parameter}
-        }
-        ini_subsetting { "foobar":
-          ensure     => present,
-          section    => 'one',
-          setting    => 'two',
-          subsetting => 'foo',
-          value      => 'bar',
-          path       => "#{tmpdir}/subsetting_separator.ini",
-          #{parameter}
-        }
-        EOS
-
-        it_behaves_like 'has_content', "#{tmpdir}/subsetting_separator.ini", pp, content
-      end
-    end
-  end
-
-  describe 'subsetting_key_val_separator' do
-    {
-      '' => %r{two = twinethree foobar},
-      "subsetting_key_val_separator => ':',"    => %r{two = twine:three foo:bar},
-      "subsetting_key_val_separator => '-',"    => %r{two = twine-three foo-bar},
-    }.each do |parameter, content|
-      context "with '#{parameter}' makes '#{content}'" do
-        pp = <<-EOS
-        ini_subsetting { "with #{parameter} makes #{content}":
-          ensure     => 'present',
-          section    => 'one',
-          setting    => 'two',
-          subsetting => 'twine',
-          value      => 'three',
-          path       => "#{tmpdir}/subsetting_key_val_separator.ini",
-          before     => Ini_subsetting['foobar'],
-          #{parameter}
-        }
-        ini_subsetting { "foobar":
-          ensure     => 'present',
-          section    => 'one',
-          setting    => 'two',
-          subsetting => 'foo',
-          value      => 'bar',
-          path       => "#{tmpdir}/subsetting_key_val_separator.ini",
-          #{parameter}
-        }
-        EOS
-
-        it_behaves_like 'has_content', "#{tmpdir}/subsetting_key_val_separator.ini", pp, content
-      end
-    end
-  end
-
   describe 'quote_char' do
     {
-      ['-Xmx'] => %r{args=""},
-      ['-Xmx', '256m'] => %r{args=-Xmx256m},
-      ['-Xmx', '512m'] => %r{args="-Xmx512m"},
-      ['-Xms', '256m'] => %r{args="-Xmx256m -Xms256m"},
+        ['-Xmx'] => %r{args=""},
+        ['-Xmx', '256m'] => %r{args=-Xmx256m},
+        ['-Xmx', '512m'] => %r{args="-Xmx512m"},
+        ['-Xms', '256m'] => %r{args="-Xmx256m -Xms256m"},
     }.each do |parameter, content|
       context %(with '#{parameter.first}' #{(parameter.length > 1) ? '=> \'' << parameter[1] << '\'' : 'absent'} makes '#{content}') do
         path = File.join(tmpdir, 'ini_subsetting.ini')
@@ -227,8 +139,7 @@ describe 'ini_subsetting resource' do
         EOS
 
         it 'applies the manifest twice' do
-          apply_manifest(pp, catch_failures: true)
-          apply_manifest(pp, catch_changes: true)
+          idempotent_apply(default, pp, {})
         end
 
         describe file("#{tmpdir}/ini_subsetting.ini") do
@@ -278,29 +189,29 @@ describe 'ini_subsetting resource' do
 
   describe 'insert types:' do
     [
-      {
-        insert_type: :start,
-        content: %r{d a b c},
-      },
-      {
-        insert_type: :end,
-        content: %r{a b c d},
-      },
-      {
-        insert_type: :before,
-        insert_value: 'c',
-        content: %r{a b d c},
-      },
-      {
-        insert_type: :after,
-        insert_value: 'a',
-        content: %r{a d b c},
-      },
-      {
-        insert_type: :index,
-        insert_value: 2,
-        content: %r{a b d c},
-      },
+        {
+            insert_type: :start,
+            content: %r{d a b c},
+        },
+        {
+            insert_type: :end,
+            content: %r{a b c d},
+        },
+        {
+            insert_type: :before,
+            insert_value: 'c',
+            content: %r{a b d c},
+        },
+        {
+            insert_type: :after,
+            insert_value: 'a',
+            content: %r{a d b c},
+        },
+        {
+            insert_type: :index,
+            insert_value: 2,
+            content: %r{a b d c},
+        },
     ].each do |params|
       context "with '#{params[:insert_type]}' makes '#{params[:content]}'" do
         pp = <<-EOS
