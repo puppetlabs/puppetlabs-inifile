@@ -3,6 +3,61 @@ require 'spec_helper'
 ini_subsetting = Puppet::Type.type(:ini_subsetting)
 
 describe ini_subsetting do
+  describe 'quote_char validation' do
+    subject { -> { described_class.new(name: 'foo', path: path, quote_char: quote_char) } }
+
+    context 'on posix platforms' do
+      let(:path) { '/absolute/path' }
+      let(:quote_char) { '\”' }
+
+      it { is_expected.to raise_exception }
+    end
+  end
+
+  describe 'path validation' do
+    subject { -> { described_class.new(name: 'foo', path: path) } }
+
+    context 'on posix platforms' do
+      before(:each) do
+        Puppet.features.stub(:posix?) { true }
+        Puppet.features.stub(:microsoft_windows?) { false }
+        Puppet::Util::Platform.stub(:windows?) { false }
+      end
+
+      context 'with an absolute path' do
+        let(:path) { '/absolute/path' }
+
+        it { is_expected.not_to raise_exception }
+      end
+
+      context 'with a relative path' do
+        let(:path) { 'relative/path' }
+
+        it { is_expected.to raise_exception }
+      end
+    end
+
+    context 'on windows platforms' do
+      before(:each) do
+        Puppet.features.stub(:posix?) { false }
+        Puppet.features.stub(:microsoft_windows?) { true }
+        Puppet::Util::Platform.stub(:windows?) { true }
+      end
+
+      context 'with an absolute path with front slashes' do
+        let(:path) { 'c:/absolute/path' }
+
+        it { is_expected.not_to raise_exception }
+      end
+
+      context 'with a relative path with back slashes' do
+        let(:path) { 'relative\path' }
+
+        it { is_expected.to raise_exception }
+      end
+    end
+  end
+
   [true, false].product([true, false, :md5]).each do |cfg, param|
     describe "when Puppet[:show_diff] is #{cfg} and show_diff => #{param}" do
       before(:each) do
