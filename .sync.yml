@@ -1,4 +1,12 @@
 ---
+.gitlab-ci.yml:
+  unmanaged: true
+
+.rubocop.yml:
+    require:
+      - rubocop-i18n
+      - rubocop-rspec
+
 .travis.yml:
   docker_sets:
     - set: docker/centos-7
@@ -28,15 +36,10 @@ Gemfile:
           - mingw
           - x64_mingw
 
-.gitlab-ci.yml:
-  unmanaged: true
-
 Rakefile:
   requires:
     - puppet_pot_generator/rake_tasks
-     
-.rubocop.yml:
-    require:
-      - rubocop-i18n
-      - rubocop-rspec
-      
+
+spec/spec_helper.rb:
+  mock_with: ':rspec'
+  coverage_report: true
