@@ -2,9 +2,9 @@ require 'spec_helper'
 
 # This is a reduced version of ruby_spec.rb just to ensure we can subclass as
 # documented
-$LOAD_PATH << './spec/fixtures/modules/inherit_ini_setting/lib'
-provider_class = Puppet::Type.type(:inherit_ini_setting).provider(:ini_setting)
-describe provider_class do
+$LOAD_PATH << './spec/fixtures/inherit_ini_setting/lib'
+
+describe Puppet::Type.type(:inherit_ini_setting).provider(:ini_setting) do
   include PuppetlabsSpec::Files
 
   let(:tmpfile) { tmpfilename('inherit_ini_setting_test') }
@@ -23,8 +23,8 @@ describe provider_class do
     let(:orig_content) { '' }
 
     it 'parses nothing when the file is empty' do
-      provider_class.stubs(:file_path).returns(tmpfile)
-      expect(provider_class.instances).to eq([])
+      allow(described_class).to receive(:file_path).and_return(tmpfile)
+      expect(described_class.instances).to eq([])
     end
 
     context 'when the file has contents' do
@@ -37,8 +37,8 @@ describe provider_class do
       end
 
       it 'parses the results' do
-        provider_class.stubs(:file_path).returns(tmpfile)
-        instances = provider_class.instances
+        allow(described_class).to receive(:file_path).and_return(tmpfile)
+        instances = described_class.instances
         expect(instances.size).to eq(2)
         # inherited version of namevar flattens the names
         names = instances.map do |instance| instance.instance_variable_get(:@property_hash)[:name] end # rubocop:disable Style/BlockDelimiters
@@ -51,7 +51,7 @@ describe provider_class do
     let(:orig_content) { '' }
 
     it 'adds a value to the file' do
-      provider_class.stubs(:file_path).returns(tmpfile)
+      allow(described_class).to receive(:file_path).and_return(tmpfile)
       resource = Puppet::Type::Inherit_ini_setting.new(setting: 'set_this', value: 'to_that')
       provider = described_class.new(resource)
       provider.create

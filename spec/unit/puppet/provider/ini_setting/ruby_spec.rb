@@ -47,7 +47,7 @@ describe provider_class do
         end
       end
       it 'returns [] when file is empty' do
-        child_one.stubs(:file_path).returns(emptyfile)
+        expect(child_one).to receive(:file_path).and_return(emptyfile)
         expect(child_one.instances).to eq([])
       end
       child_two = Class.new(provider_class) do
@@ -90,7 +90,7 @@ describe provider_class do
             '/some/file/path'
           end
         end
-        child_three.stubs(:file_path).returns(tmpfile)
+        expect(child_three).to receive(:file_path).exactly(2).times.and_return(tmpfile)
         expect(child_three.instances.size).to eq(7)
         expected_array = [
           { name: 'section1/foo', value: 'foovalue' },
