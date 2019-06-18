@@ -2,22 +2,8 @@ require 'spec_helper_acceptance'
 require 'tmpdir'
 
 describe 'ini_setting resource' do
-  @basedir = setup_test_directory
-
-  before(:all) do
-    pp = <<-MANIFEST
-    file { '#{@basedir}':
-      ensure  => directory,
-      force   => true,
-      purge   => true,
-      recurse => true,
-    }
-    MANIFEST
-    apply_manifest(pp)
-  end
-
   after :all do
-    run_shell("rm #{@basedir}/*.ini", expect_failures: true)
+    run_shell("rm #{setup_test_directory}/*.ini", expect_failures: true)
   end
 
   shared_examples 'has_content' do |path, pp, content|
@@ -55,30 +41,34 @@ describe 'ini_setting resource' do
   end
 
   context 'ensure parameter => present for global and section' do
+    basedir = setup_test_directory
+
     pp = <<-EOS
     ini_setting { 'ensure => present for section':
       ensure  => present,
-      path    => "#{@basedir}/ini_setting.ini",
+      path    => "#{basedir}/ini_setting.ini",
       section => 'one',
       setting => 'two',
       value   => 'three',
     }
     ini_setting { 'ensure => present for global':
       ensure  => present,
-      path    => "#{@basedir}/ini_setting.ini",
+      path    => "#{basedir}/ini_setting.ini",
       section => '',
       setting => 'four',
       value   => 'five',
     }
     EOS
 
-    it_behaves_like 'has_content', "#{@basedir}/ini_setting.ini", pp, %r{four = five\n\n\[one\]\ntwo = three}
+    it_behaves_like 'has_content', "#{basedir}/ini_setting.ini", pp, %r{four = five\R\R\[one\]\Rtwo = three}
   end
 
   context 'ensure parameter => absent for key/value' do
+    basedir = setup_test_directory
+
     before :all do
       ipp = <<-MANIFEST
-        file { '#{@basedir}/ini_setting.ini':
+        file { '#{basedir}/ini_setting.ini':
           content => "four = five \n [one] \n two = three",
           force   => true,
         }
@@ -90,7 +80,7 @@ describe 'ini_setting resource' do
     pp = <<-EOS
     ini_setting { 'ensure => absent for key/value':
       ensure  => absent,
-      path    => "#{@basedir}/ini_setting.ini",
+      path    => "#{basedir}/ini_setting.ini",
       section => 'one',
       setting => 'two',
       value   => 'three',
@@ -101,7 +91,7 @@ describe 'ini_setting resource' do
       idempotent_apply(pp)
     end
 
-    describe file("#{@basedir}/ini_setting.ini") do
+    describe file("#{basedir}/ini_setting.ini") do
       it { is_expected.to be_file }
 
       describe '#content' do
@@ -115,9 +105,11 @@ describe 'ini_setting resource' do
   end
 
   context 'ensure parameter => absent for global' do
+    basedir = setup_test_directory
+
     before :all do
       ipp = <<-MANIFEST
-        file { '#{@basedir}/ini_setting.ini':
+        file { '#{basedir}/ini_setting.ini':
           content => "four = five\n [one]\n two = three",
           force   => true,
         }
@@ -129,7 +121,7 @@ describe 'ini_setting resource' do
     pp = <<-EOS
     ini_setting { 'ensure => absent for global':
       ensure  => absent,
-      path    => "#{@basedir}/ini_setting.ini",
+      path    => "#{basedir}/ini_setting.ini",
       section => '',
       setting => 'four',
       value   => 'five',
@@ -140,7 +132,7 @@ describe 'ini_setting resource' do
       idempotent_apply(pp)
     end
 
-    describe file("#{@basedir}/ini_setting.ini") do
+    describe file("#{basedir}/ini_setting.ini") do
       it { is_expected.to be_file }
 
       describe '#content' do
@@ -170,6 +162,7 @@ describe 'ini_setting resource' do
   end
 
   describe 'show_diff parameter and logging:' do
+    basedir = setup_test_directory
     setup_puppet_config_file
 
     [{ value: 'initial_value', matcher: 'created', show_diff: true },
@@ -183,7 +176,7 @@ describe 'ini_setting resource' do
             section     => 'test',
             setting     => 'something',
             value       => '#{i[:value]}',
-            path        => "#{@basedir}/test_show_diff.ini",
+            path        => "#{basedir}/test_show_diff.ini",
             show_diff   => #{i[:show_diff]}
           }
       EOS
@@ -201,25 +194,36 @@ describe 'ini_setting resource' do
   end
 
   describe 'values with spaces in the value part at the beginning or at the end' do
+    basedir = setup_test_directory
+
     pp = <<-EOS
       ini_setting { 'path => foo':
           ensure     => present,
           section    => 'one',
           setting    => 'two',
           value      => '               123',
-          path       => '#{@basedir}/ini_setting.ini',
+          path       => '#{basedir}/ini_setting.ini',
         }
     EOS
 
-    it_behaves_like 'has_content', "#{@basedir}/ini_setting.ini", pp, %r{\[one\]\ntwo = 123}
+    it_behaves_like 'has_content', "#{basedir}/ini_setting.ini", pp, %r{\[one\]\Rtwo = 123}
   end
 
   describe 'refreshonly' do
     tmp = setup_test_directory
     path = tmp + '/test.txt'
+
     before :each do
-      run_shell("echo \"[section1]\nvalueinsection1 = 123\" > #{path}")
+      ipp = <<-MANIFEST
+        file { '#{path}':
+          content => "[section1]\n valueinsection1 = 123\",
+          force   => true,
+        }
+      MANIFEST
+
+      apply_manifest(ipp)
     end
+
     after :each do
       run_shell("rm #{path}", expect_failures: true)
     end
@@ -274,7 +278,7 @@ describe 'ini_setting resource' do
         end
 
         before(:each) do
-          apply_manifest(remove_setting_manifest, expect_changes: true)
+          apply_manifest(remove_setting_manifest, expect_changes: true, expect_failures: true)
         end
 
         describe file(path) do
@@ -296,7 +300,6 @@ describe 'ini_setting resource' do
             ensure => present,
             notify => Ini_Setting['updateSetting'],
           }
-
           ini_setting { "updateSetting":
             ensure => present,
             path => "#{path}",
@@ -342,7 +345,7 @@ describe 'ini_setting resource' do
         end
 
         before(:each) do
-          apply_manifest(does_not_remove_setting_manifest, expect_changes: false)
+          apply_manifest(does_not_remove_setting_manifest, expect_changes: false, expect_failures: true)
         end
 
         describe file(path) do

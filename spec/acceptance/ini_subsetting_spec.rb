@@ -1,12 +1,8 @@
 require 'spec_helper_acceptance'
 
 describe 'ini_subsetting resource' do
-  before(:all) do
-    @basedir = setup_test_directory
-  end
-
   after :all do
-    run_shell("rm #{@basedir}/*.ini", expect_failures: true)
+    run_shell("rm #{setup_test_directory}/*.ini", expect_failures: true)
   end
 
   shared_examples 'has_content' do |path, pp, content|
@@ -46,10 +42,12 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'ensure, section, setting, subsetting, & value parameters => present with subsections' do
+    basedir = setup_test_directory
+
     pp = <<-EOS
     ini_subsetting { 'ensure => present for alpha':
       ensure     => present,
-      path       => "#{@basedir}/ini_subsetting.ini",
+      path       => "#{basedir}/ini_subsetting.ini",
       section    => 'one',
       setting    => 'key',
       subsetting => 'alpha',
@@ -57,7 +55,7 @@ describe 'ini_subsetting resource' do
     }
     ini_subsetting { 'ensure => present for beta':
       ensure     => present,
-      path       => "#{@basedir}/ini_subsetting.ini",
+      path       => "#{basedir}/ini_subsetting.ini",
       section    => 'one',
       setting    => 'key',
       subsetting => 'beta',
@@ -66,16 +64,18 @@ describe 'ini_subsetting resource' do
     }
     EOS
 
-    describe file("#{@basedir}/ini_subsetting.ini") do
-      it_behaves_like 'has_content', "#{@basedir}/ini_subsetting.ini", pp, %r{\[one\]\nkey = alphabet betatrons}
+    describe file("#{basedir}/ini_subsetting.ini") do
+      it_behaves_like 'has_content', "#{basedir}/ini_subsetting.ini", pp, %r{\[one\]\Rkey = alphabet betatrons}
     end
   end
 
   describe 'ensure => absent' do
+    basedir = setup_test_directory
+
     pp = <<-EOS
     ini_subsetting { 'ensure => absent for subsetting':
       ensure     => absent,
-      path       => "#{@basedir}/ini_subsetting.ini",
+      path       => "#{basedir}/ini_subsetting.ini",
       section    => 'one',
       setting    => 'key',
       subsetting => 'alpha',
@@ -86,7 +86,7 @@ describe 'ini_subsetting resource' do
       idempotent_apply(pp)
     end
 
-    describe file("#{@basedir}/ini_subsetting.ini") do
+    describe file("#{basedir}/ini_subsetting.ini") do
       it { is_expected.to be_file }
 
       describe '#content' do
@@ -100,6 +100,7 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'quote_char' do
+    basedir = setup_test_directory
     {
       ['-Xmx'] => %r{args=""},
       ['-Xmx', '256m'] => %r{args=-Xmx256m},
@@ -107,12 +108,18 @@ describe 'ini_subsetting resource' do
       ['-Xms', '256m'] => %r{args="-Xmx256m -Xms256m"},
     }.each do |parameter, content|
       context %(with '#{parameter.first}' #{(parameter.length > 1) ? '=> \'' << parameter[1] << '\'' : 'absent'} makes '#{content}') do
-        @basedir = setup_test_directory
-        path = File.join(@basedir, 'ini_subsetting.ini')
-
+        path = File.join(basedir, 'ini_subsetting.ini')
         before :all do
-          run_shell(%(echo '[java]\nargs=-Xmx256m' > #{path}))
+          ipp = <<-MANIFEST
+        file { '#{path}':
+          content => "[java]\nargs=-Xmx256m",
+          force   => true,
+        }
+        MANIFEST
+
+          apply_manifest(ipp)
         end
+
         after :all do
           run_shell("cat #{path}", expect_failures: true)
           run_shell("rm #{path}", expect_failures: true)
@@ -134,7 +141,7 @@ describe 'ini_subsetting resource' do
           idempotent_apply(pp)
         end
 
-        describe file("#{@basedir}/ini_subsetting.ini") do
+        describe file("#{basedir}/ini_subsetting.ini") do
           it { is_expected.to be_file }
 
           describe '#content' do
@@ -148,6 +155,8 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'show_diff parameter and logging:' do
+    basedir = setup_test_directory
+    setup_puppet_config_file
     [{ value: 'initial_value', matcher: 'created', show_diff: true },
      { value: 'public_value', matcher: %r{initial_value.*public_value}, show_diff: true },
      { value: 'secret_value', matcher: %r{redacted sensitive information.*redacted sensitive information}, show_diff: false },
@@ -160,7 +169,7 @@ describe 'ini_subsetting resource' do
             setting     => 'something',
             subsetting  => 'xxx',
             value       => '#{i[:value]}',
-            path        => "#{@basedir}/test_show_diff.ini",
+            path        => "#{basedir}/test_show_diff.ini",
             show_diff   => #{i[:show_diff]}
           }
         EOS
@@ -177,6 +186,8 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'insert types:' do
+    basedir = setup_test_directory
+
     [
       {
         insert_type: :start,
@@ -209,34 +220,34 @@ describe 'ini_subsetting resource' do
           section    => 'one',
           setting    => 'two',
           subsetting => 'a',
-          path       => "#{@basedir}/insert_types.ini",
+          path       => "#{basedir}/insert_types.ini",
         } ->
         ini_subsetting { "b":
           ensure     => present,
           section    => 'one',
           setting    => 'two',
           subsetting => 'b',
-          path       => "#{@basedir}/insert_types.ini",
+          path       => "#{basedir}/insert_types.ini",
         } ->
         ini_subsetting { "c":
           ensure     => present,
           section    => 'one',
           setting    => 'two',
           subsetting => 'c',
-          path       => "#{@basedir}/insert_types.ini",
+          path       => "#{basedir}/insert_types.ini",
         } ->
         ini_subsetting { "insert makes #{params[:content]}":
           ensure       => present,
           section      => 'one',
           setting      => 'two',
           subsetting   => 'd',
-          path         => "#{@basedir}/insert_types.ini",
+          path         => "#{basedir}/insert_types.ini",
           insert_type  => '#{params[:insert_type]}',
           insert_value => '#{params[:insert_value]}',
         }
         EOS
 
-        it_behaves_like 'has_content', "#{@basedir}/insert_types.ini", pp, params[:content]
+        it_behaves_like 'has_content', "#{basedir}/insert_types.ini", pp, params[:content]
       end
     end
   end
