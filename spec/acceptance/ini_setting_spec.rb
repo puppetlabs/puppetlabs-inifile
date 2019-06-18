@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 require 'tmpdir'
 
 describe 'ini_setting resource' do
-  @basedir=setup_test_directory
+  @basedir = setup_test_directory
 
   before(:all) do
     pp = <<-MANIFEST
@@ -14,8 +14,7 @@ describe 'ini_setting resource' do
     }
     MANIFEST
     apply_manifest(pp)
-
-    end
+  end
 
   after :all do
     run_shell("rm #{@basedir}/*.ini", expect_failures: true)
@@ -78,7 +77,6 @@ describe 'ini_setting resource' do
 
   context 'ensure parameter => absent for key/value' do
     before :all do
-
       ipp = <<-MANIFEST
         file { '#{@basedir}/ini_setting.ini':
           content => "four = five \n [one] \n two = three",
@@ -101,8 +99,7 @@ describe 'ini_setting resource' do
 
     it 'applies the manifest twice' do
       idempotent_apply(pp)
-   end
-
+    end
 
     describe file("#{@basedir}/ini_setting.ini") do
       it { is_expected.to be_file }
@@ -218,7 +215,6 @@ describe 'ini_setting resource' do
   end
 
   describe 'refreshonly' do
-
     tmp = setup_test_directory
     path = tmp + '/test.txt'
     before :each do

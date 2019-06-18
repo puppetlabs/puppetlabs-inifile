@@ -25,10 +25,10 @@ end
 
 def setup_puppet_config_file
   config_path = case os[:family]
-            when 'windows'
-              'C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf'
-            else
-              '/etc/puppetlabs/puppet/puppet.conf'
+                when 'windows'
+                  'C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf'
+                else
+                  '/etc/puppetlabs/puppet/puppet.conf'
                 end
   config_pp = <<-MANIFEST
       file { '#{config_path}':

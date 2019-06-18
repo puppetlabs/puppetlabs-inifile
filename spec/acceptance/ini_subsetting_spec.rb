@@ -153,7 +153,6 @@ describe 'ini_subsetting resource' do
      { value: 'secret_value', matcher: %r{redacted sensitive information.*redacted sensitive information}, show_diff: false },
      { value: 'md5_value', matcher: %r{\{md5\}881671aa2bbc680bc530c4353125052b.*\{md5\}ed0903a7fa5de7886ca1a7a9ad06cf51}, show_diff: :md5 }].each do |i|
       context 'show_diff => #{i[:show_diff]}' do
-
         pp = <<-EOS
           ini_subsetting { 'test_show_diff':
             ensure      => present,
