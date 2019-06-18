@@ -1,19 +1,21 @@
 require 'spec_helper_acceptance'
 
-tmpdir = default.tmpdir('tmp')
-
 describe 'ini_subsetting resource' do
+  before(:all) do
+    @basedir = setup_test_directory
+  end
+
   after :all do
-    shell("rm #{tmpdir}/*.ini", acceptable_exit_codes: [0, 1, 2])
+    run_shell("rm #{@basedir}/*.ini", expect_failures: true)
   end
 
   shared_examples 'has_content' do |path, pp, content|
     before :all do
-      shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
+      run_shell("rm #{path}", expect_failures: true)
     end
 
     it 'applies the manifest twice' do
-      idempotent_apply(default, pp, {})
+      idempotent_apply(pp)
     end
 
     describe file(path) do
@@ -31,7 +33,7 @@ describe 'ini_subsetting resource' do
 
   shared_examples 'has_error' do |path, pp, error|
     before :all do
-      shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
+      run_shell("rm #{path}", expect_failures: true)
     end
 
     it 'applies the manifest and gets a failure message' do
@@ -47,7 +49,7 @@ describe 'ini_subsetting resource' do
     pp = <<-EOS
     ini_subsetting { 'ensure => present for alpha':
       ensure     => present,
-      path       => "#{tmpdir}/ini_subsetting.ini",
+      path       => "#{@basedir}/ini_subsetting.ini",
       section    => 'one',
       setting    => 'key',
       subsetting => 'alpha',
@@ -55,7 +57,7 @@ describe 'ini_subsetting resource' do
     }
     ini_subsetting { 'ensure => present for beta':
       ensure     => present,
-      path       => "#{tmpdir}/ini_subsetting.ini",
+      path       => "#{@basedir}/ini_subsetting.ini",
       section    => 'one',
       setting    => 'key',
       subsetting => 'beta',
@@ -64,8 +66,8 @@ describe 'ini_subsetting resource' do
     }
     EOS
 
-    describe file("#{tmpdir}/ini_subsetting.ini") do
-      it_behaves_like 'has_content', "#{tmpdir}/ini_subsetting.ini", pp, %r{\[one\]\nkey = alphabet betatrons}
+    describe file("#{@basedir}/ini_subsetting.ini") do
+      it_behaves_like 'has_content', "#{@basedir}/ini_subsetting.ini", pp, %r{\[one\]\nkey = alphabet betatrons}
     end
   end
 
@@ -73,7 +75,7 @@ describe 'ini_subsetting resource' do
     pp = <<-EOS
     ini_subsetting { 'ensure => absent for subsetting':
       ensure     => absent,
-      path       => "#{tmpdir}/ini_subsetting.ini",
+      path       => "#{@basedir}/ini_subsetting.ini",
       section    => 'one',
       setting    => 'key',
       subsetting => 'alpha',
@@ -81,10 +83,10 @@ describe 'ini_subsetting resource' do
     EOS
 
     it 'applies the manifest twice' do
-      idempotent_apply(default, pp, {})
+      idempotent_apply(pp)
     end
 
-    describe file("#{tmpdir}/ini_subsetting.ini") do
+    describe file("#{@basedir}/ini_subsetting.ini") do
       it { is_expected.to be_file }
 
       describe '#content' do
@@ -105,14 +107,15 @@ describe 'ini_subsetting resource' do
       ['-Xms', '256m'] => %r{args="-Xmx256m -Xms256m"},
     }.each do |parameter, content|
       context %(with '#{parameter.first}' #{(parameter.length > 1) ? '=> \'' << parameter[1] << '\'' : 'absent'} makes '#{content}') do
-        path = File.join(tmpdir, 'ini_subsetting.ini')
+        @basedir = setup_test_directory
+        path = File.join(@basedir, 'ini_subsetting.ini')
 
         before :all do
-          shell(%(echo '[java]\nargs=-Xmx256m' > #{path}))
+          run_shell(%(echo '[java]\nargs=-Xmx256m' > #{path}))
         end
         after :all do
-          shell("cat #{path}", acceptable_exit_codes: [0, 1, 2])
-          shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
+          run_shell("cat #{path}", expect_failures: true)
+          run_shell("rm #{path}", expect_failures: true)
         end
 
         pp = <<-EOS
@@ -128,10 +131,10 @@ describe 'ini_subsetting resource' do
         EOS
 
         it 'applies the manifest twice' do
-          idempotent_apply(default, pp, {})
+          idempotent_apply(pp)
         end
 
-        describe file("#{tmpdir}/ini_subsetting.ini") do
+        describe file("#{@basedir}/ini_subsetting.ini") do
           it { is_expected.to be_file }
 
           describe '#content' do
@@ -149,7 +152,8 @@ describe 'ini_subsetting resource' do
      { value: 'public_value', matcher: %r{initial_value.*public_value}, show_diff: true },
      { value: 'secret_value', matcher: %r{redacted sensitive information.*redacted sensitive information}, show_diff: false },
      { value: 'md5_value', matcher: %r{\{md5\}881671aa2bbc680bc530c4353125052b.*\{md5\}ed0903a7fa5de7886ca1a7a9ad06cf51}, show_diff: :md5 }].each do |i|
-      context "show_diff => #{i[:show_diff]}" do
+      context 'show_diff => #{i[:show_diff]}' do
+
         pp = <<-EOS
           ini_subsetting { 'test_show_diff':
             ensure      => present,
@@ -157,13 +161,10 @@ describe 'ini_subsetting resource' do
             setting     => 'something',
             subsetting  => 'xxx',
             value       => '#{i[:value]}',
-            path        => "#{tmpdir}/test_show_diff.ini",
+            path        => "#{@basedir}/test_show_diff.ini",
             show_diff   => #{i[:show_diff]}
           }
         EOS
-
-        config = { 'main' => { 'show_diff' => true } }
-        configure_puppet_on(default, config)
 
         res = apply_manifest(pp, expect_changes: true)
         it 'applies manifest and expects changed value to be logged in proper form' do
@@ -209,34 +210,34 @@ describe 'ini_subsetting resource' do
           section    => 'one',
           setting    => 'two',
           subsetting => 'a',
-          path       => "#{tmpdir}/insert_types.ini",
+          path       => "#{@basedir}/insert_types.ini",
         } ->
         ini_subsetting { "b":
           ensure     => present,
           section    => 'one',
           setting    => 'two',
           subsetting => 'b',
-          path       => "#{tmpdir}/insert_types.ini",
+          path       => "#{@basedir}/insert_types.ini",
         } ->
         ini_subsetting { "c":
           ensure     => present,
           section    => 'one',
           setting    => 'two',
           subsetting => 'c',
-          path       => "#{tmpdir}/insert_types.ini",
+          path       => "#{@basedir}/insert_types.ini",
         } ->
         ini_subsetting { "insert makes #{params[:content]}":
           ensure       => present,
           section      => 'one',
           setting      => 'two',
           subsetting   => 'd',
-          path         => "#{tmpdir}/insert_types.ini",
+          path         => "#{@basedir}/insert_types.ini",
           insert_type  => '#{params[:insert_type]}',
           insert_value => '#{params[:insert_value]}',
         }
         EOS
 
-        it_behaves_like 'has_content', "#{tmpdir}/insert_types.ini", pp, params[:content]
+        it_behaves_like 'has_content', "#{@basedir}/insert_types.ini", pp, params[:content]
       end
     end
   end
