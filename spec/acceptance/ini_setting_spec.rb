@@ -119,7 +119,7 @@ describe 'ini_setting resource' do
     end
 
     after :all do
-      run_shell("rm #{basedir}/ini_setting.ini", acceptable_exit_codes: [0, 1, 2])
+      run_shell("rm #{basedir}/ini_setting.ini", expect_failures: true)
     end
 
     pp = <<-EOS
