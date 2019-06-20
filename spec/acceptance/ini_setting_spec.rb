@@ -118,6 +118,10 @@ describe 'ini_setting resource' do
       apply_manifest(ipp)
     end
 
+    after :all do
+      run_shell("rm #{basedir}/ini_setting.ini", acceptable_exit_codes: [0, 1, 2])
+    end
+
     pp = <<-EOS
     ini_setting { 'ensure => absent for global':
       ensure  => absent,
@@ -278,7 +282,7 @@ describe 'ini_setting resource' do
         end
 
         before(:each) do
-          apply_manifest(remove_setting_manifest, expect_changes: true, expect_failures: true)
+          apply_manifest(remove_setting_manifest, expect_changes: true)
         end
 
         describe file(path) do
@@ -345,7 +349,7 @@ describe 'ini_setting resource' do
         end
 
         before(:each) do
-          apply_manifest(does_not_remove_setting_manifest, expect_changes: false, expect_failures: true)
+          apply_manifest(does_not_remove_setting_manifest, expect_changes: false)
         end
 
         describe file(path) do

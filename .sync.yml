@@ -48,7 +48,7 @@ Gemfile:
         condition: "ENV['PUPPET_GEM_VERSION'].nil? or ENV['PUPPET_GEM_VERSION'] !~ %r{ 5}"
 
 Rakefile:
- requires:
+  requires:
   use_litmus_tasks: true
   - puppet_pot_generator/rake_tasks
 
