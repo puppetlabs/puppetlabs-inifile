@@ -2,6 +2,8 @@ require 'spec_helper_acceptance'
 require 'tmpdir'
 
 describe 'ini_setting resource' do
+  basedir = setup_test_directory
+
   after :all do
     run_shell("rm #{setup_test_directory}/*.ini", expect_failures: true)
   end
@@ -41,8 +43,6 @@ describe 'ini_setting resource' do
   end
 
   context 'ensure parameter => present for global and section' do
-    basedir = setup_test_directory
-
     pp = <<-EOS
     ini_setting { 'ensure => present for section':
       ensure  => present,
@@ -64,8 +64,6 @@ describe 'ini_setting resource' do
   end
 
   context 'ensure parameter => absent for key/value' do
-    basedir = setup_test_directory
-
     before :all do
       ipp = <<-MANIFEST
         file { '#{basedir}/ini_setting.ini':
@@ -105,8 +103,6 @@ describe 'ini_setting resource' do
   end
 
   context 'ensure parameter => absent for global' do
-    basedir = setup_test_directory
-
     before :all do
       ipp = <<-MANIFEST
         file { '#{basedir}/ini_setting.ini':
@@ -118,9 +114,9 @@ describe 'ini_setting resource' do
       apply_manifest(ipp)
     end
 
-    after :all do
-      run_shell("rm #{basedir}/ini_setting.ini", expect_failures: true)
-    end
+    # after :all do
+    #   run_shell("rm #{basedir}/ini_setting.ini", expect_failures: true)
+    # end
 
     pp = <<-EOS
     ini_setting { 'ensure => absent for global':
@@ -166,14 +162,12 @@ describe 'ini_setting resource' do
   end
 
   describe 'show_diff parameter and logging:' do
-    basedir = setup_test_directory
     setup_puppet_config_file
 
     [{ value: 'initial_value', matcher: 'created', show_diff: true },
      { value: 'public_value', matcher: %r{initial_value.*public_value}, show_diff: true },
      { value: 'secret_value', matcher: %r{redacted sensitive information.*redacted sensitive information}, show_diff: false },
      { value: 'md5_value', matcher: %r{\{md5\}881671aa2bbc680bc530c4353125052b.*\{md5\}ed0903a7fa5de7886ca1a7a9ad06cf51}, show_diff: :md5 }].each do |i|
-
       pp = <<-EOS
           ini_setting { 'test_show_diff':
             ensure      => present,
@@ -198,8 +192,6 @@ describe 'ini_setting resource' do
   end
 
   describe 'values with spaces in the value part at the beginning or at the end' do
-    basedir = setup_test_directory
-
     pp = <<-EOS
       ini_setting { 'path => foo':
           ensure     => present,
@@ -214,8 +206,7 @@ describe 'ini_setting resource' do
   end
 
   describe 'refreshonly' do
-    tmp = setup_test_directory
-    path = tmp + '/test.txt'
+    path = basedir + '/test.txt'
 
     before :each do
       ipp = <<-MANIFEST

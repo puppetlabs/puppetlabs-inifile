@@ -1,6 +1,8 @@
 require 'spec_helper_acceptance'
 
 describe 'ini_subsetting resource' do
+  basedir = setup_test_directory
+
   after :all do
     run_shell("rm #{setup_test_directory}/*.ini", expect_failures: true)
   end
@@ -42,8 +44,6 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'ensure, section, setting, subsetting, & value parameters => present with subsections' do
-    basedir = setup_test_directory
-
     pp = <<-EOS
     ini_subsetting { 'ensure => present for alpha':
       ensure     => present,
@@ -70,8 +70,6 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'ensure => absent' do
-    basedir = setup_test_directory
-
     pp = <<-EOS
     ini_subsetting { 'ensure => absent for subsetting':
       ensure     => absent,
@@ -100,7 +98,6 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'quote_char' do
-    basedir = setup_test_directory
     {
       ['-Xmx'] => %r{args=""},
       ['-Xmx', '256m'] => %r{args=-Xmx256m},
@@ -155,14 +152,14 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'show_diff parameter and logging:' do
-    basedir = setup_test_directory
     setup_puppet_config_file
+
     [{ value: 'initial_value', matcher: 'created', show_diff: true },
      { value: 'public_value', matcher: %r{initial_value.*public_value}, show_diff: true },
      { value: 'secret_value', matcher: %r{redacted sensitive information.*redacted sensitive information}, show_diff: false },
      { value: 'md5_value', matcher: %r{\{md5\}881671aa2bbc680bc530c4353125052b.*\{md5\}ed0903a7fa5de7886ca1a7a9ad06cf51}, show_diff: :md5 }].each do |i|
-      context "show_diff => #{i[:show_diff]}" do
-        pp = <<-EOS
+
+      pp = <<-EOS
           ini_subsetting { 'test_show_diff':
             ensure      => present,
             section     => 'test',
@@ -174,6 +171,7 @@ describe 'ini_subsetting resource' do
           }
         EOS
 
+      context "show_diff => #{i[:show_diff]}" do
         res = apply_manifest(pp, expect_changes: true)
         it 'applies manifest and expects changed value to be logged in proper form' do
           expect(res.stdout).to match(i[:matcher])
@@ -186,8 +184,6 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'insert types:' do
-    basedir = setup_test_directory
-
     [
       {
         insert_type: :start,
