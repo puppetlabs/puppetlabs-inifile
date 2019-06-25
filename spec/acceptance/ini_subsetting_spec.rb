@@ -4,7 +4,7 @@ describe 'ini_subsetting resource' do
   basedir = setup_test_directory
 
   after :all do
-    run_shell("rm #{setup_test_directory}/*.ini", expect_failures: true)
+    run_shell("rm #{basedir}/*.ini", expect_failures: true)
   end
 
   shared_examples 'has_content' do |path, pp, content|

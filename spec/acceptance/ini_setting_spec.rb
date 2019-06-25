@@ -1,11 +1,10 @@
 require 'spec_helper_acceptance'
-require 'tmpdir'
 
 describe 'ini_setting resource' do
   basedir = setup_test_directory
 
   after :all do
-    run_shell("rm #{setup_test_directory}/*.ini", expect_failures: true)
+    run_shell("rm #{basedir}/*.ini", expect_failures: true)
   end
 
   shared_examples 'has_content' do |path, pp, content|
@@ -114,9 +113,9 @@ describe 'ini_setting resource' do
       apply_manifest(ipp)
     end
 
-    # after :all do
-    #   run_shell("rm #{basedir}/ini_setting.ini", expect_failures: true)
-    # end
+    after :all do
+      run_shell("rm #{basedir}/ini_setting.ini", expect_failures: true)
+    end
 
     pp = <<-EOS
     ini_setting { 'ensure => absent for global':
@@ -206,11 +205,9 @@ describe 'ini_setting resource' do
   end
 
   describe 'refreshonly' do
-    path = basedir + '/test.txt'
-
     before :each do
       ipp = <<-MANIFEST
-        file { '#{path}':
+        file { '#{basedir}/ini_setting.ini':
           content => "[section1]\n valueinsection1 = 123\",
           force   => true,
         }
@@ -220,7 +217,7 @@ describe 'ini_setting resource' do
     end
 
     after :each do
-      run_shell("rm #{path}", expect_failures: true)
+      run_shell("rm #{basedir}/ini_setting.ini", expect_failures: true)
     end
     context 'when event is triggered' do
       context 'update setting value' do
@@ -232,7 +229,7 @@ describe 'ini_setting resource' do
 
           ini_setting { "updateSetting":
             ensure => present,
-            path => "#{path}",
+            path => "#{basedir}/ini_setting.ini",
             section => 'section1',
             setting => 'valueinsection1',
             value   => "newValue",
@@ -245,7 +242,7 @@ describe 'ini_setting resource' do
           apply_manifest(update_value_manifest, expect_changes: true)
         end
 
-        describe file(path) do
+        describe file("#{basedir}/ini_setting.ini") do
           it { is_expected.to be_file }
           describe '#content' do
             subject { super().content }
@@ -264,7 +261,7 @@ describe 'ini_setting resource' do
 
           ini_setting { "removeSetting":
             ensure => absent,
-            path => "#{path}",
+            path => "#{basedir}/ini_setting.ini",
             section => 'section1',
             setting => 'valueinsection1',
             refreshonly => true,
@@ -276,7 +273,7 @@ describe 'ini_setting resource' do
           apply_manifest(remove_setting_manifest, expect_changes: true)
         end
 
-        describe file(path) do
+        describe file("#{basedir}/ini_setting.ini") do
           it { is_expected.to be_file }
           describe '#content' do
             subject { super().content }
@@ -291,13 +288,13 @@ describe 'ini_setting resource' do
       context 'does not update setting' do
         let(:does_not_update_value_manifest) do
           <<-EOS
-          file { "#{path}":
+          file { "#{basedir}/ini_setting.ini":
             ensure => present,
             notify => Ini_Setting['updateSetting'],
           }
           ini_setting { "updateSetting":
             ensure => present,
-            path => "#{path}",
+            path => "#{basedir}/ini_setting.ini",
             section => 'section1',
             setting => 'valueinsection1',
             value   => "newValue",
@@ -310,7 +307,7 @@ describe 'ini_setting resource' do
           apply_manifest(does_not_update_value_manifest, expect_changes: false)
         end
 
-        describe file(path) do
+        describe file("#{basedir}/ini_setting.ini") do
           it { is_expected.to be_file }
           describe '#content' do
             subject { super().content }
@@ -324,14 +321,14 @@ describe 'ini_setting resource' do
       context 'does not remove setting' do
         let(:does_not_remove_setting_manifest) do
           <<-EOS
-          file { "#{path}":
+          file { "#{basedir}/ini_setting.ini":
             ensure => present,
             notify => Ini_Setting['removeSetting'],
           }
 
           ini_setting { "removeSetting":
             ensure => absent,
-            path => "#{path}",
+            path => "#{basedir}/ini_setting.ini",
             section => 'section1',
             setting => 'valueinsection1',
             refreshonly => true,
@@ -343,7 +340,7 @@ describe 'ini_setting resource' do
           apply_manifest(does_not_remove_setting_manifest, expect_changes: false)
         end
 
-        describe file(path) do
+        describe file("#{basedir}/ini_setting.ini") do
           it { is_expected.to be_file }
           describe '#content' do
             subject { super().content }
