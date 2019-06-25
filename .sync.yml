@@ -31,25 +31,9 @@ Gemfile:
   required:
     ':development':
       - gem: puppet-lint-i18n
-    ':system_tests':
-      - gem: 'puppet-module-posix-system-r#{minor_version}'
-        platforms: ruby
-      - gem: 'puppet-module-win-system-r#{minor_version}'
-        platforms:
-          - mswin
-          - mingw
-          - x64_mingw
-      - gem: 'puppet_litmus'
-        platforms:
-        - ruby
-        - mswin
-        - mingw
-        - x64_mingw
-        condition: "ENV['PUPPET_GEM_VERSION'].nil? or ENV['PUPPET_GEM_VERSION'] !~ %r{ 5}"
 
 Rakefile:
   requires:
-  use_litmus_tasks: true
   - puppet_pot_generator/rake_tasks
 
 spec/spec_helper.rb:
