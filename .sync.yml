@@ -34,7 +34,7 @@ Gemfile:
 
 Rakefile:
   requires:
-  - puppet_pot_generator/rake_tasks
+   - puppet_pot_generator/rake_tasks
 
 spec/spec_helper.rb:
   mock_with: ':rspec'
