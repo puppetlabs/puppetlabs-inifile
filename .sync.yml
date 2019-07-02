@@ -31,18 +31,10 @@ Gemfile:
   required:
     ':development':
       - gem: puppet-lint-i18n
-    ':system_tests':
-      - gem: 'puppet-module-posix-system-r#{minor_version}'
-        platforms: ruby
-      - gem: 'puppet-module-win-system-r#{minor_version}'
-        platforms:
-          - mswin
-          - mingw
-          - x64_mingw
 
 Rakefile:
   requires:
-    - puppet_pot_generator/rake_tasks
+   - puppet_pot_generator/rake_tasks
 
 spec/spec_helper.rb:
   mock_with: ':rspec'
