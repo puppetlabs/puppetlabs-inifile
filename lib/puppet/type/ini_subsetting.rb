@@ -71,8 +71,7 @@ Puppet::Type.newtype(:ini_subsetting) do
   end
 
   newparam(:quote_char) do
-    desc 'The character used to quote the entire value of the setting. ' +
-         %q(Valid values are '', '"' and "'")
+    desc "The character used to quote the entire value of the setting. Valid values are '', '\"' and \"'\""
     defaultto('')
 
     validate do |value|

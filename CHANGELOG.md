@@ -2,7 +2,17 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v3.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v3.0.0) (2019-04-19)
+## [v3.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v3.1.0) (2019-07-31)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v3.0.0...v3.1.0)
+
+### Added
+
+- FM-8222 - Port Module inifile to Litmus [\#344](https://github.com/puppetlabs/puppetlabs-inifile/pull/344) ([lionce](https://github.com/lionce))
+- \(FM-8154\) Add Windows Server 2019 support [\#340](https://github.com/puppetlabs/puppetlabs-inifile/pull/340) ([eimlav](https://github.com/eimlav))
+- \(FM-8041\) Add RedHat 8 support [\#339](https://github.com/puppetlabs/puppetlabs-inifile/pull/339) ([eimlav](https://github.com/eimlav))
+
+## [v3.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v3.0.0) (2019-04-22)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.5.0...v3.0.0)
 
@@ -16,10 +26,19 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [2.5.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.5.0) (2018-12-28)
 
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.4.0...2.5.0)
+
+## [2.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.4.0) (2018-09-27)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.3.0...2.4.0)
+
 ### Added
 
 - \(MODULES-8142\) - Addition of support for SLES 15 [\#315](https://github.com/puppetlabs/puppetlabs-inifile/pull/315) ([david22swan](https://github.com/david22swan))
 - \(MODULES-7560\) - removed spaces from the beginning or from the end of the value [\#311](https://github.com/puppetlabs/puppetlabs-inifile/pull/311) ([lionce](https://github.com/lionce))
+- pdksync - \(FM-7392\) - Puppet 6 Testing Changes [\#300](https://github.com/puppetlabs/puppetlabs-inifile/pull/300) ([pmcmaw](https://github.com/pmcmaw))
+- pdksync - \(MODULES-7658\) use beaker4 in puppet-module-gems [\#296](https://github.com/puppetlabs/puppetlabs-inifile/pull/296) ([tphoney](https://github.com/tphoney))
+- \(MODULES-7552\) - Addition of support for Ubuntu 18.04 to inifile [\#292](https://github.com/puppetlabs/puppetlabs-inifile/pull/292) ([david22swan](https://github.com/david22swan))
 
 ### Fixed
 
@@ -27,17 +46,6 @@ All notable changes to this project will be documented in this file. The format 
 - \(MODULES-6714\) - inifile: ensure absent not working with refreshonly = true [\#313](https://github.com/puppetlabs/puppetlabs-inifile/pull/313) ([Lavinia-Dan](https://github.com/Lavinia-Dan))
 - \(FM-7483\) - update module to the latest version [\#310](https://github.com/puppetlabs/puppetlabs-inifile/pull/310) ([lionce](https://github.com/lionce))
 - \(FM-7331\)-Fix japanese test [\#308](https://github.com/puppetlabs/puppetlabs-inifile/pull/308) ([lionce](https://github.com/lionce))
-
-## [2.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.4.0) (2018-09-27)
-
-### Added
-
-- pdksync - \(FM-7392\) - Puppet 6 Testing Changes [\#300](https://github.com/puppetlabs/puppetlabs-inifile/pull/300) ([pmcmaw](https://github.com/pmcmaw))
-- pdksync - \(MODULES-7658\) use beaker4 in puppet-module-gems [\#296](https://github.com/puppetlabs/puppetlabs-inifile/pull/296) ([tphoney](https://github.com/tphoney))
-- \(MODULES-7552\) - Addition of support for Ubuntu 18.04 to inifile [\#292](https://github.com/puppetlabs/puppetlabs-inifile/pull/292) ([david22swan](https://github.com/david22swan))
-
-### Fixed
-
 - \(MODULES-7625\) - Update README Limitations section [\#293](https://github.com/puppetlabs/puppetlabs-inifile/pull/293) ([eimlav](https://github.com/eimlav))
 
 ## 2.3.0

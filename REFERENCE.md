@@ -186,7 +186,7 @@ Default value:  =
 
 ##### `quote_char`
 
-The character used to quote the entire value of the setting.
+The character used to quote the entire value of the setting. Valid values are '', '\"' and \"'\"
 
 Default value: ''
 
