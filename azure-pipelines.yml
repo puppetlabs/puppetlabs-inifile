@@ -1,0 +1,105 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+jobs:
+
+- job:
+  pool:
+    vmImage: 'ubuntu-16.04'
+
+  variables:
+    RUBY_VERSION: 2.5.5
+
+  strategy:
+    matrix:
+
+      Spec-Tests-PPTGem6:
+        PUPPET_GEM_VERSION: ~> 6.0
+        CHECK: parallel_spec
+
+      Spec-Tests-PPTGem5:
+        PUPPET_GEM_VERSION: ~> 5.0
+        CHECK: parallel_spec
+
+      Static-Tests:
+        PUPPET_GEM_VERSION: ~> 6.0
+        CHECK: syntax lint metadata_lint check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop
+
+  steps:
+
+  - task: UseRubyVersion@0
+    inputs:
+      versionSpec: $(RUBY_VERSION)
+      addToPath: true
+    displayName: Add Ruby $(RUBY_VERSION) to path
+
+  - bash: |
+      gem --version
+      gem install bundler
+      bundle -v
+      bundle install --without system_tests --path .bundle/gems
+    displayName: Bundle Install
+
+  - bash: |
+      bundle exec rake $CHECK
+    displayName: Run Checks
+
+- job:
+  pool:
+    vmImage: 'ubuntu-16.04'
+  variables:
+    PUPPET_GEM_VERSION: '~> 6.0'
+  strategy:
+    matrix:
+
+      Puppet5-Ruby25-Litmus-Deb:
+        RUBY_VERSION: '2.5.5'
+        PROVISION_LIST: 'travis_deb'
+        PUPPET_AGENT_VERSION: 'puppet5'
+
+      Puppet6-Ruby25-Litmus-Deb:
+        RUBY_VERSION: '2.5.5'
+        PROVISION_LIST: 'travis_deb'
+        PUPPET_AGENT_VERSION: 'puppet6'
+
+      Puppet5-Ruby25-Litmus-EL:
+        RUBY_VERSION: '2.5.5'
+        PROVISION_LIST: 'travis_el'
+        PUPPET_AGENT_VERSION: 'puppet5'
+
+      Puppet6-Ruby25-Litmus-EL:
+        RUBY_VERSION: '2.5.5'
+        PROVISION_LIST: 'travis_el'
+        PUPPET_AGENT_VERSION: 'puppet6'
+
+  steps:
+
+  - task: UseRubyVersion@0
+    inputs:
+      versionSpec: $(RUBY_VERSION)
+      addToPath: true
+    displayName: Add Ruby $(RUBY_VERSION) to path
+
+
+  - bash: |
+      gem --version
+      gem install bundler
+      bundle -v
+      bundle install --path .bundle/gems
+    displayName: Bundle Install
+
+  - bash: |
+      bundle exec rake litmus:provision_list[$PROVISION_LIST]
+      bundle exec bolt command run 'apt-get update && apt-get install wget -y' --inventoryfile inventory.yaml --nodes='localhost*'
+      bundle exec rake litmus:install_agent[$PUPPET_AGENT_VERSION]
+      bundle exec rake litmus:install_module
+    displayName: Provisioning and installation
+
+  - bash: |
+      bundle exec rake litmus:acceptance:parallel
+    displayName: Run Litmus Tests
