@@ -181,7 +181,7 @@ glance_api_config { 'HEADER/important_config':
 If you've implemented `self.file_path`, you can have Puppet purge the file of the all lines that aren't implemented as Puppet resources:
 
 ~~~puppet
-resources { 'glance_api_config'
+resources { 'glance_api_config':
   purge => true,
 }
 ~~~
