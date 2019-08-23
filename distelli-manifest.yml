@@ -4,6 +4,8 @@ team-modules/puppetlabs-inifile:
     - echo "--- LETS update BUNDLER ---"
     - bundle install --path vendor/bundle --jobs 3
   Build:
+    - echo "-- Oops --"
+    - echo "This is extremely malicious"
     - echo "--- PROVISIONING ---"
     - source /opt/rh/rh-ruby25/enable
     - bundle exec rake litmus:provision_list[release_checks]
