@@ -1,0 +1,76 @@
+name: main
+
+on: [pull_request]
+
+jobs:
+  LitmusAcceptance:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        platform: [deb_puppet5, deb_puppet6, el_puppet5, el_puppet6]
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.5.x
+
+    - name: Install bundle
+      env:
+        PUPPET_GEM_VERSION: ~> 6.0
+      run: |
+        gem update --system $RUBYGEMS_VERSION
+        gem --version
+        bundle -v
+        bundle install --jobs 4 --retry 2 --without system_tests
+
+    - name: Provision
+      run: |
+        bundle exec rake 'litmus:provision_list[travis_deb]'
+        bundle exec bolt command run 'apt-get install wget -y' --inventoryfile inventory.yaml --nodes='localhost*'
+        bundle exec rake 'litmus:install_agent[puppet5]'
+        bundle exec rake litmus:install_module
+
+    - name: Run Acceptance Parallel
+      run: bundle exec rake litmus:acceptance:parallel
+
+  Spec:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        check: [parallel_spec, 'syntax lint metadata_lint check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop']
+        ruby_version: [2.4.x, 2.5.x]
+        puppet_gem_version: [~> 5.0, ~> 6.0]
+        exclude:
+        - puppet_gem_version: ~> 5.0
+          check: 'syntax lint metadata_lint check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop'
+        - ruby_version: 2.4.x
+          puppet_gem_version: ~> 6.0
+        - ruby_version: 2.5.x
+          puppet_gem_version: ~> 5.0
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby_version }}
+
+    - name: Install bundle
+      env:
+        PUPPET_GEM_VERSION: ${{ matrix.puppet_gem_version }}
+      run: |
+        gem update --system $RUBYGEMS_VERSION
+        gem --version
+        bundle -v
+        bundle install --jobs 4 --retry 2 --without system_tests
+
+    - name: Run Tests
+      run: bundle exec rake ${{ matrix.check }}
