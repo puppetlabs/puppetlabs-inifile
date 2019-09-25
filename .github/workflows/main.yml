@@ -9,7 +9,10 @@ jobs:
 
     strategy:
       matrix:
-        platform: [deb_puppet5, deb_puppet6, el_puppet5, el_puppet6]
+        ruby_version: [2.5.x]
+        puppet_gem_version: [~> 6.0]
+        platform: [travis_el, travis_deb]
+        agent_family: ['puppet5', 'puppet6']
 
     steps:
     - uses: actions/checkout@v1
@@ -17,26 +20,13 @@ jobs:
     - name: Set up Ruby
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.5.x
+        ruby-version: ${{ matrix.ruby_version }}
 
-    - name: Install bundle
-      env:
-        PUPPET_GEM_VERSION: ~> 6.0
-      run: |
-        gem update --system $RUBYGEMS_VERSION
-        gem --version
-        bundle -v
-        bundle install --jobs 4 --retry 2 --without system_tests
-
-    - name: Provision
-      run: |
-        bundle exec rake 'litmus:provision_list[travis_deb]'
-        bundle exec bolt command run 'apt-get install wget -y' --inventoryfile inventory.yaml --nodes='localhost*'
-        bundle exec rake 'litmus:install_agent[puppet5]'
-        bundle exec rake litmus:install_module
-
-    - name: Run Acceptance Parallel
-      run: bundle exec rake litmus:acceptance:parallel
+    - name: Litmus Parallel
+      uses: puppetlabs/action-litmus_parallel@master
+      with:
+        platform: ${{ matrix.platform }}
+        agent_family: ${{ matrix.agent_family }}
 
   Spec:
 
@@ -63,14 +53,8 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby_version }}
 
-    - name: Install bundle
-      env:
-        PUPPET_GEM_VERSION: ${{ matrix.puppet_gem_version }}
-      run: |
-        gem update --system $RUBYGEMS_VERSION
-        gem --version
-        bundle -v
-        bundle install --jobs 4 --retry 2 --without system_tests
-
-    - name: Run Tests
-      run: bundle exec rake ${{ matrix.check }}
+    - name: Spec Tests
+      uses: puppetlabs/action-litmus_spec@master
+      with:
+        puppet_gem_versionm: ${{ matrix.puppet_gem_version }}
+        check: ${{ matrix.check }}
