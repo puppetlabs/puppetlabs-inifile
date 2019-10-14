@@ -1,0 +1,46 @@
+name: "every24h"
+
+on:
+  schedule:
+    -
+      cron: "* */24 * * *"
+
+jobs:
+  Spec:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        check: [parallel_spec, 'syntax lint metadata_lint check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop']
+        ruby_version: [2.4.x, 2.5.x]
+        puppet_gem_version: [~> 5.0, ~> 6.0]
+        exclude:
+        - puppet_gem_version: ~> 5.0
+          check: 'syntax lint metadata_lint check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop'
+        - ruby_version: 2.4.x
+          puppet_gem_version: ~> 6.0
+        - ruby_version: 2.5.x
+          puppet_gem_version: ~> 5.0
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby_version }}
+
+    - name: Spec Tests
+      uses: puppetlabs/action-litmus_spec@master
+      with:
+        puppet_gem_versionm: ${{ matrix.puppet_gem_version }}
+        check: ${{ matrix.check }}
+
+    - name: Other Action
+      id: hello
+      uses: ./.github/actions/test-action
+      with:
+        who-to-greet: 'Test Hello World'
+
+    - name: Get output from hello
+      run: echo "The time was ${{ steps.hello.outputs.time }}"
