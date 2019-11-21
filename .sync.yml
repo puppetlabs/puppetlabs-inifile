@@ -3,7 +3,7 @@
   required:
   - "---.project"
 ".gitlab-ci.yml":
-  unmanaged: true
+  delete: true
 ".rubocop.yml":
   require:
   - rubocop-i18n
