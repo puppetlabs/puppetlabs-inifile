@@ -64,6 +64,9 @@
     services: docker
     stage: acceptance
     sudo: required
+  simplecov: true
+appveyor.yml:
+  simplecov: true
 Gemfile:
   optional:
     ":development":
