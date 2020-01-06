@@ -30,10 +30,7 @@ Puppet::Functions.create_function(:'inifile::create_ini_settings') do
     repeated_param 'Any', :arguments
   end
 
-
   def default_impl(*arguments)
-    
-
     unless arguments.size.between?(1, 2)
       raise(Puppet::ParseError, _('create_ini_settings(): Wrong number of arguments ' \
         'given (%{arguments_size} for 1 or 2)') % { arguments_size: arguments.size })
@@ -71,6 +68,5 @@ Puppet::Functions.create_function(:'inifile::create_ini_settings') do
 
     Puppet::Parser::Functions.function('create_resources')
     function_create_resources(['ini_setting', resources, defaults])
-  
   end
 end
