@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v4.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.1.0) (2020-01-15)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v4.0.0...v4.1.0)
+
+### Added
+
+- pdksync - \(FM-8581\) - Debian 10 added to travis and provision file refactored [\#374](https://github.com/puppetlabs/puppetlabs-inifile/pull/374) ([david22swan](https://github.com/david22swan))
+- Puppet 4 functions [\#373](https://github.com/puppetlabs/puppetlabs-inifile/pull/373) ([binford2k](https://github.com/binford2k))
+- pdksync - "MODULES-10242 Add ubuntu14 support back to the modules" [\#368](https://github.com/puppetlabs/puppetlabs-inifile/pull/368) ([sheenaajay](https://github.com/sheenaajay))
+- \(FM-8689\) - Addition of Support for CentOS 8 [\#366](https://github.com/puppetlabs/puppetlabs-inifile/pull/366) ([david22swan](https://github.com/david22swan))
+
 ## [v4.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.0.0) (2019-11-11)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v3.1.0...v4.0.0)
@@ -35,7 +46,6 @@ All notable changes to this project will be documented in this file. The format 
 ### Fixed
 
 - FM-7779 - Cleanup Inifile [\#328](https://github.com/puppetlabs/puppetlabs-inifile/pull/328) ([lionce](https://github.com/lionce))
-- pdksync - \(FM-7655\) Fix rubygems-update for ruby \< 2.3 [\#320](https://github.com/puppetlabs/puppetlabs-inifile/pull/320) ([tphoney](https://github.com/tphoney))
 
 ## [2.5.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.5.0) (2018-12-28)
 
@@ -55,6 +65,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Fixed
 
+- pdksync - \(FM-7655\) Fix rubygems-update for ruby \< 2.3 [\#320](https://github.com/puppetlabs/puppetlabs-inifile/pull/320) ([tphoney](https://github.com/tphoney))
 - \(MODULES-6714\) - inifile: ensure absent not working with refreshonly = true [\#313](https://github.com/puppetlabs/puppetlabs-inifile/pull/313) ([Lavinia-Dan](https://github.com/Lavinia-Dan))
 - \(FM-7483\) - update module to the latest version [\#310](https://github.com/puppetlabs/puppetlabs-inifile/pull/310) ([lionce](https://github.com/lionce))
 - \(FM-7331\)-Fix japanese test [\#308](https://github.com/puppetlabs/puppetlabs-inifile/pull/308) ([lionce](https://github.com/lionce))
