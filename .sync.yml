@@ -13,111 +13,13 @@
   secure: ''
   branches:
   - release
-  includes:
-  - bundler_args: 
-    dist: trusty
-    env: PLATFORMS=deb_puppet5
-    rvm: 2.5.3
-    before_script:
-    - bundle exec rake 'litmus:provision_list[travis_deb]'
-    - bundle exec bolt command run 'apt-get install wget -y' --inventoryfile inventory.yaml --nodes='localhost*'
-    - bundle exec rake 'litmus:install_agent[puppet5]'
-    - bundle exec rake litmus:install_module
-    script:
-    - bundle exec rake litmus:acceptance:parallel
-    services: docker
-    stage: acceptance
-    sudo: required
-  - bundler_args: 
-    dist: trusty
-    env: PLATFORM=centos:deb_puppet6
-    rvm: 2.5.3
-    before_script:
-    - bundle exec rake 'litmus:provision_list[travis_deb]'
-    - bundle exec bolt command run 'apt-get install wget -y' --inventoryfile inventory.yaml --nodes='localhost*'
-    - bundle exec rake 'litmus:install_agent[puppet6]'
-    - bundle exec rake litmus:install_module
-    script:
-    - bundle exec rake litmus:acceptance:parallel
-    services: docker
-    sudo: required
-  - bundler_args: 
-    dist: trusty
-    env: PLATFORMS=ub_puppet5
-    rvm: 2.5.3
-    before_script:
-    - bundle exec rake 'litmus:provision_list[travis_ub]'
-    - bundle exec bolt command run 'apt-get install wget -y' --inventoryfile inventory.yaml --nodes='localhost*'
-    - bundle exec rake 'litmus:install_agent[puppet5]'
-    - bundle exec rake litmus:install_module
-    script:
-    - bundle exec rake litmus:acceptance:parallel
-    services: docker
-    stage: acceptance
-    sudo: required
-  - bundler_args: 
-    dist: trusty
-    env: PLATFORM=centos:ub_puppet6
-    rvm: 2.5.3
-    before_script:
-    - bundle exec rake 'litmus:provision_list[travis_ub]'
-    - bundle exec bolt command run 'apt-get install wget -y' --inventoryfile inventory.yaml --nodes='localhost*'
-    - bundle exec rake 'litmus:install_agent[puppet6]'
-    - bundle exec rake litmus:install_module
-    script:
-    - bundle exec rake litmus:acceptance:parallel
-    services: docker
-    sudo: required
-  - bundler_args: 
-    dist: trusty
-    env: PLATFORMS=el6_puppet5
-    rvm: 2.5.3
-    before_script:
-    - bundle exec rake 'litmus:provision_list[travis_el6]'
-    - bundle exec rake 'litmus:install_agent[puppet5]'
-    - bundle exec rake litmus:install_module
-    script:
-    - bundle exec rake litmus:acceptance:parallel
-    services: docker
-    sudo: required
-  - bundler_args: 
-    dist: trusty
-    env: PLATFORM=centos:el6_puppet6
-    rvm: 2.5.3
-    before_script:
-    - bundle exec rake 'litmus:provision_list[travis_el6]'
-    - bundle exec rake 'litmus:install_agent[puppet6]'
-    - bundle exec rake litmus:install_module
-    script:
-    - bundle exec rake litmus:acceptance:parallel
-    services: docker
-    stage: acceptance
-    sudo: required
-  - bundler_args: 
-    dist: trusty
-    env: PLATFORMS=el7_puppet5
-    rvm: 2.5.3
-    before_script:
-    - bundle exec rake 'litmus:provision_list[travis_el7]'
-    - bundle exec rake 'litmus:install_agent[puppet5]'
-    - bundle exec rake litmus:install_module
-    script:
-    - bundle exec rake litmus:acceptance:parallel
-    services: docker
-    sudo: required
-  - bundler_args: 
-    dist: trusty
-    env: PLATFORM=centos:el7_puppet6
-    rvm: 2.5.3
-    before_script:
-    - bundle exec rake 'litmus:provision_list[travis_el7]'
-    - bundle exec rake 'litmus:install_agent[puppet6]'
-    - bundle exec rake litmus:install_module
-    script:
-    - bundle exec rake litmus:acceptance:parallel
-    services: docker
-    stage: acceptance
-    sudo: required
+  use_litmus: true
+  litmus:
+    provision_list:
+      - travis_ub
+      - travis_el6
+      - travis_el7
+      - ---travis_el
   simplecov: true
   notifications:
     slack:
