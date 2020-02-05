@@ -6,6 +6,8 @@
   - rubocop-i18n
   - rubocop-rspec
 ".travis.yml":
+  global_env: 
+    - HONEYCOMB_WRITEKEY="7f3c63a70eecc61d635917de46bea4e6",HONEYCOMB_DATASET="litmus tests"
   dist: trusty
   deploy_to_forge:
     enabled: false
@@ -30,7 +32,7 @@
     sudo: required
   - bundler_args: 
     dist: trusty
-    env: PLATFORM=centos:deb_puppet6
+    env: PLATFORM=deb_puppet6
     rvm: 2.5.3
     before_script:
     - bundle exec rake 'litmus:provision_list[travis_deb]'
@@ -57,7 +59,7 @@
     sudo: required
   - bundler_args: 
     dist: trusty
-    env: PLATFORM=centos:ub_puppet6
+    env: PLATFORM=ub_puppet6
     rvm: 2.5.3
     before_script:
     - bundle exec rake 'litmus:provision_list[travis_ub]'
@@ -82,7 +84,7 @@
     sudo: required
   - bundler_args: 
     dist: trusty
-    env: PLATFORM=centos:el6_puppet6
+    env: PLATFORM=el6_puppet6
     rvm: 2.5.3
     before_script:
     - bundle exec rake 'litmus:provision_list[travis_el6]'
@@ -107,7 +109,7 @@
     sudo: required
   - bundler_args: 
     dist: trusty
-    env: PLATFORM=centos:el7_puppet6
+    env: PLATFORM=el7_puppet6
     rvm: 2.5.3
     before_script:
     - bundle exec rake 'litmus:provision_list[travis_el7]'
@@ -123,6 +125,9 @@
     slack:
       secure: f7XbE9eVRGVVLoq1BYsib9T+elBhFoAs/Vojg1OaxFAixZSMAbHq+6egsAZuToSXwwo2XIYeBYbnyomvoKDrMw1UDQ93vc85AwZBvk4pKsPpF+jfgX+az56pu7LeZmEcDk+eWvvH2PPhOJmJpYcWR/gRKQciGSGHBiMgD8UmenU=
 appveyor.yml:
+  environment:
+    HONEYCOMB_WRITEKEY: 7f3c63a70eecc61d635917de46bea4e6
+    HONEYCOMB_DATASET: litmus tests
   simplecov: true
 Gemfile:
   optional:
