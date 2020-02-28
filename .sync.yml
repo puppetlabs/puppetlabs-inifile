@@ -31,6 +31,15 @@ appveyor.yml:
   environment:
     HONEYCOMB_WRITEKEY: 7f3c63a70eecc61d635917de46bea4e6
     HONEYCOMB_DATASET: litmus tests
+  use_litmus: true
+  matrix_extras:
+  - RUBY_VERSION: 25-x64
+    ACCEPTANCE: 'yes'
+    TARGET_HOST: localhost
+  - RUBY_VERSION: 25-x64
+    ACCEPTANCE: 'yes'
+    TARGET_HOST: localhost
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
   simplecov: true
 Gemfile:
   optional:
