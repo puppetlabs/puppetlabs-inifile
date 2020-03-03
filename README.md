@@ -188,12 +188,12 @@ resources { 'glance_api_config':
 
 ### Manage multiple ini_settings
 
-To manage multiple `ini_settings`, use the [`create_ini_settings`](#function-create_ini_settings) function.
+To manage multiple `ini_settings`, use the [`inifile::create_ini_settings`](REFERENCE.md#inifilecreate_ini_settings) function.
 
 ~~~puppet
 $defaults = { 'path' => '/tmp/foo.ini' }
 $example = { 'section1' => { 'setting1' => 'value1' } }
-create_ini_settings($example, $defaults)
+inifile::create_ini_settings($example, $defaults)
 ~~~
 
 Results in:
@@ -220,7 +220,7 @@ $example = {
     }
   }
 }
-create_ini_settings($example, $defaults)
+inifile::create_ini_settings($example, $defaults)
 ~~~
 
 Results in:
@@ -243,17 +243,14 @@ ini_setting { '[section1] setting2':
 
 #### Manage multiple ini_settings with Hiera
 
-This example requires Puppet 3.x/4.x, as it uses automatic retrieval of Hiera data for class parameters and `puppetlabs/stdlib`.
-
 For the profile `example`:
 
 ~~~puppet
 class profile::example (
-  $settings,
+  Hash $settings,
 ) {
-  validate_hash($settings)
   $defaults = { 'path' => '/tmp/foo.ini' }
-  create_ini_settings($settings, $defaults)
+  inifile::create_ini_settings($settings, $defaults)
 }
 ~~~
 
@@ -299,8 +296,6 @@ See [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-inifile/blob/master/
 
 <a id="limitations"></a>
 ## Limitations
-
-Due to (PUP-4709) the create_ini_settings function will cause errors when attempting to create multiple ini_settings in one go when using Puppet 4.0.x or 4.1.x. If needed, the temporary fix for this can be found here: https://github.com/puppetlabs/puppetlabs-inifile/pull/196.
 
 For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-inifile/blob/master/metadata.json)
 

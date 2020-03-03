@@ -26,3 +26,12 @@ if ENV['COVERAGE'] == 'yes'
     end
   end
 end
+
+shared_examples 'create_ini_settings function' do
+  it { is_expected.not_to eq(nil) }
+  it { is_expected.to run.with_params({}) }
+  it { is_expected.to run.with_params({}, {}) }
+
+  it { is_expected.to run.with_params('section' => { 'setting' => 'value' }).and_raise_error(Puppet::ParseError, %r{must pass the path parameter}) }
+  it { is_expected.to run.with_params(1 => 2).and_raise_error(Puppet::ParseError, %r{Section 1 must contain a Hash}) }
+end
