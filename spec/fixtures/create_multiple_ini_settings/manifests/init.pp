@@ -9,12 +9,11 @@ class create_multiple_ini_settings {
   $example = {
     'section1' => {
       'setting1'  => 'value1',
-      'settings2' => {
+      'setting2' => {
         'ensure' => 'absent'
       }
     }
   }
 
-  create_ini_settings($example, $defaults)
+  inifile::create_ini_settings($example, $defaults)
 }
-
