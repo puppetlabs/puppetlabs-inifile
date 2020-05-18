@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+require 'singleton'
+
+class LitmusHelper
+  include Singleton
+  include PuppetLitmus
+end
+
 def setup_test_directory
   basedir = case os[:family]
             when 'windows'
@@ -19,7 +26,7 @@ def setup_test_directory
       force   => true,
     }
   MANIFEST
-  apply_manifest(pp)
+  LitmusHelper.instance.apply_manifest(pp)
   basedir
 end
 
@@ -36,5 +43,5 @@ def setup_puppet_config_file
         force   => true,
       }
   MANIFEST
-  apply_manifest(config_pp)
+  LitmusHelper.instance.apply_manifest(config_pp)
 end
