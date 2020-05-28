@@ -61,6 +61,13 @@ Gemfile:
   required:
     ":development":
     - gem: puppet-lint-i18n
+    - gem: bolt
+      version: = 2.6.0
+      condition: Gem::Version.new(RUBY_VERSION.dup) > Gem::Version.new('2.5.0')
+      platforms:
+        - mswin
+        - mingw
+        - x64_mingw
 Rakefile:
   requires:
   - puppet_pot_generator/rake_tasks
