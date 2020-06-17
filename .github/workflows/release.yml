@@ -1,9 +1,6 @@
 name: "release"
 
-on: 
-  push:
-    branches:
-      - 'release'
+on: [pull_request] 
 
 jobs:
   LitmusAcceptancePuppet5:
