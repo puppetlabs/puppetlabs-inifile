@@ -217,6 +217,14 @@ Default value: end
 
 The value for the insert types which require one.
 
+##### `delete_if_empty`
+
+Valid values: `true`, `false`
+
+Set to true to delete the parent setting when the subsetting is empty instead of writing an empty string
+
+Default value: `false`
+
 ## Functions
 
 ### create_ini_settings

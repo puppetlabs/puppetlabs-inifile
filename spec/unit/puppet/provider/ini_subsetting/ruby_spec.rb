@@ -321,4 +321,41 @@ describe provider_class do
       validate_file(expected_content_four, tmpfile)
     end
   end
+
+  context 'when delete_if_empty is toggled to true' do
+    let(:common_params) do
+      {
+        title: 'ini_setting_delete_if_empty_test',
+        path: tmpfile,
+        section: 'master',
+        delete_if_empty: true,
+      }
+    end
+
+    let(:orig_content) do
+      <<-EOS
+        [master]
+        reports = http
+        something = else
+      EOS
+    end
+
+    expected_content_one = <<-EOS
+        [master]
+        something = else
+    EOS
+
+    expected_content_two = ''
+
+    it 'removes the subsetting when the it is empty' do
+      resource = Puppet::Type::Ini_subsetting.new(common_params.merge(setting: 'reports', subsetting: 'http', subsetting_separator: ','))
+      provider = described_class.new(resource)
+      provider.destroy
+      validate_file(expected_content_one, tmpfile)
+      resource = Puppet::Type::Ini_subsetting.new(common_params.merge(setting: 'something', subsetting: 'else', subsetting_separator: ','))
+      provider = described_class.new(resource)
+      provider.destroy
+      validate_file(expected_content_two, tmpfile)
+    end
+  end
 end
