@@ -97,6 +97,45 @@ describe 'ini_subsetting resource' do
     end
   end
 
+  describe 'delete_if_empty => true' do
+    pp = <<-EOS
+    ini_subsetting { 'ensure => absent for alpha':
+      ensure          => absent,
+      path            => "#{basedir}/ini_subsetting.ini",
+      section         => 'one',
+      setting         => 'key',
+      subsetting      => 'alpha',
+      delete_if_empty => true,
+    }
+    ini_subsetting { 'ensure => absent for beta':
+      ensure          => absent,
+      path            => "#{basedir}/ini_subsetting.ini",
+      section         => 'one',
+      setting         => 'key',
+      subsetting      => 'beta',
+      delete_if_empty => true,
+    }
+    EOS
+
+    it 'applies the manifest twice' do
+      run_shell("echo -e [one]\\\\nkey = alphabet betatrons > #{basedir}/ini_subsetting.ini", expect_failures: true)
+      idempotent_apply(pp)
+    end
+
+    describe file("#{basedir}/ini_subsetting.ini") do
+      it { is_expected.to be_file }
+
+      describe '#content' do
+        subject { super().content }
+
+        it { is_expected.not_to match %r{\[one\]} }
+        it { is_expected.not_to match %r{key =} }
+        it { is_expected.not_to match %r{alphabet} }
+        it { is_expected.not_to match %r{betatrons} }
+      end
+    end
+  end
+
   describe 'quote_char' do
     {
       ['-Xmx'] => %r{args=""},
@@ -108,11 +147,11 @@ describe 'ini_subsetting resource' do
         path = File.join(basedir, 'ini_subsetting.ini')
         before :all do
           ipp = <<-MANIFEST
-        file { '#{path}':
-          content => "[java]\nargs=-Xmx256m",
-          force   => true,
-        }
-        MANIFEST
+          file { '#{path}':
+            content => "[java]\nargs=-Xmx256m",
+            force   => true,
+          }
+          MANIFEST
 
           apply_manifest(ipp)
         end
@@ -159,7 +198,7 @@ describe 'ini_subsetting resource' do
      { value: 'secret_value', matcher: %r{redacted sensitive information.*redacted sensitive information}, show_diff: false },
      { value: 'md5_value', matcher: %r{\{md5\}881671aa2bbc680bc530c4353125052b.*\{md5\}ed0903a7fa5de7886ca1a7a9ad06cf51}, show_diff: :md5 }].each do |i|
 
-      pp = <<-EOS
+       pp = <<-EOS
           ini_subsetting { 'test_show_diff':
             ensure      => present,
             section     => 'test',
@@ -169,18 +208,18 @@ describe 'ini_subsetting resource' do
             path        => "#{basedir}/test_show_diff.ini",
             show_diff   => #{i[:show_diff]}
           }
-        EOS
+       EOS
 
-      context "show_diff => #{i[:show_diff]}" do
-        res = apply_manifest(pp, expect_changes: true)
-        it 'applies manifest and expects changed value to be logged in proper form' do
-          expect(res.stdout).to match(i[:matcher])
-        end
-        it 'applies manifest and expects changed value to be logged in proper form #optional test' do
-          expect(res.stdout).not_to match(i[:value]) unless i[:show_diff] == true
-        end
-      end
-    end
+       context "show_diff => #{i[:show_diff]}" do
+         res = apply_manifest(pp, expect_changes: true)
+         it 'applies manifest and expects changed value to be logged in proper form' do
+           expect(res.stdout).to match(i[:matcher])
+         end
+         it 'applies manifest and expects changed value to be logged in proper form #optional test' do
+           expect(res.stdout).not_to match(i[:value]) unless i[:show_diff] == true
+         end
+       end
+     end
   end
 
   describe 'insert types:' do

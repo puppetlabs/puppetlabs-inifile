@@ -123,4 +123,10 @@ Puppet::Type.newtype(:ini_subsetting) do
   newparam(:insert_value) do
     desc 'The value for the insert types which require one.'
   end
+
+  newparam(:delete_if_empty) do
+    desc 'Set to true to delete the parent setting when the subsetting is empty instead of writing an empty string'
+    newvalues(:true, :false)
+    defaultto(:false)
+  end
 end

@@ -24,7 +24,11 @@ Puppet::Type.type(:ini_subsetting).provide(:ruby) do
 
   def destroy
     setting_value.remove_subsetting(subsetting, resource[:use_exact_match])
-    ini_file.set_value(section, setting, key_val_separator, setting_value.get_value)
+    if setting_value.get_value.empty? && resource[:delete_if_empty]
+      ini_file.remove_setting(section, setting)
+    else
+      ini_file.set_value(section, setting, key_val_separator, setting_value.get_value)
+    end
     ini_file.save
     @ini_file = nil
     @setting_value = nil
