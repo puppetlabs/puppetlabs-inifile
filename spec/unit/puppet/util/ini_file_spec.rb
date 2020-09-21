@@ -177,12 +177,12 @@ describe Puppet::Util::IniFile do
   context 'the file has quotation marks in its section names' do
     let(:sample_content) do
       template = <<-EOS
-        [branch "master"]
+        [branch "main"]
                 remote = origin
-                merge = refs/heads/master
+                merge = refs/heads/main
 
         [alias]
-        to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/master
+        to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/main
         [branch "production"]
                 remote = origin
                 merge = refs/heads/production
@@ -192,7 +192,7 @@ describe Puppet::Util::IniFile do
 
     it 'parses the sections' do
       expect(ini_sub.section_names).to match_array ['',
-                                                    'branch "master"',
+                                                    'branch "main"',
                                                     'alias',
                                                     'branch "production"']
     end

@@ -71,7 +71,7 @@ describe provider_class do
           foo=foovalue
 
           bar = barvalue
-          master = true
+          main = true
           [section2]
 
           foo= foovalue2
@@ -95,7 +95,7 @@ describe provider_class do
         expected_array = [
           { name: 'section1/foo', value: 'foovalue' },
           { name: 'section1/bar', value: 'barvalue' },
-          { name: 'section1/master', value: 'true' },
+          { name: 'section1/main', value: 'true' },
           { name: 'section2/foo', value: 'foovalue2' },
           { name: 'section2/baz', value: 'bazvalue' },
           { name: 'section2/url', value: 'http://192.168.1.1:8080' },
@@ -126,7 +126,7 @@ describe provider_class do
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -149,7 +149,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -179,7 +179,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -209,7 +209,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -239,7 +239,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -270,7 +270,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -301,7 +301,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -331,7 +331,7 @@ yahoo = yippee
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -360,7 +360,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = false
+main = false
 [section2]
 
 foo= foovalue2
@@ -375,7 +375,7 @@ subby=bar
   shoes = purple
     EOS
     it 'modifies an existing setting with a different boolean value' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'master', value: false))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'main', value: false))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       transaction = instance_double('transaction', persistence: true)
@@ -391,7 +391,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -420,7 +420,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -449,7 +449,7 @@ subby=foo
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -478,7 +478,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -520,7 +520,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -552,7 +552,7 @@ huzzah = shazaam
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -584,7 +584,7 @@ huzzah = shazaam
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -616,7 +616,7 @@ huzzah = shazaam
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -650,7 +650,7 @@ huzzah = shazaam
     end
 
     it 'is able to handle variables of any type' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'master', value: true))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'main', value: true))
       provider = described_class.new(resource)
       expect(provider.value).to eq('true')
     end
@@ -931,7 +931,7 @@ bar baz
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -957,7 +957,7 @@ EOS
 ; This is also a comment
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -990,7 +990,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -1021,7 +1021,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -1054,7 +1054,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -1087,7 +1087,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -1119,7 +1119,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section2]
 
 foo= foovalue2
@@ -1154,7 +1154,7 @@ subby=bar
      foo=foovalue
 
      bar = barvalue
-     master = true
+     main = true
 
 [section2]
   foo= foovalue2
@@ -1175,7 +1175,7 @@ subby=bar
      foo=foovalue
 
      bar = barvalue
-     master = true
+     main = true
      yahoo = yippee
 
 [section2]
@@ -1203,7 +1203,7 @@ subby=bar
      foo=foovalue
 
      bar = barvalue2
-     master = true
+     main = true
 
 [section2]
   foo= foovalue2
@@ -1230,7 +1230,7 @@ subby=bar
      foo=foovalue
 
      bar = barvalue
-     master = true
+     main = true
 
 [section2]
   foo= foovalue2
@@ -1258,7 +1258,7 @@ subby=bar
      foo=foovalue
 
      bar = barvalue
-     master = true
+     main = true
 
 [section2]
   foo= foovalue2
@@ -1285,7 +1285,7 @@ subby=bar
      foo=foovalue
 
      bar = barvalue
-     master = true
+     main = true
 
 [section2]
   foo= foovalue2
@@ -1313,7 +1313,7 @@ subby=bar
      foo=foovalue
 
      bar = barvalue
-     master = true
+     main = true
 
 [section2]
   foo= foovalue2
@@ -1340,7 +1340,7 @@ subby=bar
      foo=foovalue
 
      bar = barvalue
-     master = true
+     main = true
 
 [section2]
   foo= foovalue2
@@ -1507,7 +1507,7 @@ bar = barvalue2
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section - two]
 
 foo= foovalue2
@@ -1527,7 +1527,7 @@ subby=bar
 foo=foovalue
 
 bar = barvalue
-master = true
+main = true
 [section - two]
 
 foo= foovalue2
@@ -1552,12 +1552,12 @@ subby=bar
   context 'when sections have spaces and quotations' do
     let(:orig_content) do
       <<-EOS
-[branch "master"]
+[branch "main"]
         remote = origin
-        merge = refs/heads/master
+        merge = refs/heads/main
 
 [alias]
-to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/master
+to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/main
 [branch "production"]
         remote = origin
         merge = refs/heads/production
@@ -1565,12 +1565,12 @@ to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/produc
     end
 
     expected_content_one = <<-EOS
-[branch "master"]
+[branch "main"]
         remote = origin
-        merge = refs/heads/master
+        merge = refs/heads/main
 
 [alias]
-to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/master
+to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/main
 foo = bar
 [branch "production"]
         remote = origin
