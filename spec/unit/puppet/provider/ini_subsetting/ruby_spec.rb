@@ -150,21 +150,21 @@ describe provider_class do
       {
         title: 'ini_setting_ensure_present_test',
         path: tmpfile,
-        section: 'master',
+        section: 'main',
         setting: 'reports',
       }
     end
 
     let(:orig_content) do
       <<-EOS
-        [master]
+        [main]
 
         reports = http,foo
       EOS
     end
 
     expected_content_one = <<-EOS
-        [master]
+        [main]
 
         reports = foo
     EOS
@@ -177,7 +177,7 @@ describe provider_class do
     end
 
     expected_content_two = <<-EOS
-        [master]
+        [main]
 
         reports = http,foo,puppetdb
     EOS
@@ -190,7 +190,7 @@ describe provider_class do
     end
 
     expected_content_three = <<-EOS
-        [master]
+        [main]
 
         reports = http,foo
         somenewsetting = puppetdb
@@ -209,7 +209,7 @@ describe provider_class do
       {
         title: 'ini_setting_ensure_present_test',
         path: tmpfile,
-        section: 'master',
+        section: 'main',
         setting: 'reports',
         use_exact_match: true,
       }
@@ -217,14 +217,14 @@ describe provider_class do
 
     let(:orig_content) do
       <<-EOS
-        [master]
+        [main]
 
         reports = http,foo
       EOS
     end
 
     expected_content_one = <<-EOS
-        [master]
+        [main]
 
         reports = http,foo,fo
     EOS
@@ -236,7 +236,7 @@ describe provider_class do
     end
 
     expected_content_two = <<-EOS
-        [master]
+        [main]
 
         reports = http,foo
     EOS
@@ -254,7 +254,7 @@ describe provider_class do
       {
         title: 'ini_setting_ensure_present_test',
         path: tmpfile,
-        section: 'master',
+        section: 'main',
         setting: 'reports',
         subsetting_separator: ',',
         subsetting_key_val_separator: ':',
@@ -263,14 +263,14 @@ describe provider_class do
 
     let(:orig_content) do
       <<-EOS
-        [master]
+        [main]
 
         reports = a:1,b:2
       EOS
     end
 
     expected_content_one = <<-EOS
-        [master]
+        [main]
 
         reports = a:1,b:2,c:3
     EOS
@@ -282,7 +282,7 @@ describe provider_class do
     end
 
     expected_content_two = <<-EOS
-        [master]
+        [main]
 
         reports = a:1,b:2
         somenewsetting = c:3
@@ -296,7 +296,7 @@ describe provider_class do
     end
 
     expected_content_three = <<-EOS
-        [master]
+        [main]
 
         reports = a:1
     EOS
@@ -309,7 +309,7 @@ describe provider_class do
     end
 
     expected_content_four = <<-EOS
-        [master]
+        [main]
 
         reports = a:1,b:5
     EOS
@@ -327,21 +327,21 @@ describe provider_class do
       {
         title: 'ini_setting_delete_if_empty_test',
         path: tmpfile,
-        section: 'master',
+        section: 'main',
         delete_if_empty: true,
       }
     end
 
     let(:orig_content) do
       <<-EOS
-        [master]
+        [main]
         reports = http
         something = else
       EOS
     end
 
     expected_content_one = <<-EOS
-        [master]
+        [main]
         something = else
     EOS
 

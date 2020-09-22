@@ -1,6 +1,6 @@
 # inifile
 
-[![Build Status](https://travis-ci.org/puppetlabs/puppetlabs-inifile.png?branch=master)](https://travis-ci.org/puppetlabs/puppetlabs-inifile)
+[![Build Status](https://travis-ci.org/puppetlabs/puppetlabs-inifile.png?branch=main)](https://travis-ci.org/puppetlabs/puppetlabs-inifile)
 
 #### Table of Contents
 
@@ -292,12 +292,12 @@ ini_setting { '[section1] setting3':
 
 <a id="reference"></a> 
 ## Reference
-See [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-inifile/blob/master/REFERENCE.md)
+See [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-inifile/blob/main/REFERENCE.md)
 
 <a id="limitations"></a>
 ## Limitations
 
-For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-inifile/blob/master/metadata.json)
+For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-inifile/blob/main/metadata.json)
 
 <a id="development"></a> 
 ## Development
