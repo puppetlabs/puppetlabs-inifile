@@ -33,7 +33,7 @@ describe 'create_multiple_ini_settings' do
 
   context 'on a Windows platform', if: Puppet::Util::Platform.windows? do
     let(:facts) do
-      { 'osfamily' => 'windows' }
+      { 'os' => { 'family' => 'windows' } }
     end
 
     it { is_expected.to compile }
