@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v4.3.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.3.1) (2020-11-09)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v4.3.0...v4.3.1)
+
+### Fixed
+
+- \(IAC-992\) - Removal of inappropriate terminology [\#415](https://github.com/puppetlabs/puppetlabs-inifile/pull/415) ([david22swan](https://github.com/david22swan))
+
 ## [v4.3.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.3.0) (2020-09-10)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v4.2.0...v4.3.0)
@@ -11,10 +19,6 @@ All notable changes to this project will be documented in this file. The format 
 - pdksync - \(IAC-973\) - Update travis/appveyor to run on new default branch `main` [\#407](https://github.com/puppetlabs/puppetlabs-inifile/pull/407) ([david22swan](https://github.com/david22swan))
 - Add delete\_if\_empty parameter to the ini\_subsetting type/provider [\#405](https://github.com/puppetlabs/puppetlabs-inifile/pull/405) ([mmarod](https://github.com/mmarod))
 - \(IAC-746\) - Add ubuntu 20.04 support [\#396](https://github.com/puppetlabs/puppetlabs-inifile/pull/396) ([david22swan](https://github.com/david22swan))
-
-### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
-
-- \(maint\) pin bolt to version 2.23.0 [\#411](https://github.com/puppetlabs/puppetlabs-inifile/pull/411) ([adrianiurca](https://github.com/adrianiurca))
 
 ## [v4.2.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.2.0) (2020-04-27)
 
