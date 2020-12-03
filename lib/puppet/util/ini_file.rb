@@ -168,7 +168,7 @@ module Puppet::Util
               # if they are at the end of a section, we can insert
               # any new settings *before* the final chunk of whitespace
               # lines.
-              if line =~ %r{^\s*$}
+              if line.match?(%r{^\s*$})
                 whitespace_buffer << line
               else
                 # If we get here, we've found a non-whitespace line.
