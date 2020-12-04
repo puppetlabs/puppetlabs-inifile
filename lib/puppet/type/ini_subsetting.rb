@@ -75,7 +75,7 @@ Puppet::Type.newtype(:ini_subsetting) do
     defaultto('')
 
     validate do |value|
-      unless value =~ %r{^["']?$}
+      unless value.match?(%r{^["']?$})
         raise Puppet::Error, _(%q(:quote_char valid values are '', '"' and "'"))
       end
     end
