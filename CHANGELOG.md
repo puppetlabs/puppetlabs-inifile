@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v4.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.4.0) (2020-12-08)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v4.3.1...v4.4.0)
+
+### Added
+
+- \(feat\) - Add Puppet 7 support [\#422](https://github.com/puppetlabs/puppetlabs-inifile/pull/422) ([daianamezdrea](https://github.com/daianamezdrea))
+
 ## [v4.3.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.3.1) (2020-11-09)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v4.3.0...v4.3.1)
