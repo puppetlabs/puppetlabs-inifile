@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Puppet::Util
   #
   # external_iterator.rb

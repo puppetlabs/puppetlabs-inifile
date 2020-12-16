@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @summary DEPRECATED.  Use the namespaced function [`inifile::create_ini_settings`](#inifilecreate_ini_settings) instead.
 Puppet::Functions.create_function(:create_ini_settings) do
   dispatch :deprecation_gen do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest/md5'
 
 Puppet::Type.newtype(:ini_subsetting) do

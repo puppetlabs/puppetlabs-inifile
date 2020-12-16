@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @summary This function is used to create a set of ini_setting resources from a hash
 Puppet::Functions.create_function(:'inifile::create_ini_settings') do
   # @param settings

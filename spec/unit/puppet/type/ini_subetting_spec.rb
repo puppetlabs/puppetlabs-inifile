@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 ini_subsetting = Puppet::Type.type(:ini_subsetting)
