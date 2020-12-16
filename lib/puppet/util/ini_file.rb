@@ -66,7 +66,7 @@ module Puppet::Util
       @sections_hash[section_name].get_value(setting) if @sections_hash.key?(section_name)
     end
 
-    def set_value(*args) # rubocop:disable Naming/AccessorMethodName : Recomended alternative is a common value name
+    def set_value(*args)
       case args.size
       when 1
         section_name = args[0]
