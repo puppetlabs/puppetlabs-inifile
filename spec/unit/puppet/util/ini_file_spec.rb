@@ -127,7 +127,6 @@ describe Puppet::Util::IniFile do
       template.split("\n")
     end
 
-    # rubocop:disable RSpec/ExpectInHook
     before :each do
       expect(ini_sub.get_value('section1', 'far')).to eq(nil)
       expect(ini_sub.get_value('section1', 'bar')).to eq(nil)
