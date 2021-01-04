@@ -145,7 +145,7 @@ describe 'ini_subsetting resource' do
       ['-Xmx', '512m'] => %r{args="-Xmx512m"},
       ['-Xms', '256m'] => %r{args="-Xmx256m -Xms256m"},
     }.each do |parameter, content|
-      context %(with '#{parameter.first}' #{(parameter.length > 1) ? '=> \'' << parameter[1] << '\'' : 'absent'} makes '#{content}') do
+      context %(with '#{parameter.first}' #{(parameter.length > 1) ? '=> \'' + parameter[1] + '\'' : 'absent'} makes '#{content}') do
         path = File.join(basedir, 'ini_subsetting.ini')
         before :all do
           ipp = <<-MANIFEST
