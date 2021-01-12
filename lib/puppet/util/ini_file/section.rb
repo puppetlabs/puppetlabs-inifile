@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Puppet::Util::IniFile
   #
   # section.rb

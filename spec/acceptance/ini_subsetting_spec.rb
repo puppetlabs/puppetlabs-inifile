@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'ini_subsetting resource' do
@@ -143,7 +145,7 @@ describe 'ini_subsetting resource' do
       ['-Xmx', '512m'] => %r{args="-Xmx512m"},
       ['-Xms', '256m'] => %r{args="-Xmx256m -Xms256m"},
     }.each do |parameter, content|
-      context %(with '#{parameter.first}' #{(parameter.length > 1) ? '=> \'' << parameter[1] << '\'' : 'absent'} makes '#{content}') do
+      context %(with '#{parameter.first}' #{(parameter.length > 1) ? '=> \'' + parameter[1] + '\'' : 'absent'} makes '#{content}') do
         path = File.join(basedir, 'ini_subsetting.ini')
         before :all do
           ipp = <<-MANIFEST
@@ -197,7 +199,6 @@ describe 'ini_subsetting resource' do
      { value: 'public_value', matcher: %r{initial_value.*public_value}, show_diff: true },
      { value: 'secret_value', matcher: %r{redacted sensitive information.*redacted sensitive information}, show_diff: false },
      { value: 'md5_value', matcher: %r{\{md5\}881671aa2bbc680bc530c4353125052b.*\{md5\}ed0903a7fa5de7886ca1a7a9ad06cf51}, show_diff: :md5 }].each do |i|
-
        pp = <<-EOS
           ini_subsetting { 'test_show_diff':
             ensure      => present,

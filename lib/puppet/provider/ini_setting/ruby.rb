@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path('../../../util/ini_file', __FILE__)
 
 Puppet::Type.type(:ini_setting).provide(:ruby) do
@@ -33,7 +35,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
     setting.nil? && ini_file.section_names.include?(section) || !ini_file.get_value(section, setting).nil?
     if ini_file.section?(section)
       !ini_file.get_value(section, setting).nil?
-    elsif resource.parameters.keys.include?(:force_new_section_creation) && !resource[:force_new_section_creation]
+    elsif resource.parameters.key?(:force_new_section_creation) && !resource[:force_new_section_creation]
       # for backwards compatibility, if a user is using their own ini_setting
       # types but does not have this parameter, we need to fall back to the
       # previous functionality which was to create the section.  Anyone
@@ -42,7 +44,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
       # https://github.com/puppetlabs/puppetlabs-inifile/pull/286
       resource[:ensure] = :absent
       resource[:force_new_section_creation]
-    elsif resource.parameters.keys.include?(:force_new_section_creation) && resource[:force_new_section_creation]
+    elsif resource.parameters.key?(:force_new_section_creation) && resource[:force_new_section_creation]
       !resource[:force_new_section_creation]
     else
       false

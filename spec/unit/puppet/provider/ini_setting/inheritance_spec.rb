@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 # This is a reduced version of ruby_spec.rb just to ensure we can subclass as

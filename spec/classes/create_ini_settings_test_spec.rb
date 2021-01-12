@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 # end-to-end test of the create_init_settings function
 describe 'create_ini_settings_test' do

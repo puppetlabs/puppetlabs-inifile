@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest/md5'
 
 Puppet::Type.newtype(:ini_subsetting) do
@@ -100,7 +102,7 @@ Puppet::Type.newtype(:ini_subsetting) do
       end
     end
 
-    def is_to_s(value) # rubocop:disable Style/PredicateName : Changing breaks the code (./.bundle/gems/gems/puppet-5.3.3-universal-darwin/lib/puppet/parameter.rb:525:in `to_s')
+    def is_to_s(value) # rubocop:disable Naming/PredicateName : Changing breaks the code (./.bundle/gems/gems/puppet-5.3.3-universal-darwin/lib/puppet/parameter.rb:525:in `to_s')
       should_to_s(value)
     end
   end
