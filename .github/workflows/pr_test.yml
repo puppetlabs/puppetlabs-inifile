@@ -5,6 +5,7 @@ on: [pull_request]
 env:
   HONEYCOMB_WRITEKEY: 7f3c63a70eecc61d635917de46bea4e6
   HONEYCOMB_DATASET: litmus tests
+  SERVICE_URL: https://facade-issue181-6f3kfepqcq-ew.a.run.app/v1/provision
 
 jobs:
   setup_matrix:
