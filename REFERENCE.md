@@ -16,7 +16,7 @@
 
 ## Resource types
 
-### `ini_setting`
+### <a name="ini_setting"></a>`ini_setting`
 
 ini_settings is used to manage a single setting in an INI file
 
@@ -40,7 +40,21 @@ The value of the setting to be defined.
 
 The following parameters are available in the `ini_setting` type.
 
-##### `force_new_section_creation`
+* [`force_new_section_creation`](#force_new_section_creation)
+* [`indent_char`](#indent_char)
+* [`indent_width`](#indent_width)
+* [`key_val_separator`](#key_val_separator)
+* [`name`](#name)
+* [`path`](#path)
+* [`provider`](#provider)
+* [`refreshonly`](#refreshonly)
+* [`section`](#section)
+* [`section_prefix`](#section_prefix)
+* [`section_suffix`](#section_suffix)
+* [`setting`](#setting)
+* [`show_diff`](#show_diff)
+
+##### <a name="force_new_section_creation"></a>`force_new_section_creation`
 
 Valid values: ``true``, ``false``, `yes`, `no`
 
@@ -48,38 +62,38 @@ Create setting only if the section exists
 
 Default value: ``true``
 
-##### `indent_char`
+##### <a name="indent_char"></a>`indent_char`
 
 The character to indent new settings with.
 
 Default value: ` `
 
-##### `indent_width`
+##### <a name="indent_width"></a>`indent_width`
 
 The number of indent_chars to use to indent a new setting.
 
-##### `key_val_separator`
+##### <a name="key_val_separator"></a>`key_val_separator`
 
 The separator string to use between each setting name and value.
 
 Default value: ` = `
 
-##### `name`
+##### <a name="name"></a>`name`
 
 namevar
 
 An arbitrary name used as the identity of the resource.
 
-##### `path`
+##### <a name="path"></a>`path`
 
 The ini file Puppet will ensure contains the specified setting.
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `ini_setting` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### `refreshonly`
+##### <a name="refreshonly"></a>`refreshonly`
 
 Valid values: ``true``, ``false``, `yes`, `no`
 
@@ -87,29 +101,29 @@ A flag indicating whether or not the ini_setting should be updated only when cal
 
 Default value: ``false``
 
-##### `section`
+##### <a name="section"></a>`section`
 
 The name of the section in the ini file in which the setting should be defined.
 
 Default value: `''`
 
-##### `section_prefix`
+##### <a name="section_prefix"></a>`section_prefix`
 
 The prefix to the section name\'s header.
 
 Default value: `[`
 
-##### `section_suffix`
+##### <a name="section_suffix"></a>`section_suffix`
 
 The suffix to the section name\'s header.
 
 Default value: `]`
 
-##### `setting`
+##### <a name="setting"></a>`setting`
 
 The name of the setting to be defined.
 
-##### `show_diff`
+##### <a name="show_diff"></a>`show_diff`
 
 Valid values: ``true``, `md5`, ``false``
 
@@ -117,7 +131,7 @@ Whether to display differences when the setting changes.
 
 Default value: ``true``
 
-### `ini_subsetting`
+### <a name="ini_subsetting"></a>`ini_subsetting`
 
 ini_subsettings is used to manage multiple values in a setting in an INI file
 
@@ -141,7 +155,23 @@ The value of the subsetting to be defined.
 
 The following parameters are available in the `ini_subsetting` type.
 
-##### `delete_if_empty`
+* [`delete_if_empty`](#delete_if_empty)
+* [`insert_type`](#insert_type)
+* [`insert_value`](#insert_value)
+* [`key_val_separator`](#key_val_separator)
+* [`name`](#name)
+* [`path`](#path)
+* [`provider`](#provider)
+* [`quote_char`](#quote_char)
+* [`section`](#section)
+* [`setting`](#setting)
+* [`show_diff`](#show_diff)
+* [`subsetting`](#subsetting)
+* [`subsetting_key_val_separator`](#subsetting_key_val_separator)
+* [`subsetting_separator`](#subsetting_separator)
+* [`use_exact_match`](#use_exact_match)
+
+##### <a name="delete_if_empty"></a>`delete_if_empty`
 
 Valid values: ``true``, ``false``
 
@@ -149,7 +179,7 @@ Set to true to delete the parent setting when the subsetting is empty instead of
 
 Default value: ``false``
 
-##### `insert_type`
+##### <a name="insert_type"></a>`insert_type`
 
 Valid values: `start`, `end`, `before`, `after`, `index`
 
@@ -163,48 +193,48 @@ Where the new subsetting item should be inserted
 
 Default value: `end`
 
-##### `insert_value`
+##### <a name="insert_value"></a>`insert_value`
 
 The value for the insert types which require one.
 
-##### `key_val_separator`
+##### <a name="key_val_separator"></a>`key_val_separator`
 
 The separator string to use between each setting name and value.
 
 Default value: ` = `
 
-##### `name`
+##### <a name="name"></a>`name`
 
 namevar
 
 An arbitrary name used as the identity of the resource.
 
-##### `path`
+##### <a name="path"></a>`path`
 
 The ini file Puppet will ensure contains the specified setting.
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `ini_subsetting` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### `quote_char`
+##### <a name="quote_char"></a>`quote_char`
 
 The character used to quote the entire value of the setting. Valid values are '', '\"' and \"'\"
 
 Default value: `''`
 
-##### `section`
+##### <a name="section"></a>`section`
 
 The name of the section in the ini file in which the setting should be defined.
 
 Default value: `''`
 
-##### `setting`
+##### <a name="setting"></a>`setting`
 
 The name of the setting to be defined.
 
-##### `show_diff`
+##### <a name="show_diff"></a>`show_diff`
 
 Valid values: ``true``, `md5`, ``false``
 
@@ -212,23 +242,23 @@ Whether to display differences when the setting changes.
 
 Default value: ``true``
 
-##### `subsetting`
+##### <a name="subsetting"></a>`subsetting`
 
 The name of the subsetting to be defined.
 
-##### `subsetting_key_val_separator`
+##### <a name="subsetting_key_val_separator"></a>`subsetting_key_val_separator`
 
 The separator string between the subsetting name and its value. Defaults to the empty string.
 
 Default value: `''`
 
-##### `subsetting_separator`
+##### <a name="subsetting_separator"></a>`subsetting_separator`
 
 The separator string between subsettings. Defaults to the empty string.
 
 Default value: ` `
 
-##### `use_exact_match`
+##### <a name="use_exact_match"></a>`use_exact_match`
 
 Valid values: ``true``, ``false``
 
@@ -239,7 +269,7 @@ Default value: ``false``
 
 ## Functions
 
-### `create_ini_settings`
+### <a name="create_ini_settings"></a>`create_ini_settings`
 
 Type: Ruby 4.x API
 
@@ -257,7 +287,7 @@ Data type: `Any`
 
 
 
-### `inifile::create_ini_settings`
+### <a name="inifilecreate_ini_settings"></a>`inifile::create_ini_settings`
 
 Type: Ruby 4.x API
 
