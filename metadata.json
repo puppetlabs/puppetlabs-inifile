@@ -9,10 +9,6 @@
   "issues_url": "https://tickets.puppetlabs.com/browse/MODULES",
   "dependencies": [
     {
-      "name": "puppetlabs/translate",
-      "version_requirement": ">= 1.0.0 < 3.0.0"
-    },
-    {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 4.13.0 < 8.0.0"
     }
