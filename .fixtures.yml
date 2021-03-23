@@ -7,7 +7,6 @@ fixtures:
     inherit_test1: "#{source_dir}/spec/fixtures/inherit_test1"
   repositories:
     stdlib: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
-    translate: 'https://github.com/puppetlabs/puppetlabs-translate.git'
     facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
     puppet_agent: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
     provision: 'https://github.com/puppetlabs/provision.git'    
