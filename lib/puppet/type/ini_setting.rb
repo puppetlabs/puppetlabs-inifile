@@ -89,6 +89,7 @@ Puppet::Type.newtype(:ini_setting) do
     desc 'The value of the setting to be defined.'
 
     munge do |value|
+      value = value.unwrap if value.respond_to?(:unwrap)
       if ([true, false].include? value) || value.is_a?(Numeric)
         value.to_s
       else
