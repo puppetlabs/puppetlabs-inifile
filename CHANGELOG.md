@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v5.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.1.0) (2021-06-28)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.0.1...v5.1.0)
+
+### Added
+
+- Accept Datatype Sensitive [\#454](https://github.com/puppetlabs/puppetlabs-inifile/pull/454) ([cocker-cc](https://github.com/cocker-cc))
+
 ## [v5.0.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.0.1) (2021-03-29)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.0.0...v5.0.1)
