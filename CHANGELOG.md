@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v5.2.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.2.0) (2021-08-25)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.1.0...v5.2.0)
+
+### Added
+
+- pdksync - \(IAC-1709\) - Add Support for Debian 11 [\#458](https://github.com/puppetlabs/puppetlabs-inifile/pull/458) ([david22swan](https://github.com/david22swan))
+
+### Fixed
+
+- \(IAC-1741\) Allow stdlib v8.0.0 [\#459](https://github.com/puppetlabs/puppetlabs-inifile/pull/459) ([david22swan](https://github.com/david22swan))
+
 ## [v5.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.1.0) (2021-06-28)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.0.1...v5.1.0)
