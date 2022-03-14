@@ -295,9 +295,18 @@ ini_setting { '[section1] setting3':
 See [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-inifile/blob/main/REFERENCE.md)
 
 <a id="limitations"></a>
+
 ## Limitations
 
+### Supported operating systems
+
 For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-inifile/blob/main/metadata.json)
+
+### create_ini_settings
+
+When using inifile::create_ini_settings it’s worth noting that namespace tags will not be applied to the resource. If you need these namespace tags we advise using the standard ini_setting resource.
+
+For more information about resource tags, please see [this article](https://puppet.com/docs/puppet/7/lang_tags.html#lang_tags-assigning-tags-to-resources).
 
 <a id="development"></a> 
 ## Development
