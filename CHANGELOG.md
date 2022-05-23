@@ -2,7 +2,24 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v5.2.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.2.0) (2021-08-25)
+## [v5.3.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.3.0) (2022-05-23)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.2.0...v5.3.0)
+
+### Added
+
+- pdksync - \(FM-8922\) - Add Support for Windows 2022 [\#468](https://github.com/puppetlabs/puppetlabs-inifile/pull/468) ([david22swan](https://github.com/david22swan))
+- pdksync - \(IAC-1753\) - Add Support for AlmaLinux 8 [\#463](https://github.com/puppetlabs/puppetlabs-inifile/pull/463) ([david22swan](https://github.com/david22swan))
+- pdksync - \(IAC-1751\) - Add Support for Rocky 8 [\#462](https://github.com/puppetlabs/puppetlabs-inifile/pull/462) ([david22swan](https://github.com/david22swan))
+- match section names containing prefix character \(normally \[\) [\#457](https://github.com/puppetlabs/puppetlabs-inifile/pull/457) ([tja523](https://github.com/tja523))
+
+### Fixed
+
+- pdksync - \(GH-iac-334\) Remove Support for Ubuntu 14.04/16.04 [\#471](https://github.com/puppetlabs/puppetlabs-inifile/pull/471) ([david22swan](https://github.com/david22swan))
+- pdksync - \(IAC-1787\) Remove Support for CentOS 6 [\#466](https://github.com/puppetlabs/puppetlabs-inifile/pull/466) ([david22swan](https://github.com/david22swan))
+- pdksync - \(IAC-1598\) - Remove Support for Debian 8 [\#461](https://github.com/puppetlabs/puppetlabs-inifile/pull/461) ([david22swan](https://github.com/david22swan))
+
+## [v5.2.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.2.0) (2021-08-26)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.1.0...v5.2.0)
 
