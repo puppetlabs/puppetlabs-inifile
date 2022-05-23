@@ -31,19 +31,9 @@ module Puppet::Util
 
     def section_regex
       # Only put in prefix/suffix if they exist
-      # Also, if the prefix is '', the negated
-      # set match should be a match all instead.
       r_string = '^\s*'
       r_string += Regexp.escape(@section_prefix)
-      r_string += '('
-      if @section_prefix != ''
-        r_string += '[^'
-        r_string += Regexp.escape(@section_prefix)
-        r_string += ']'
-      else
-        r_string += '.'
-      end
-      r_string += '*)'
+      r_string += '(.*)'
       r_string += Regexp.escape(@section_suffix)
       r_string += '\s*$'
       %r{#{r_string}}
