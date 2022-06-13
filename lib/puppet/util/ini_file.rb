@@ -67,6 +67,8 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
         (section_name, setting, separator, value) = args
       end
 
+      value = [*value]
+
       complete_setting = {
         setting:,
         separator:,
@@ -77,8 +79,17 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       section = @sections_hash[section_name]
 
       if section.existing_setting?(setting)
+        existing_value = section.get_value(setting)
+        section_index = @section_names.index(section_name)
+
         update_line(section, setting, value)
         section.update_existing_setting(setting, value)
+
+        if value.length > existing_value.length
+          increment_section_line_numbers(section_index + 1, value.length - existing_value.length)
+        elsif value.length < existing_value.length
+          decrement_section_line_numbers(section_index + 1, existing_value.length - value.length)
+        end
       elsif find_commented_setting(section, setting)
         # So, this stanza is a bit of a hack.  What we're trying
         # to do here is this: for settings that don't already
@@ -99,7 +110,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
         # numbers for all of the sections *after* the one that
         # was modified.
         section_index = @section_names.index(section_name)
-        increment_section_line_numbers(section_index + 1)
+        increment_section_line_numbers(section_index + 1, value.length)
       elsif !setting.nil? || !value.nil?
         section.set_additional_setting(setting, value)
       end
@@ -108,6 +119,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
     def remove_setting(section_name, setting)
       section = @sections_hash[section_name]
       return unless section.existing_setting?(setting)
+      existing_value = section.get_value(setting)
 
       # If the setting is found, we have some work to do.
       # First, we remove the line from our array of lines:
@@ -121,7 +133,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       # numbers for all of the sections *after* the one that
       # was modified.
       section_index = @section_names.index(section_name)
-      decrement_section_line_numbers(section_index + 1)
+      decrement_section_line_numbers(section_index + 1, existing_value.length)
 
       return unless section.empty?
 
@@ -172,7 +184,9 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
 
           # write new settings, if there are any
           section.additional_settings.each_pair do |key, value|
-            fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{value}")
+            value.each do |v|
+              fh.puts("#{@indent_char * (@indent_width || section.indentation || 0)}#{key}#{@key_val_separator}#{v}")
+            end
           end
 
           if !whitespace_buffer.empty?
@@ -233,7 +247,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
           return Section.new(name, start_line, end_line_num, settings, min_indentation, empty_line_count)
         end
         if (match = @setting_regex.match(line))
-          settings[match[2]] = match[4]
+          (settings[match[2]] ||= []).push(match[4])
           indentation = match[1].length
           min_indentation = [indentation, min_indentation || indentation].min
         end
@@ -246,15 +260,24 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
     end
 
     def update_line(section, setting, value)
-      (section.start_line..section.end_line).each do |line_num|
+      updated = false
+      section.end_line.downto section.start_line do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
+        if match[2] == setting
+          lines.delete_at(line_num)
 
-        lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}" if match[2] == setting
+          if !updated
+            value.each_with_index do |v, i|
+              lines.insert(line_num + i, "#{match[1]}#{match[2]}#{match[3]}#{v}")
+            end
+            updated = true
+          end
+        end
       end
     end
 
     def remove_line(section, setting)
-      (section.start_line..section.end_line).each do |line_num|
+      section.end_line.downto section.start_line do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
 
         lines.delete_at(line_num) if match[2] == setting
@@ -305,26 +328,28 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
     def insert_inline_setting_line(result, section, complete_setting)
       line_num = result[:line_num]
       s = complete_setting
-      lines.insert(line_num + 1, "#{@indent_char * (@indent_width || section.indentation || 0)}#{s[:setting]}#{s[:separator]}#{s[:value]}")
+      s[:value].each_with_index do |v, i|
+        lines.insert(line_num + 1 + i, "#{@indent_char * (@indent_width || section.indentation || 0)}#{s[:setting]}#{s[:separator]}#{v}")
+      end
     end
 
     # Utility method; given a section index (index into the @section_names
     # array), decrement the start/end line numbers for that section and all
     # all of the other sections that appear *after* the specified section.
-    def decrement_section_line_numbers(section_index)
+    def decrement_section_line_numbers(section_index, n = 1)
       @section_names[section_index..(@section_names.length - 1)].each do |name|
         section = @sections_hash[name]
-        section.decrement_line_nums
+        section.decrement_line_nums(n)
       end
     end
 
     # Utility method; given a section index (index into the @section_names
     # array), increment the start/end line numbers for that section and all
     # all of the other sections that appear *after* the specified section.
-    def increment_section_line_numbers(section_index)
+    def increment_section_line_numbers(section_index, n = 1)
       @section_names[section_index..(@section_names.length - 1)].each do |name|
         section = @sections_hash[name]
-        section.increment_line_nums
+        section.increment_line_nums(n)
       end
     end
 
