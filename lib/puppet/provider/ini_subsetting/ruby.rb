@@ -89,7 +89,7 @@ Puppet::Type.type(:ini_subsetting).provide(:ruby) do
 
   def setting_value
     @setting_value ||= Puppet::Util::SettingValue.new(
-      ini_file.get_value(section, setting),
+      Array(ini_file.get_value(section, setting))[0],
       subsetting_separator, quote_char, subsetting_key_val_separator
     )
   end

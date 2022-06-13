@@ -49,16 +49,16 @@ describe Puppet::Util::IniFile do
     end
 
     it 'exposes settings for sections #section1' do
-      expect(ini_sub.get_settings('section1')).to eq('bar' => 'barvalue',
-                                                     'baz' => '',
-                                                     'foo' => 'foovalue')
+      expect(ini_sub.get_settings('section1')).to eq('bar' => ['barvalue'],
+                                                     'baz' => [''],
+                                                     'foo' => ['foovalue'])
     end
     it 'exposes settings for sections #section2' do
-      expect(ini_sub.get_settings('section2')).to eq('baz' => 'bazvalue',
-                                                     'foo' => 'foovalue2',
-                                                     'l' => 'git log',
-                                                     "xyzzy['thing1']['thing2']" => 'xyzzyvalue',
-                                                     'zot' => 'multi word value')
+      expect(ini_sub.get_settings('section2')).to eq('baz' => ['bazvalue'],
+                                                     'foo' => ['foovalue2'],
+                                                     'l' => ['git log'],
+                                                     "xyzzy['thing1']['thing2']" => ['xyzzyvalue'],
+                                                     'zot' => ['multi word value'])
     end
   end
 
@@ -83,7 +83,7 @@ describe Puppet::Util::IniFile do
     end
 
     it 'exposes settings for sections' do
-      expect(ini_sub.get_value('section1', 'foo')).to eq('foovalue')
+      expect(ini_sub.get_value('section1', 'foo')).to eq(['foovalue'])
     end
   end
 
@@ -109,10 +109,10 @@ describe Puppet::Util::IniFile do
     end
 
     it 'exposes settings for sections #bar' do
-      expect(ini_sub.get_value('', 'foo')).to eq('bar')
+      expect(ini_sub.get_value('', 'foo')).to eq(['bar'])
     end
     it 'exposes settings for sections #foovalue' do
-      expect(ini_sub.get_value('section1', 'foo')).to eq('foovalue')
+      expect(ini_sub.get_value('section1', 'foo')).to eq(['foovalue'])
     end
   end
 
@@ -136,42 +136,42 @@ describe Puppet::Util::IniFile do
 
     it 'properlies update uncommented values' do
       ini_sub.set_value('section1', 'foo', ' = ', 'foovalue')
-      expect(ini_sub.get_value('section1', 'foo')).to eq('foovalue')
+      expect(ini_sub.get_value('section1', 'foo')).to eq(['foovalue'])
     end
 
     it 'properlies update uncommented values without separator' do
       ini_sub.set_value('section1', 'foo', 'foovalue')
-      expect(ini_sub.get_value('section1', 'foo')).to eq('foovalue')
+      expect(ini_sub.get_value('section1', 'foo')).to eq(['foovalue'])
     end
 
     it 'properlies update commented value' do
       ini_sub.set_value('section1', 'bar', ' = ', 'barvalue')
-      expect(ini_sub.get_value('section1', 'bar')).to eq('barvalue')
+      expect(ini_sub.get_value('section1', 'bar')).to eq(['barvalue'])
     end
 
     it 'properlies update commented values' do
       ini_sub.set_value('section1', "xyzzy['thing1']['thing2']", ' = ', 'xyzzyvalue')
-      expect(ini_sub.get_value('section1', "xyzzy['thing1']['thing2']")).to eq('xyzzyvalue')
+      expect(ini_sub.get_value('section1', "xyzzy['thing1']['thing2']")).to eq(['xyzzyvalue'])
     end
 
     it 'properlies update commented value without separator' do
       ini_sub.set_value('section1', 'bar', 'barvalue')
-      expect(ini_sub.get_value('section1', 'bar')).to eq('barvalue')
+      expect(ini_sub.get_value('section1', 'bar')).to eq(['barvalue'])
     end
 
     it 'properlies update commented values without separator' do
       ini_sub.set_value('section1', "xyzzy['thing1']['thing2']", 'xyzzyvalue')
-      expect(ini_sub.get_value('section1', "xyzzy['thing1']['thing2']")).to eq('xyzzyvalue')
+      expect(ini_sub.get_value('section1', "xyzzy['thing1']['thing2']")).to eq(['xyzzyvalue'])
     end
 
     it 'properlies add new empty values' do
       ini_sub.set_value('section1', 'baz', ' = ', 'bazvalue')
-      expect(ini_sub.get_value('section1', 'baz')).to eq('bazvalue')
+      expect(ini_sub.get_value('section1', 'baz')).to eq(['bazvalue'])
     end
 
     it 'adds new empty values without separator' do
       ini_sub.set_value('section1', 'baz', 'bazvalue')
-      expect(ini_sub.get_value('section1', 'baz')).to eq('bazvalue')
+      expect(ini_sub.get_value('section1', 'baz')).to eq(['bazvalue'])
     end
   end
 
@@ -258,10 +258,10 @@ describe Puppet::Util::IniFile do
     end
 
     it 'exposes settings for sections #print' do
-      expect(ini_sub.get_value('khotkeys', '{5465e8c7-d608-4493-a48f-b99d99fdb508}')).to eq('Print,none,PrintScreen')
+      expect(ini_sub.get_value('khotkeys', '{5465e8c7-d608-4493-a48f-b99d99fdb508}')).to eq(['Print,none,PrintScreen'])
     end
     it 'exposes settings for sections #search' do
-      expect(ini_sub.get_value('khotkeys', '{d03619b6-9b3c-48cc-9d9c-a2aadb485550}')).to eq('Search,none,Search')
+      expect(ini_sub.get_value('khotkeys', '{d03619b6-9b3c-48cc-9d9c-a2aadb485550}')).to eq(['Search,none,Search'])
     end
   end
 
@@ -277,13 +277,13 @@ describe Puppet::Util::IniFile do
     end
 
     it 'exposes settings for sections #A' do
-      expect(ini_sub.get_value('Drive names', 'A:')).to eq '5.25" Floppy'
+      expect(ini_sub.get_value('Drive names', 'A:')).to eq ['5.25" Floppy']
     end
     it 'exposes settings for sections #B' do
-      expect(ini_sub.get_value('Drive names', 'B:')).to eq '3.5" Floppy'
+      expect(ini_sub.get_value('Drive names', 'B:')).to eq ['3.5" Floppy']
     end
     it 'exposes settings for sections #C' do
-      expect(ini_sub.get_value('Drive names', 'C:')).to eq 'Winchester'
+      expect(ini_sub.get_value('Drive names', 'C:')).to eq ['Winchester']
     end
   end
 
@@ -302,16 +302,48 @@ describe Puppet::Util::IniFile do
     end
 
     it 'exposes settings for sections #log' do
-      expect(ini_sub.get_value('global', 'log file')).to eq '/var/log/samba/log.%m'
+      expect(ini_sub.get_value('global', 'log file')).to eq ['/var/log/samba/log.%m']
     end
     it 'exposes settings for sections #kerberos' do
-      expect(ini_sub.get_value('global', 'kerberos method')).to eq 'system keytab'
+      expect(ini_sub.get_value('global', 'kerberos method')).to eq ['system keytab']
     end
     it 'exposes settings for sections #passdb' do
-      expect(ini_sub.get_value('global', 'passdb backend')).to eq 'tdbsam'
+      expect(ini_sub.get_value('global', 'passdb backend')).to eq ['tdbsam']
     end
     it 'exposes settings for sections #security' do
-      expect(ini_sub.get_value('global', 'security')).to eq 'ads'
+      expect(ini_sub.get_value('global', 'security')).to eq ['ads']
+    end
+  end
+
+  context 'when using keys with multiple values' do
+    let(:sample_content) do
+      template = <<-EOS
+        [section]
+        foo=value1
+        foo=value2
+        bar=barvalue
+      EOS
+      template.split("\n")
+    end
+
+    it 'exposes settings for section #section' do
+      expect(ini_sub.get_settings('section')).to eq('foo' => ['value1', 'value2'],
+                                                    'bar' => ['barvalue'])
+    end
+
+    it 'adds multiple values' do
+      ini_sub.set_value('section', 'baz', ['bazvalue', 'bazvalue2'])
+      expect(ini_sub.get_value('section', 'baz')).to eq(['bazvalue', 'bazvalue2'])
+    end
+
+    it 'updates multiple values' do
+      ini_sub.set_value('section', 'bar', ['barvalue', 'barvalue2'])
+      expect(ini_sub.get_value('section', 'bar')).to eq(['barvalue', 'barvalue2'])
+    end
+
+    it 'removes extra values' do
+      ini_sub.set_value('section', 'foo', 'value2')
+      expect(ini_sub.get_value('section', 'foo')).to eq(['value2'])
     end
   end
 end

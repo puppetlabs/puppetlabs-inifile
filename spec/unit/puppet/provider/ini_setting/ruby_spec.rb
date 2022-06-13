@@ -95,13 +95,13 @@ describe provider_class do
         expect(child_three).to receive(:file_path).exactly(2).times.and_return(tmpfile)
         expect(child_three.instances.size).to eq(7)
         expected_array = [
-          { name: 'section1/foo', value: 'foovalue' },
-          { name: 'section1/bar', value: 'barvalue' },
-          { name: 'section1/main', value: 'true' },
-          { name: 'section2/foo', value: 'foovalue2' },
-          { name: 'section2/baz', value: 'bazvalue' },
-          { name: 'section2/url', value: 'http://192.168.1.1:8080' },
-          { name: 'section:sub/subby', value: 'bar' },
+          { name: 'section1/foo', value: ['foovalue'] },
+          { name: 'section1/bar', value: ['barvalue'] },
+          { name: 'section1/main', value: ['true'] },
+          { name: 'section2/foo', value: ['foovalue2'] },
+          { name: 'section2/baz', value: ['bazvalue'] },
+          { name: 'section2/url', value: ['http://192.168.1.1:8080'] },
+          { name: 'section:sub/subby', value: ['bar'] },
         ]
         real_array = []
         ensure_array = []
@@ -439,7 +439,7 @@ subby=foo
     it 'modifies an existing setting with a different value - with colon in section' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'subby', value: 'foo'))
       provider = described_class.new(resource)
-      expect(provider.value).to eq('bar')
+      expect(provider.value).to eq(['bar'])
       provider.value = 'foo'
       validate_file(expected_content_ten, tmpfile)
     end
@@ -468,7 +468,7 @@ subby=bar
     it 'is able to handle settings with non alphanumbering settings' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(setting: 'url', value: 'http://192.168.0.1:8080'))
       provider = described_class.new(resource)
-      expect(provider.value).to eq('http://192.168.1.1:8080')
+      expect(provider.value).to eq(['http://192.168.1.1:8080'])
       provider.value = 'http://192.168.0.1:8080'
       validate_file(expected_content_eleven, tmpfile)
     end
@@ -497,7 +497,7 @@ subby=bar
     it 'is able to handle settings with pre/suffix with non alphanumbering settings' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'shoes', value: 'http://192.168.0.1:8080', section_prefix: '-', section_suffix: '-'))
       provider = described_class.new(resource)
-      expect(provider.value).to eq('purple')
+      expect(provider.value).to eq(['purple'])
       provider.value = 'http://192.168.0.1:8080'
       validate_file(expected_content_twelve, tmpfile)
     end
@@ -654,7 +654,7 @@ huzzah = shazaam
     it 'is able to handle variables of any type' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'main', value: true))
       provider = described_class.new(resource)
-      expect(provider.value).to eq('true')
+      expect(provider.value).to eq(['true'])
     end
   end
 
@@ -776,7 +776,7 @@ foo = http://192.168.1.1:8080
     it 'modifies an existing setting with a different value' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: '', setting: 'foo', value: 'yippee'))
       provider = described_class.new(resource)
-      expect(provider.value).to eq('blah')
+      expect(provider.value).to eq(['blah'])
       provider.value = 'yippee'
       validate_file(expected_content_two, tmpfile)
     end
@@ -817,7 +817,7 @@ foo = yippee
     it 'modifies an existing setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee'))
       provider = described_class.new(resource)
-      expect(provider.value).to eq('http://192.168.1.1:8080')
+      expect(provider.value).to eq(['http://192.168.1.1:8080'])
       provider.value = 'yippee'
       validate_file(expected_content_two, tmpfile)
     end
@@ -851,7 +851,7 @@ foo=yippee
     it 'modifies an existing setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee', key_val_separator: '='))
       provider = described_class.new(resource)
-      expect(provider.value).to eq('bar')
+      expect(provider.value).to eq(['bar'])
       provider.value = 'yippee'
       validate_file(expected_content_one, tmpfile)
     end
@@ -872,7 +872,7 @@ foo: yippee
     it 'modifies an existing setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee', key_val_separator: ': '))
       provider = described_class.new(resource)
-      expect(provider.value).to eq('bar')
+      expect(provider.value).to eq(['bar'])
       provider.value = 'yippee'
       validate_file(expected_content_one, tmpfile)
     end
@@ -906,7 +906,7 @@ foo yippee
     it 'modifies an existing setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee', key_val_separator: ' '))
       provider = described_class.new(resource)
-      expect(provider.value).to eq('bar')
+      expect(provider.value).to eq(['bar'])
       provider.value = 'yippee'
       validate_file(expected_content_one, tmpfile)
     end
@@ -1586,5 +1586,131 @@ foo = bar
       validate_file(expected_content_one, tmpfile)
     end
   end
+
+  context 'when using keys with multiple values' do
+    let(:orig_content) do
+        <<-EOS
+[section]
+foo = foovalue
+foo = foovalue2
+foo = foovalue3
+foo = foovalue4
+bar = barvalue
+
+[section2]
+foo = value
+bar = barvalue
+foo = value2
+
+[section3]
+        EOS
+    end
+
+    it 'retains an existing setting with setting the original value' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section', setting: 'foo', value: ['foovalue', 'foovalue2', 'foovalue3', 'foovalue4']))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be true
+      provider.create
+      validate_file(orig_content, tmpfile)
+    end
+
+    expected_content_one = <<-EOS
+[section]
+foo = foovalue
+bar = barvalue
+
+[section2]
+foo = value
+bar = barvalue
+foo = value2
+
+[section3]
+    EOS
+
+    it 'removes additional values from an existing setting' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section', setting: 'foo', value: 'foovalue'))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be true
+      provider.create
+      validate_file(expected_content_one, tmpfile)
+    end
+
+    expected_content_two = <<-EOS
+[section]
+foo = foovalue
+foo = foovalue2
+foo = foovalue3
+foo = foovalue4
+bar = barvalue
+
+[section2]
+bar = barvalue
+foo = value
+foo = value2
+foo = value3
+
+[section3]
+    EOS
+
+    it 'adds new values to an existing setting' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: ['value', 'value2', 'value3']))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be true
+      provider.create
+      validate_file(expected_content_two, tmpfile)
+    end
+
+    expected_content_three = <<-EOS
+[section]
+foo = foovalue2
+foo = foovalue4
+foo = foovalue
+foo = foovalue3
+bar = barvalue
+
+[section2]
+foo = value
+bar = barvalue
+foo = value2
+
+[section3]
+    EOS
+
+    it 'modifies an existing setting with values ordered differently' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section', setting: 'foo', value: ['foovalue2', 'foovalue4', 'foovalue', 'foovalue3']))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be true
+      provider.create
+      validate_file(expected_content_three, tmpfile)
+    end
+
+    expected_content_four = <<-EOS
+[section]
+foo = foovalue
+foo = foovalue2
+foo = foovalue3
+foo = foovalue4
+bar = barvalue
+
+[section2]
+foo = value
+bar = barvalue
+foo = value2
+
+[section3]
+foo = a
+foo = b
+foo = c
+    EOS
+
+    it 'adds a new setting' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'foo', value: ['a', 'b', 'c']))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be false
+      provider.create
+      validate_file(expected_content_four, tmpfile)
+    end
+  end
+
   # rubocop:enable Layout/IndentHeredoc
 end
