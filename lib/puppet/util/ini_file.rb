@@ -263,16 +263,15 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       updated = false
       section.end_line.downto section.start_line do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
-        if match[2] == setting
-          lines.delete_at(line_num)
+        next unless match[2] == setting
 
-          if !updated
-            value.each_with_index do |v, i|
-              lines.insert(line_num + i, "#{match[1]}#{match[2]}#{match[3]}#{v}")
-            end
-            updated = true
-          end
+        lines.delete_at(line_num)
+        next if updated
+
+        value.each_with_index do |v, i|
+          lines.insert(line_num + i, "#{match[1]}#{match[2]}#{match[3]}#{v}")
         end
+        updated = true
       end
     end
 
