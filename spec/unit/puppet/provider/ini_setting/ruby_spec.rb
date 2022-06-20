@@ -1553,7 +1553,7 @@ setting1 = hellowworld
 
   context 'when using keys with multiple values' do
     let(:orig_content) do
-        <<-EOS
+      <<-EOS
 [section]
 foo = foovalue
 foo = foovalue2
@@ -1567,7 +1567,7 @@ bar = barvalue
 foo = value2
 
 [section3]
-        EOS
+      EOS
     end
 
     it 'retains an existing setting with setting the original value' do
