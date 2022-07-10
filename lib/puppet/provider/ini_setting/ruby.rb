@@ -32,8 +32,9 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def exists?
-    setting.nil? && ini_file.section_names.include?(section) || !ini_file.get_value(section, setting).nil?
-    if ini_file.section?(section)
+    if setting.nil?
+      ini_file.section_names.include?(section)
+    elsif ini_file.section?(section)
       !ini_file.get_value(section, setting).nil?
     elsif resource.parameters.key?(:force_new_section_creation) && !resource[:force_new_section_creation]
       # for backwards compatibility, if a user is using their own ini_setting

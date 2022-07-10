@@ -162,6 +162,18 @@ describe 'ini_setting resource' do
     end
   end
 
+  context 'ensure parameter => present and only section' do
+    pp = <<-EOS
+    ini_setting { 'ensure => present for section':
+      ensure  => present,
+      path    => "#{basedir}/ini_setting.ini",
+      section => 'one',
+    }
+    EOS
+
+    it_behaves_like 'has_content', "#{basedir}/ini_setting.ini", pp, %r{\[one\]}
+  end
+
   describe 'show_diff parameter and logging:' do
     setup_puppet_config_file
 
