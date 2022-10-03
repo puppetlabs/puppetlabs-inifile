@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v5.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.4.0) (2022-10-03)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.3.0...v5.4.0)
+
+### Added
+
+- pdksync - \(GH-cat-11\) Certify Support for Ubuntu 22.04 [\#484](https://github.com/puppetlabs/puppetlabs-inifile/pull/484) ([david22swan](https://github.com/david22swan))
+- pdksync - \(GH-cat-12\) Add Support for Redhat 9 [\#480](https://github.com/puppetlabs/puppetlabs-inifile/pull/480) ([david22swan](https://github.com/david22swan))
+
+### Fixed
+
+- \(MAINT\) Drop support for Solaris 10, Windows Server 2008 R2, and AIX 5.3 and 6.1 [\#485](https://github.com/puppetlabs/puppetlabs-inifile/pull/485) ([jordanbreen28](https://github.com/jordanbreen28))
+
+### UNCATEGORIZED PRS; LABEL THEM ON GITHUB
+
+- Fix broken idempotency with empty sections [\#483](https://github.com/puppetlabs/puppetlabs-inifile/pull/483) ([kajinamit](https://github.com/kajinamit))
+
 ## [v5.3.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.3.0) (2022-05-23)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.2.0...v5.3.0)
