@@ -10,7 +10,6 @@ QUOTE_CHAR = '"'
 
 describe Puppet::Util::SettingValue do
   describe 'space subsetting separator' do
-
     let(:setting_value) { described_class.new(INIT_VALUE_SPACE, ' ') }
 
     it 'gets the original value' do
@@ -43,7 +42,6 @@ describe Puppet::Util::SettingValue do
   end
 
   describe 'comma subsetting separator' do
-
     let(:setting_value) { described_class.new(INIT_VALUE_COMMA, ',') }
 
     it 'gets the original value' do
@@ -75,7 +73,6 @@ describe Puppet::Util::SettingValue do
   end
 
   describe 'quote_char parameter' do
-
     it 'gets quoted empty string if original value was empty' do
       setting_value = described_class.new(nil, ' ', QUOTE_CHAR)
       expect(setting_value.get_value).to eq(QUOTE_CHAR * 2)
