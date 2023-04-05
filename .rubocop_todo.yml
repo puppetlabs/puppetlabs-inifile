@@ -55,9 +55,9 @@ Lint/BooleanSymbol:
 # Offense count: 4
 # Configuration parameters: AllowedMethods.
 # AllowedMethods: enums
-Lint/ConstantDefinitionInBlock:
-  Exclude:
-    - 'spec/unit/puppet/util/setting_value_spec.rb'
+# Lint/ConstantDefinitionInBlock:
+#   Exclude:
+#     - 'spec/unit/puppet/util/setting_value_spec.rb'
 
 # Offense count: 1
 # Configuration parameters: IgnoreLiteralBranches, IgnoreConstantBranches.
