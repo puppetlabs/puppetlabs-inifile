@@ -27,12 +27,6 @@ Metrics/CyclomaticComplexity:
 Metrics/MethodLength:
   Max: 33
 
-# # Offense count: 2
-# # Configuration parameters: CountKeywordArgs.
-# Metrics/ParameterLists:
-#   MaxOptionalParameters: 5
-#   Max: 6
-
 # Offense count: 2
 # Configuration parameters: AllowedMethods, AllowedPatterns.
 Metrics/PerceivedComplexity:
@@ -47,9 +41,9 @@ Naming/AccessorMethodName:
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: lowercase, uppercase
-Naming/HeredocDelimiterCase:
-  Exclude:
-    - 'lib/puppet/type/ini_subsetting.rb'
+# Naming/HeredocDelimiterCase:
+#   Exclude:
+#     - 'lib/puppet/type/ini_subsetting.rb'
 
 # Offense count: 114
 # Configuration parameters: ForbiddenDelimiters.

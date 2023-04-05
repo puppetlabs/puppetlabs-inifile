@@ -108,7 +108,7 @@ Puppet::Type.newtype(:ini_subsetting) do
   end
 
   newparam(:insert_type) do
-    desc <<-eof
+    desc <<-EOF
       Where the new subsetting item should be inserted
 
       * :start  - insert at the beginning of the line.
@@ -116,7 +116,7 @@ Puppet::Type.newtype(:ini_subsetting) do
       * :before - insert before the specified element if possible.
       * :after  - insert after the specified element if possible.
       * :index  - insert at the specified index number.
-    eof
+    EOF
 
     newvalues(:start, :end, :before, :after, :index)
     defaultto(:end)
