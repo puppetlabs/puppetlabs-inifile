@@ -37,14 +37,6 @@ Naming/AccessorMethodName:
   Exclude:
     - 'lib/puppet/util/setting_value.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: lowercase, uppercase
-# Naming/HeredocDelimiterCase:
-#   Exclude:
-#     - 'lib/puppet/type/ini_subsetting.rb'
-
 # Offense count: 114
 # Configuration parameters: ForbiddenDelimiters.
 # ForbiddenDelimiters: (?i-mx:(^|\s)(EO[A-Z]{1}|END)(\s|$))
@@ -58,12 +50,12 @@ Naming/HeredocDelimiterNaming:
     - 'spec/unit/puppet/provider/ini_subsetting/ruby_spec.rb'
     - 'spec/unit/puppet/util/ini_file_spec.rb'
 
-# Offense count: 1
-# Configuration parameters: MinNameLength, AllowNamesEndingInNumbers, AllowedNames, ForbiddenNames.
-# AllowedNames: as, at, by, cc, db, id, if, in, io, ip, of, on, os, pp, to
-Naming/MethodParameterName:
-  Exclude:
-    - 'lib/puppet/util/ini_file.rb'
+# # Offense count: 1
+# # Configuration parameters: MinNameLength, AllowNamesEndingInNumbers, AllowedNames, ForbiddenNames.
+# # AllowedNames: as, at, by, cc, db, id, if, in, io, ip, of, on, os, pp, to
+# Naming/MethodParameterName:
+#   Exclude:
+#     - 'lib/puppet/util/ini_file.rb'
 
 # Offense count: 2
 # Configuration parameters: MinSize.
