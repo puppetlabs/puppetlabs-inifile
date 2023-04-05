@@ -335,10 +335,10 @@ module Puppet::Util
       end
     end
 
-    def flush_buffer_to_file(buffer, fh)
+    def flush_buffer_to_file(buffer, file)
       return if buffer.empty?
 
-      buffer.each { |l| fh.puts(l) }
+      buffer.each { |l| file.puts(l) }
       buffer.clear
     end
   end
