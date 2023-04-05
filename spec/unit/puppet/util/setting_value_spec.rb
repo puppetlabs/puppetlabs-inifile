@@ -37,7 +37,7 @@ describe Puppet::Util::SettingValue do
 
     it 'removes existing value' do
       setting_value.remove_subsetting('-Xmx')
-      expect(setting_value.get_subsetting_value('-Xmx')).to eq(nil)
+      expect(setting_value.get_subsetting_value('-Xmx')).to be_nil
     end
   end
 
@@ -68,7 +68,7 @@ describe Puppet::Util::SettingValue do
 
     it 'removes existing value' do
       setting_value.remove_subsetting('-Xmx')
-      expect(setting_value.get_subsetting_value('-Xmx')).to eq(nil)
+      expect(setting_value.get_subsetting_value('-Xmx')).to be_nil
     end
   end
 
@@ -108,7 +108,7 @@ describe Puppet::Util::SettingValue do
       setting_value = described_class.new(INIT_VALUE_UNQUOTED, ' ', QUOTE_CHAR)
       setting_value.remove_subsetting('-Xmx')
 
-      expect(setting_value.get_subsetting_value('-Xmx')).to eq(nil)
+      expect(setting_value.get_subsetting_value('-Xmx')).to be_nil
     end
   end
   it 'quotes the setting when removing an existing value #quotes' do

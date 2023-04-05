@@ -128,9 +128,9 @@ describe Puppet::Util::IniFile do
     end
 
     before :each do
-      expect(ini_sub.get_value('section1', 'far')).to eq(nil)
-      expect(ini_sub.get_value('section1', 'bar')).to eq(nil)
-      expect(ini_sub.get_value('section1', "xyzzy['thing1']['thing2']")).to eq(nil)
+      expect(ini_sub.get_value('section1', 'far')).to be_nil
+      expect(ini_sub.get_value('section1', 'bar')).to be_nil
+      expect(ini_sub.get_value('section1', "xyzzy['thing1']['thing2']")).to be_nil
     end
     # rubocop:enable RSpec/ExpectInHook
 

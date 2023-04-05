@@ -379,7 +379,7 @@ describe provider_class do
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       transaction = instance_double('transaction', persistence: true)
-      expect(Puppet::Transaction::ResourceHarness.new(transaction).evaluate(provider.resource).out_of_sync).to eq(true)
+      expect(Puppet::Transaction::ResourceHarness.new(transaction).evaluate(provider.resource).out_of_sync).to be(true)
       validate_file(expected_content_eight, tmpfile)
     end
 

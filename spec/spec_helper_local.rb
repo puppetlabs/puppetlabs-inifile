@@ -30,7 +30,7 @@ if ENV['COVERAGE'] == 'yes'
 end
 
 shared_examples 'create_ini_settings function' do
-  it { is_expected.not_to eq(nil) }
+  it { is_expected.not_to be_nil }
   it { is_expected.to run.with_params({}) }
   it { is_expected.to run.with_params({}, {}) }
 
