@@ -53,6 +53,7 @@ describe Puppet::Util::IniFile do
                                                      'baz' => '',
                                                      'foo' => 'foovalue')
     end
+
     it 'exposes settings for sections #section2' do
       expect(ini_sub.get_settings('section2')).to eq('baz' => 'bazvalue',
                                                      'foo' => 'foovalue2',
@@ -111,6 +112,7 @@ describe Puppet::Util::IniFile do
     it 'exposes settings for sections #bar' do
       expect(ini_sub.get_value('', 'foo')).to eq('bar')
     end
+
     it 'exposes settings for sections #foovalue' do
       expect(ini_sub.get_value('section1', 'foo')).to eq('foovalue')
     end
@@ -260,6 +262,7 @@ describe Puppet::Util::IniFile do
     it 'exposes settings for sections #print' do
       expect(ini_sub.get_value('khotkeys', '{5465e8c7-d608-4493-a48f-b99d99fdb508}')).to eq('Print,none,PrintScreen')
     end
+
     it 'exposes settings for sections #search' do
       expect(ini_sub.get_value('khotkeys', '{d03619b6-9b3c-48cc-9d9c-a2aadb485550}')).to eq('Search,none,Search')
     end
@@ -279,9 +282,11 @@ describe Puppet::Util::IniFile do
     it 'exposes settings for sections #A' do
       expect(ini_sub.get_value('Drive names', 'A:')).to eq '5.25" Floppy'
     end
+
     it 'exposes settings for sections #B' do
       expect(ini_sub.get_value('Drive names', 'B:')).to eq '3.5" Floppy'
     end
+
     it 'exposes settings for sections #C' do
       expect(ini_sub.get_value('Drive names', 'C:')).to eq 'Winchester'
     end
@@ -304,12 +309,15 @@ describe Puppet::Util::IniFile do
     it 'exposes settings for sections #log' do
       expect(ini_sub.get_value('global', 'log file')).to eq '/var/log/samba/log.%m'
     end
+
     it 'exposes settings for sections #kerberos' do
       expect(ini_sub.get_value('global', 'kerberos method')).to eq 'system keytab'
     end
+
     it 'exposes settings for sections #passdb' do
       expect(ini_sub.get_value('global', 'passdb backend')).to eq 'tdbsam'
     end
+
     it 'exposes settings for sections #security' do
       expect(ini_sub.get_value('global', 'security')).to eq 'ads'
     end

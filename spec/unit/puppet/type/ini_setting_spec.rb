@@ -91,9 +91,11 @@ describe ini_setting do
         it 'tells correct md5 hashes for multiple values' do
           expect(value.change_to_s('not_at', 'all_secret')).to include('6edef0c4f5ec664feff6ca6fbc290970', '1660308ab156754fa09af0e8dc2c6629')
         end
+
         it 'does not tell singular value one' do
           expect(value.change_to_s('not_at #', 'all_secret')).not_to include('not_at')
         end
+
         it 'does not tell singular value two' do
           expect(value.change_to_s('not_at', 'all_secret')).not_to include('all_secret')
         end
@@ -101,6 +103,7 @@ describe ini_setting do
         it 'tells md5 of current value' do
           expect(value.is_to_s('not_at_all_secret')).to eq('{md5}858b46aee11b780b8f5c8853668efc05')
         end
+
         it 'does not tell the current value' do
           expect(value.is_to_s('not_at_all_secret')).not_to include('not_secret_at_all')
         end
@@ -108,6 +111,7 @@ describe ini_setting do
         it 'tells md5 of new value' do
           expect(value.should_to_s('not_at_all_secret')).to eq('{md5}858b46aee11b780b8f5c8853668efc05')
         end
+
         it 'does not tell the new value' do
           expect(value.should_to_s('not_at_all_secret')).not_to include('not_secret_at_all')
         end
@@ -115,9 +119,11 @@ describe ini_setting do
         it 'tells redaction warning in place of actual values' do
           expect(value.change_to_s('at_all', 'not_secret')).to include('[redacted sensitive information]')
         end
+
         it 'does not tell actual value one' do
           expect(value.change_to_s('at_all', 'not_secret')).not_to include('not_secret')
         end
+
         it 'does not tell actual value two' do
           expect(value.change_to_s('at_all', 'not_secret')).not_to include('at_all')
         end
@@ -125,6 +131,7 @@ describe ini_setting do
         it 'tells redaction warning in place of current value' do
           expect(value.is_to_s('not_secret_at_all')).to eq('[redacted sensitive information]')
         end
+
         it 'does not tell current value' do
           expect(value.is_to_s('not_secret_at_all')).not_to include('not_secret_at_all')
         end
@@ -132,6 +139,7 @@ describe ini_setting do
         it 'tells redaction warning in place of new value' do
           expect(value.should_to_s('not_secret_at_all')).to eq('[redacted sensitive information]')
         end
+
         it 'does not tell new value' do
           expect(value.should_to_s('not_secret_at_all')).not_to include('not_secret_at_all')
         end
@@ -162,9 +170,11 @@ describe ini_setting do
         it 'creates relationship' do
           expect(auto_req.size).to be 1
         end
+
         it 'links to ini_setting resource' do
           expect(auto_req[0].target).to eq(ini_setting_resource)
         end
+
         it 'autorequires parent directory' do
           expect(auto_req[0].source).to eq(file_resource)
         end

@@ -197,6 +197,7 @@ describe 'ini_setting resource' do
         it 'applies manifest and expects changed value to be logged in proper form' do
           expect(res.stdout).to match(i[:matcher])
         end
+
         it 'applies manifest and expects changed value to be logged in proper form #optional test' do
           expect(res.stdout).not_to match(i[:value]) unless i[:show_diff] == true
         end
@@ -258,6 +259,7 @@ describe 'ini_setting resource' do
 
         describe file("#{basedir}/ini_setting.ini") do
           it { is_expected.to be_file }
+
           describe '#content' do
             subject { super().content }
 
@@ -289,6 +291,7 @@ describe 'ini_setting resource' do
 
         describe file("#{basedir}/ini_setting.ini") do
           it { is_expected.to be_file }
+
           describe '#content' do
             subject { super().content }
 
@@ -323,6 +326,7 @@ describe 'ini_setting resource' do
 
         describe file("#{basedir}/ini_setting.ini") do
           it { is_expected.to be_file }
+
           describe '#content' do
             subject { super().content }
 
@@ -356,6 +360,7 @@ describe 'ini_setting resource' do
 
         describe file("#{basedir}/ini_setting.ini") do
           it { is_expected.to be_file }
+
           describe '#content' do
             subject { super().content }
 

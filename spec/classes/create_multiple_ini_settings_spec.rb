@@ -23,6 +23,7 @@ describe 'create_multiple_ini_settings' do
         path: '/tmp/foo.ini',
       )
     }
+
     it {
       is_expected.to contain_ini_setting('/tmp/foo.ini [section1] setting2').with(
         ensure: 'absent',

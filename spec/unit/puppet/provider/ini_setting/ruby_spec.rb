@@ -52,6 +52,7 @@ describe provider_class do
         expect(child_one).to receive(:file_path).and_return(emptyfile)
         expect(child_one.instances).to eq([])
       end
+
       child_two = Class.new(provider_class) do
         def self.file_path
           '/some/file/path'

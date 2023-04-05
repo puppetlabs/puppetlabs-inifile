@@ -56,6 +56,7 @@ describe Puppet::Util::SettingValue do
       setting_value.add_subsetting('-Xms', '256m')
       expect(setting_value.get_subsetting_value('-Xms')).to eq('256m')
     end
+
     it 'adds a new value #original' do
       setting_value.add_subsetting('-Xms', '256m')
       expect(setting_value.get_value).to eq(INIT_VALUE_COMMA[0, INIT_VALUE_COMMA.length - 1] + ',-Xms256m"')
@@ -84,6 +85,7 @@ describe Puppet::Util::SettingValue do
 
       expect(setting_value.get_subsetting_value('-Xms')).to eq('256m')
     end
+
     it 'quotes the setting when adding a value #original' do
       setting_value = described_class.new(INIT_VALUE_UNQUOTED, ' ', QUOTE_CHAR)
       setting_value.add_subsetting('-Xms', '256m')
@@ -97,6 +99,7 @@ describe Puppet::Util::SettingValue do
 
       expect(setting_value.get_subsetting_value('-Xmx')).to eq('512m')
     end
+
     it 'quotes the setting when changing an existing value #quotes' do
       setting_value = described_class.new(INIT_VALUE_UNQUOTED, ' ', QUOTE_CHAR)
       setting_value.add_subsetting('-Xmx', '512m')
