@@ -73,7 +73,9 @@ describe ini_setting do
       end
       let(:value) { described_class.new(name: 'foo', value: 'whatever', show_diff: param).property(:value) }
 
-      if cfg && [true, 'true'].include?(param)
+      true_array = [true, 'true']
+      md5_array = ['md5', :md5]
+      if cfg && true_array.include?(param)
         it 'displays diff' do
           expect(value.change_to_s('not_secret', 'at_all')).to include('not_secret', 'at_all')
         end
@@ -85,7 +87,7 @@ describe ini_setting do
         it 'tells new value' do
           expect(value.should_to_s('not_secret_at_all')).to eq('not_secret_at_all')
         end
-      elsif cfg && ['md5', :md5].include?(param)
+      elsif cfg && md5_array.include?(param)
         it 'tells correct md5 hashes for multiple values' do
           expect(value.change_to_s('not_at', 'all_secret')).to include('6edef0c4f5ec664feff6ca6fbc290970', '1660308ab156754fa09af0e8dc2c6629')
         end
