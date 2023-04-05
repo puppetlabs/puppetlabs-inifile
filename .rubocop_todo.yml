@@ -8,11 +8,11 @@ Lint/BooleanSymbol:
 
 # Offense count: 6
 # This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantCopEnableDirective:
-  Exclude:
-    - 'spec/unit/puppet/provider/ini_setting/ruby_spec.rb'
-    - 'spec/unit/puppet/type/ini_setting_spec.rb'
-    - 'spec/unit/puppet/util/ini_file_spec.rb'
+# Lint/RedundantCopEnableDirective:
+#   Exclude:
+#     - 'spec/unit/puppet/provider/ini_setting/ruby_spec.rb'
+#     - 'spec/unit/puppet/type/ini_setting_spec.rb'
+#     - 'spec/unit/puppet/util/ini_file_spec.rb'
 
 # Offense count: 11
 # Configuration parameters: AllowedMethods, AllowedPatterns, CountRepeatedAttributes.

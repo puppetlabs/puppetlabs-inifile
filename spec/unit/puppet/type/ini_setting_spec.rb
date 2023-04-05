@@ -64,7 +64,6 @@ describe ini_setting do
         it { is_expected.to raise_exception }
       end
     end
-    # rubocop:enable RSpec/NestedGroups
   end
 
   [true, false].product([true, false, 'true', 'false', 'md5', :md5]).each do |cfg, param|

@@ -114,8 +114,6 @@ describe provider_class do
         expect(ensure_array.uniq).to eq([:present])
         expect((real_array - expected_array) && (expected_array - real_array)).to eq([])
       end
-      # rubocop:enable RSpec/ExampleLength
-      # rubocop:enable RSpec/MultipleExpectations
     end
   end
 
@@ -384,7 +382,6 @@ describe provider_class do
       expect(Puppet::Transaction::ResourceHarness.new(transaction).evaluate(provider.resource).out_of_sync).to eq(true)
       validate_file(expected_content_eight, tmpfile)
     end
-    # rubocop:enable RSpec/MultipleExpectations : Unable to reduce without altering test
 
     expected_content_nine = <<~EOS
       # This is a comment
@@ -1586,5 +1583,4 @@ setting1 = hellowworld
       validate_file(expected_content_one, tmpfile)
     end
   end
-  # rubocop:enable Layout/IndentHeredoc
 end
