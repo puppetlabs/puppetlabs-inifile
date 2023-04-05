@@ -112,16 +112,11 @@ RSpec/ImplicitSubject:
     - 'spec/classes/create_multiple_ini_settings_spec.rb'
     - 'spec/classes/inherit_test1_spec.rb'
 
-# Offense count: 4
-RSpec/LeakyConstantDeclaration:
-  Exclude:
-    - 'spec/unit/puppet/util/setting_value_spec.rb'
-
 # Offense count: 3
 # This cop supports safe autocorrection (--autocorrect).
-RSpec/MatchArray:
-  Exclude:
-    - 'spec/unit/puppet/util/ini_file_spec.rb'
+# RSpec/MatchArray:
+#   Exclude:
+#     - 'spec/unit/puppet/util/ini_file_spec.rb'
 
 # Offense count: 5
 RSpec/MultipleExpectations:

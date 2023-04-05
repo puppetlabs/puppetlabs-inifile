@@ -195,10 +195,7 @@ describe Puppet::Util::IniFile do
     end
 
     it 'parses the sections' do
-      expect(ini_sub.section_names).to match_array ['',
-                                                    'branch "main"',
-                                                    'alias',
-                                                    'branch "production"']
+      expect(ini_sub.section_names).to contain_exactly('', 'branch "main"', 'alias', 'branch "production"')
     end
   end
 
@@ -228,7 +225,7 @@ describe Puppet::Util::IniFile do
     end
 
     it 'parses the correct section_names' do
-      expect(ini_sub.section_names).to match_array ['', 'global', 'printers', 'print$', 'Shares']
+      expect(ini_sub.section_names).to contain_exactly('', 'global', 'printers', 'print$', 'Shares')
     end
   end
 
@@ -242,10 +239,7 @@ describe Puppet::Util::IniFile do
     end
 
     it 'parses the correct section_names' do
-      expect(ini_sub.section_names).to match_array [
-        '',
-        'monitor:///var/log/*.log',
-      ]
+      expect(ini_sub.section_names).to contain_exactly('', 'monitor:///var/log/*.log')
     end
   end
 
