@@ -112,7 +112,7 @@ module Puppet::Util
         before_index = insert_value.to_i
         before_index = @subsetting_items.length if before_index > @subsetting_items.length
         @subsetting_items.insert(before_index, new_item)
-      else
+      else # rubocop:disable Lint/DuplicateBranch
         @subsetting_items.push(new_item)
       end
 

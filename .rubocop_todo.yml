@@ -6,12 +6,6 @@ Lint/BooleanSymbol:
     - 'lib/puppet/type/ini_subsetting.rb'
     - 'lib/puppet/util/setting_value.rb'
 
-# # Offense count: 1
-# # Configuration parameters: IgnoreLiteralBranches, IgnoreConstantBranches.
-# Lint/DuplicateBranch:
-#   Exclude:
-#     - 'lib/puppet/util/setting_value.rb'
-
 # Offense count: 6
 # This cop supports safe autocorrection (--autocorrect).
 Lint/RedundantCopEnableDirective:
