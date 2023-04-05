@@ -951,7 +951,7 @@ subby=bar
 
  -nonstandard-
    shoes = purple
-EOS
+      EOS
     end
 
     expected_content_one = <<-EOS
@@ -1468,7 +1468,7 @@ baz = bazvalue
 [section1]
 # foo=foovalue
 # bar=bar2
-EOS
+        EOS
       end
 
       expected_content_one = <<-EOS
