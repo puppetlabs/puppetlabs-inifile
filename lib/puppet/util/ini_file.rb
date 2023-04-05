@@ -146,7 +146,7 @@ module Puppet::Util
           whitespace_buffer = []
 
           if section.new_section? && !section.global?
-            if index == 1 && !global_empty || index > 1
+            if (index == 1 && !global_empty) || index > 1
               fh.puts('')
             end
 
