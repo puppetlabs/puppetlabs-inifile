@@ -17,6 +17,7 @@ module Puppet::Util
       @subsetting_items = []
 
       return unless @setting_value
+
       unquoted, quote_char = unquote_setting_value(setting_value)
       @quote_char = quote_char unless quote_char.empty?
       # an item can contain escaped separator
@@ -66,6 +67,7 @@ module Puppet::Util
       return nil unless index
       # the exact match is set and the item is found, the value should be true
       return true if use_exact_match == :true
+
       item = @subsetting_items[index]
       item[(subsetting.length + @key_val_separator.length)..-1]
     end

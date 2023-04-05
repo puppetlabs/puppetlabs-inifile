@@ -148,6 +148,7 @@ Puppet::Type.newtype(:ini_setting) do
     if self[:ensure] == :absent && self[:refreshonly]
       return provider.destroy
     end
+
     # update the value in the provider, which will save the value to the ini file
     provider.value = self[:value] if self[:refreshonly]
   end

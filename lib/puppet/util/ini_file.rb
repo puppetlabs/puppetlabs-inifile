@@ -110,6 +110,7 @@ module Puppet::Util
     def remove_setting(section_name, setting)
       section = @sections_hash[section_name]
       return unless section.existing_setting?(setting)
+
       # If the setting is found, we have some work to do.
       # First, we remove the line from our array of lines:
       remove_line(section, setting)
@@ -125,6 +126,7 @@ module Puppet::Util
       decrement_section_line_numbers(section_index + 1)
 
       return unless section.empty?
+
       # By convention, it's time to remove this newly emptied out section
       lines.delete_at(section.start_line)
       decrement_section_line_numbers(section_index + 1)
@@ -247,6 +249,7 @@ module Puppet::Util
     def update_line(section, setting, value)
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
+
         if match[2] == setting
           lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}"
         end
@@ -256,6 +259,7 @@ module Puppet::Util
     def remove_line(section, setting)
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
+
         if match[2] == setting
           lines.delete_at(line_num)
         end
@@ -292,6 +296,7 @@ module Puppet::Util
     #               be used to mimic the whitespace from the comment line
     def find_commented_setting(section, setting)
       return nil if section.new_section?
+
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @commented_setting_regex.match(lines[line_num]))
         if match[3] == setting
@@ -332,6 +337,7 @@ module Puppet::Util
 
     def flush_buffer_to_file(buffer, fh)
       return if buffer.empty?
+
       buffer.each { |l| fh.puts(l) }
       buffer.clear
     end
