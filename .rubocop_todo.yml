@@ -86,26 +86,12 @@ RSpec/DescribeClass:
     - 'spec/unit/puppet/type/ini_setting_spec.rb'
     - 'spec/unit/puppet/type/ini_subetting_spec.rb'
 
-# Offense count: 40
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowConsecutiveOneLiners.
-# RSpec/EmptyLineAfterExample:
-#   Exclude:
-#     - 'spec/acceptance/ini_setting_spec.rb'
-#     - 'spec/acceptance/ini_subsetting_spec.rb'
-#     - 'spec/classes/create_ini_settings_test_spec.rb'
-#     - 'spec/classes/create_multiple_ini_settings_spec.rb'
-#     - 'spec/unit/puppet/provider/ini_setting/ruby_spec.rb'
-#     - 'spec/unit/puppet/type/ini_setting_spec.rb'
-#     - 'spec/unit/puppet/type/ini_subetting_spec.rb'
-#     - 'spec/unit/puppet/util/ini_file_spec.rb'
-#     - 'spec/unit/puppet/util/setting_value_spec.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-RSpec/EmptyLineAfterExampleGroup:
-  Exclude:
-    - 'spec/unit/puppet/util/setting_value_spec.rb'
+# # Offense count: 1
+# # This cop supports safe autocorrection (--autocorrect).
+# RSpec/EmptyLineAfterExampleGroup:
+#   Exclude:
+#     - 'spec/unit/puppet/util/setting_value_spec.rb'
 
 # Offense count: 4
 # This cop supports safe autocorrection (--autocorrect).
