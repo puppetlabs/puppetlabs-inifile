@@ -7,7 +7,7 @@ module Puppet::Util
   #
   # ini_file.rb
   #
-  class IniFile
+  class IniFile # rubocop:disable Metrics/ClassLength
     def initialize(path, key_val_separator = ' = ', section_prefix = '[', section_suffix = ']',
                    indent_char = ' ', indent_width = nil)
 
