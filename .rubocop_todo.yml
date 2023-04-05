@@ -50,20 +50,12 @@ Naming/HeredocDelimiterNaming:
     - 'spec/unit/puppet/provider/ini_subsetting/ruby_spec.rb'
     - 'spec/unit/puppet/util/ini_file_spec.rb'
 
-# Offense count: 8
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# RSpec/BeEq:
-#   Exclude:
-#     - 'spec/spec_helper_local.rb'
-#     - 'spec/unit/puppet/provider/ini_setting/ruby_spec.rb'
-#     - 'spec/unit/puppet/util/ini_file_spec.rb'
-#     - 'spec/unit/puppet/util/setting_value_spec.rb'
 
 # Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-RSpec/ContextMethod:
-  Exclude:
-    - 'spec/unit/puppet/util/external_iterator_spec.rb'
+# # This cop supports safe autocorrection (--autocorrect).
+# RSpec/ContextMethod:
+#   Exclude:
+#     - 'spec/unit/puppet/util/external_iterator_spec.rb'
 
 # Offense count: 27
 # Configuration parameters: Prefixes, AllowedPatterns.

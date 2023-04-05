@@ -12,7 +12,7 @@ describe Puppet::Util::ExternalIterator do
     expected_values = [['a', 0], ['b', 1], ['c', 2]]
   end
 
-  context '#next' do
+  describe '#next' do
     it 'iterates over the items' do
       expected_values.each do |expected_pair|
         expect(subject_class.next).to eq(expected_pair)
@@ -20,7 +20,7 @@ describe Puppet::Util::ExternalIterator do
     end
   end
 
-  context '#peek' do
+  describe '#peek' do
     it 'returns the 0th item repeatedly' do
       (0..2).each do |_i|
         expect(subject_class.peek).to eq(expected_values[0])
