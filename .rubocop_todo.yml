@@ -17,11 +17,6 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Max: 128
 
-# # Offense count: 1
-# # Configuration parameters: CountComments, CountAsOne.
-# Metrics/ClassLength:
-#   Max: 211
-
 # Offense count: 3
 # Configuration parameters: AllowedMethods, AllowedPatterns.
 Metrics/CyclomaticComplexity:
@@ -32,11 +27,11 @@ Metrics/CyclomaticComplexity:
 Metrics/MethodLength:
   Max: 33
 
-# Offense count: 2
-# Configuration parameters: CountKeywordArgs.
-Metrics/ParameterLists:
-  MaxOptionalParameters: 5
-  Max: 6
+# # Offense count: 2
+# # Configuration parameters: CountKeywordArgs.
+# Metrics/ParameterLists:
+#   MaxOptionalParameters: 5
+#   Max: 6
 
 # Offense count: 2
 # Configuration parameters: AllowedMethods, AllowedPatterns.

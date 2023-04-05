@@ -8,7 +8,7 @@ module Puppet::Util
   # ini_file.rb
   #
   class IniFile # rubocop:disable Metrics/ClassLength
-    def initialize(path, key_val_separator = ' = ', section_prefix = '[', section_suffix = ']',
+    def initialize(path, key_val_separator = ' = ', section_prefix = '[', section_suffix = ']', # rubocop:disable Metrics/ParameterLists
                    indent_char = ' ', indent_width = nil)
 
       k_v_s = (key_val_separator =~ %r{^\s+$}) ? ' ' : key_val_separator.strip
