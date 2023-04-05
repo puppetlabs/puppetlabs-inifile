@@ -14,6 +14,7 @@ describe ini_setting do
         Puppet.features.stub(:microsoft_windows?) { false }
         Puppet::Util::Platform.stub(:windows?) { false }
       end
+
       context 'with an absolute path' do
         let(:path) { '/absolute/path' }
 
@@ -71,6 +72,7 @@ describe ini_setting do
       before(:each) do
         Puppet[:show_diff] = cfg
       end
+
       let(:value) { described_class.new(name: 'foo', value: 'whatever', show_diff: param).property(:value) }
 
       true_array = [true, 'true']

@@ -65,6 +65,7 @@ describe ini_subsetting do
       before(:each) do
         Puppet[:show_diff] = cfg
       end
+
       let(:value) { described_class.new(name: 'foo', value: 'whatever', show_diff: param).property(:value) }
 
       if cfg && param == true

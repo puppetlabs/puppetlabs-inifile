@@ -234,6 +234,7 @@ describe 'ini_setting resource' do
     after :each do
       run_shell("rm #{basedir}/ini_setting.ini", expect_failures: true)
     end
+
     context 'when event is triggered' do
       context 'update setting value' do
         let(:update_value_manifest) do
