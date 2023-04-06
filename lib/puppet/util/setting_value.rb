@@ -38,10 +38,10 @@ module Puppet::Util
         quote_char = "'"
       end
 
-      unquoted = if quote_char != ''
-                   setting_value[1, setting_value.length - 2]
-                 else
+      unquoted = if quote_char == ''
                    setting_value
+                 else
+                   setting_value[1, setting_value.length - 2]
                  end
 
       [unquoted, quote_char]
