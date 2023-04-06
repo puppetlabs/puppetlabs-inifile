@@ -109,24 +109,14 @@ Style/ClassAndModuleChildren:
     - 'lib/puppet/util/ini_file.rb'
     - 'lib/puppet/util/ini_file/section.rb'
     - 'lib/puppet/util/setting_value.rb'
-# # Offense count: 7
-# # This cop supports unsafe autocorrection (--autocorrect-all).
-# # Configuration parameters: Mode.
-# Style/StringConcatenation:
-#   Exclude:
-#     - 'lib/puppet/type/ini_setting.rb'
-#     - 'lib/puppet/type/ini_subsetting.rb'
-#     - 'spec/acceptance/ini_subsetting_spec.rb'
-#     - 'spec/unit/puppet/provider/ini_setting/ruby_spec.rb'
-#     - 'spec/unit/puppet/util/setting_value_spec.rb'
 
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: AllowMethodsWithArguments, AllowedMethods, AllowedPatterns, AllowComments.
-# AllowedMethods: define_method
-Style/SymbolProc:
-  Exclude:
-    - 'lib/puppet/util/setting_value.rb'
+# # Offense count: 1
+# # This cop supports unsafe autocorrection (--autocorrect-all).
+# # Configuration parameters: AllowMethodsWithArguments, AllowedMethods, AllowedPatterns, AllowComments.
+# # AllowedMethods: define_method
+# Style/SymbolProc:
+#   Exclude:
+#     - 'lib/puppet/util/setting_value.rb'
 
 # Offense count: 15
 # This cop supports safe autocorrection (--autocorrect).

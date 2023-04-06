@@ -22,7 +22,7 @@ module Puppet::Util
       @quote_char = quote_char unless quote_char.empty?
       # an item can contain escaped separator
       @subsetting_items = unquoted.scan(Regexp.new("(?:(?:[^\\#{@subsetting_separator}]|\\.)+)"))
-      @subsetting_items.map! { |item| item.strip }
+      @subsetting_items.map!(&:strip)
     end
 
     # If the setting value is quoted, the quotes are
