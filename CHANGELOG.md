@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v5.4.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.4.1) (2023-04-06)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.4.0...v5.4.1)
+
+### Fixed
+
+- pdksync - \(CONT-189\) Remove support for RedHat6 / OracleLinux6 / Scientific6 [\#492](https://github.com/puppetlabs/puppetlabs-inifile/pull/492) ([david22swan](https://github.com/david22swan))
+- pdksync - \(CONT-130\) - Dropping Support for Debian 9 [\#489](https://github.com/puppetlabs/puppetlabs-inifile/pull/489) ([jordanbreen28](https://github.com/jordanbreen28))
+
 ## [v5.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.4.0) (2022-10-03)
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.3.0...v5.4.0)
@@ -101,7 +110,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Added
 
-- Finish API conversion of `create_ini_settings` [\#387](https://github.com/puppetlabs/puppetlabs-inifile/pull/387) ([alexjfisher](https://github.com/alexjfisher))
+- Finish API conversion of `create\_ini\_settings` [\#387](https://github.com/puppetlabs/puppetlabs-inifile/pull/387) ([alexjfisher](https://github.com/alexjfisher))
 
 ## [v4.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.1.0) (2020-01-15)
 
@@ -147,6 +156,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Fixed
 
 - FM-7779 - Cleanup Inifile [\#328](https://github.com/puppetlabs/puppetlabs-inifile/pull/328) ([lionce](https://github.com/lionce))
+- \(MODULES-6714\) - inifile: ensure absent not working with refreshonly = true [\#313](https://github.com/puppetlabs/puppetlabs-inifile/pull/313) ([Lavinia-Dan](https://github.com/Lavinia-Dan))
 
 ## [2.5.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.5.0) (2018-12-28)
 
@@ -160,7 +170,6 @@ All notable changes to this project will be documented in this file. The format 
 ### Fixed
 
 - pdksync - \(FM-7655\) Fix rubygems-update for ruby \< 2.3 [\#320](https://github.com/puppetlabs/puppetlabs-inifile/pull/320) ([tphoney](https://github.com/tphoney))
-- \(MODULES-6714\) - inifile: ensure absent not working with refreshonly = true [\#313](https://github.com/puppetlabs/puppetlabs-inifile/pull/313) ([Lavinia-Dan](https://github.com/Lavinia-Dan))
 - \(FM-7483\) - update module to the latest version [\#310](https://github.com/puppetlabs/puppetlabs-inifile/pull/310) ([lionce](https://github.com/lionce))
 - \(FM-7331\)-Fix japanese test [\#308](https://github.com/puppetlabs/puppetlabs-inifile/pull/308) ([lionce](https://github.com/lionce))
 
