@@ -5,6 +5,6 @@ require 'spec_helper'
 # parser OK.
 describe 'inherit_test1' do
   it {
-    is_expected.to contain_inherit_ini_setting('valid_type').with('value' => 'true')
+    expect(subject).to contain_inherit_ini_setting('valid_type').with('value' => 'true')
   }
 end

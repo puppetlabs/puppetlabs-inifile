@@ -15,7 +15,7 @@ describe 'create_multiple_ini_settings' do
     it { is_expected.to have_ini_setting_resource_count(2) }
 
     it {
-      is_expected.to contain_ini_setting('/tmp/foo.ini [section1] setting1').with(
+      expect(subject).to contain_ini_setting('/tmp/foo.ini [section1] setting1').with(
         ensure: 'present',
         section: 'section1',
         setting: 'setting1',
@@ -25,7 +25,7 @@ describe 'create_multiple_ini_settings' do
     }
 
     it {
-      is_expected.to contain_ini_setting('/tmp/foo.ini [section1] setting2').with(
+      expect(subject).to contain_ini_setting('/tmp/foo.ini [section1] setting2').with(
         ensure: 'absent',
         section: 'section1',
         setting: 'setting2',

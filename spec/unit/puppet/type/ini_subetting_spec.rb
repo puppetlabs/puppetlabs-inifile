@@ -6,18 +6,18 @@ ini_subsetting = Puppet::Type.type(:ini_subsetting)
 
 describe ini_subsetting do
   describe 'quote_char validation' do
-    subject { -> { described_class.new(name: 'foo', path: path, quote_char: quote_char) } }
+    subject(:ini_subsetting_test) { described_class.new(name: 'foo', path: path, quote_char: quote_char) }
 
     context 'when on posix platforms' do
       let(:path) { '/absolute/path' }
       let(:quote_char) { '\”' }
 
-      it { expect(subject).to raise_exception }
+      it { expect { ini_subsetting_test }.to raise_exception(Puppet::ResourceError) }
     end
   end
 
   describe 'path validation' do
-    subject { -> { described_class.new(name: 'foo', path: path) } }
+    subject(:ini_subsetting_test) { described_class.new(name: 'foo', path: path) }
 
     context 'when on posix platforms' do
       before(:each) do
@@ -29,13 +29,13 @@ describe ini_subsetting do
       context 'with an absolute path' do
         let(:path) { '/absolute/path' }
 
-        it { expect(subject).not_to raise_exception }
+        it { expect { ini_subsetting_test }.not_to raise_exception }
       end
 
       context 'with a relative path' do
         let(:path) { 'relative/path' }
 
-        it { expect(subject).to raise_exception }
+        it { expect { ini_subsetting_test }.to raise_exception(Puppet::ResourceError) }
       end
     end
 
@@ -49,13 +49,13 @@ describe ini_subsetting do
       context 'with an absolute path with front slashes' do
         let(:path) { 'c:/absolute/path' }
 
-        it { expect(subject).not_to raise_exception }
+        it { expect { ini_subsetting_test }.not_to raise_exception }
       end
 
       context 'with a relative path with back slashes' do
         let(:path) { 'relative\path' }
 
-        it { expect(subject).to raise_exception }
+        it { expect { ini_subsetting_test }.to raise_exception(Puppet::ResourceError) }
       end
     end
   end

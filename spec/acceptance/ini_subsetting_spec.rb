@@ -25,7 +25,7 @@ describe 'ini_subsetting resource' do
         subject { super().content }
 
         it {
-          is_expected.to match content
+          expect(subject).to match content
         }
       end
     end

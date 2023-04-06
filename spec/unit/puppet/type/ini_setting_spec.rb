@@ -6,7 +6,7 @@ ini_setting = Puppet::Type.type(:ini_setting)
 
 describe ini_setting do
   describe 'path validation' do
-    subject { -> { described_class.new(name: 'foo', path: path) } }
+    subject(:ini_setting_path) { described_class.new(name: 'foo', path: path) }
 
     context 'when on posix platforms' do
       before(:each) do
@@ -18,13 +18,13 @@ describe ini_setting do
       context 'with an absolute path' do
         let(:path) { '/absolute/path' }
 
-        it { expect(subject).not_to raise_exception }
+        it { expect { ini_setting_path }.not_to raise_exception }
       end
 
       context 'with a relative path' do
         let(:path) { 'relative/path' }
 
-        it { expect(subject).to raise_exception }
+        it { expect { ini_setting_path }.to raise_exception(Puppet::ResourceError) }
       end
     end
 
@@ -38,31 +38,31 @@ describe ini_setting do
       context 'with an absolute path with front slashes' do
         let(:path) { 'c:/absolute/path' }
 
-        it { expect(subject).not_to raise_exception }
+        it { expect { ini_setting_path }.not_to raise_exception }
       end
 
       context 'with an absolute path with backslashes' do
         let(:path) { 'c:\absolute\path' }
 
-        it { expect(subject).not_to raise_exception }
+        it { expect { ini_setting_path }.not_to raise_exception }
       end
 
       context 'with an absolute path with mixed slashes' do
         let(:path) { 'c:/absolute\path' }
 
-        it { expect(subject).not_to raise_exception }
+        it { expect { ini_setting_path }.not_to raise_exception }
       end
 
       context 'with a relative path with front slashes' do
         let(:path) { 'relative/path' }
 
-        it { expect(subject).to raise_exception }
+        it { expect { ini_setting_path }.to raise_exception(Puppet::ResourceError) }
       end
 
       context 'with a relative path with back slashes' do
         let(:path) { 'relative\path' }
 
-        it { expect(subject).to raise_exception }
+        it { expect { ini_setting_path }.to raise_exception(Puppet::ResourceError) }
       end
     end
   end
