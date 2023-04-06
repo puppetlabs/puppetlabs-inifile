@@ -15,7 +15,7 @@ describe 'ini_subsetting resource' do
     end
 
     it 'applies the manifest twice' do
-      expect(idempotent_apply(pp)).not_to raise_error
+      expect { idempotent_apply(pp) }.not_to raise_error
     end
 
     describe file(path) do
@@ -83,7 +83,7 @@ describe 'ini_subsetting resource' do
     EOS
 
     it 'applies the manifest twice' do
-      expect(idempotent_apply(pp)).not_to raise_error
+      expect { idempotent_apply(pp) }.not_to raise_error
     end
 
     describe file("#{basedir}/ini_subsetting.ini") do
@@ -121,7 +121,7 @@ describe 'ini_subsetting resource' do
 
     it 'applies the manifest twice' do
       run_shell("echo -e [one]\\\\nkey = alphabet betatrons > #{basedir}/ini_subsetting.ini", expect_failures: true)
-      expect(idempotent_apply(pp)).not_to raise_error
+      expect { idempotent_apply(pp) }.not_to raise_error
     end
 
     describe file("#{basedir}/ini_subsetting.ini") do
@@ -176,7 +176,7 @@ describe 'ini_subsetting resource' do
         EOS
 
         it 'applies the manifest twice' do
-          expect(idempotent_apply(pp)).not_to raise_error
+          expect { idempotent_apply(pp) }.not_to raise_error
         end
 
         describe file("#{basedir}/ini_subsetting.ini") do

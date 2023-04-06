@@ -15,7 +15,7 @@ describe 'ini_setting resource' do
     end
 
     it 'applies the manifest twice' do
-      expect(idempotent_apply(pp)).not_to raise_error
+      expect { idempotent_apply(pp) }.not_to raise_error
     end
 
     describe file(path) do
@@ -87,7 +87,7 @@ describe 'ini_setting resource' do
     EOS
 
     it 'applies the manifest twice' do
-      expect(idempotent_apply(pp)).not_to raise_error
+      expect { idempotent_apply(pp) }.not_to raise_error
     end
 
     describe file("#{basedir}/ini_setting.ini") do
@@ -130,7 +130,7 @@ describe 'ini_setting resource' do
     EOS
 
     it 'applies the manifest twice' do
-      expect(idempotent_apply(pp)).not_to raise_error
+      expect { idempotent_apply(pp) }.not_to raise_error
     end
 
     describe file("#{basedir}/ini_setting.ini") do
