@@ -49,7 +49,7 @@ describe provider_class do
         end
       end
       it 'returns [] when file is empty' do
-        expect(child_one).to receive(:file_path).and_return(emptyfile)
+        allow(child_one).to receive(:file_path).and_return(emptyfile)
         expect(child_one.instances).to eq([])
       end
 
