@@ -72,9 +72,7 @@ module Puppet::Util
         separator: separator,
         value: value,
       }
-      unless @sections_hash.key?(section_name)
-        add_section(Section.new(section_name, nil, nil, nil, nil))
-      end
+      add_section(Section.new(section_name, nil, nil, nil, nil)) unless @sections_hash.key?(section_name)
 
       section = @sections_hash[section_name]
 
@@ -146,9 +144,7 @@ module Puppet::Util
           whitespace_buffer = []
 
           if section.new_section? && !section.global?
-            if (index == 1 && !global_empty) || index > 1
-              fh.puts('')
-            end
+            fh.puts('') if (index == 1 && !global_empty) || index > 1
 
             fh.puts("#{@section_prefix}#{section.name}#{@section_suffix}")
           end
@@ -250,9 +246,7 @@ module Puppet::Util
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
 
-        if match[2] == setting
-          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}"
-        end
+        lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}" if match[2] == setting
       end
     end
 
@@ -260,9 +254,7 @@ module Puppet::Util
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
 
-        if match[2] == setting
-          lines.delete_at(line_num)
-        end
+        lines.delete_at(line_num) if match[2] == setting
       end
     end
 
@@ -299,9 +291,7 @@ module Puppet::Util
 
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @commented_setting_regex.match(lines[line_num]))
-        if match[3] == setting
-          return { match: match, line_num: line_num }
-        end
+        return { match: match, line_num: line_num } if match[3] == setting
       end
       nil
     end

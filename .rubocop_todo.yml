@@ -110,21 +110,13 @@ Style/ClassAndModuleChildren:
     - 'lib/puppet/util/ini_file/section.rb'
     - 'lib/puppet/util/setting_value.rb'
 
-# # Offense count: 4
+# # Offense count: 10
 # # This cop supports safe autocorrection (--autocorrect).
-# Style/FileWrite:
+# Style/IfUnlessModifier:
 #   Exclude:
-#     - 'spec/unit/puppet/provider/ini_setting/inheritance_spec.rb'
-#     - 'spec/unit/puppet/provider/ini_setting/ruby_spec.rb'
-#     - 'spec/unit/puppet/provider/ini_subsetting/ruby_spec.rb'
-
-# Offense count: 10
-# This cop supports safe autocorrection (--autocorrect).
-Style/IfUnlessModifier:
-  Exclude:
-    - 'lib/puppet/type/ini_setting.rb'
-    - 'lib/puppet/type/ini_subsetting.rb'
-    - 'lib/puppet/util/ini_file.rb'
+#     - 'lib/puppet/type/ini_setting.rb'
+#     - 'lib/puppet/type/ini_subsetting.rb'
+#     - 'lib/puppet/util/ini_file.rb'
 
 # Offense count: 1
 Style/MixinUsage:

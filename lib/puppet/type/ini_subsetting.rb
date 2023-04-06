@@ -52,9 +52,7 @@ Puppet::Type.newtype(:ini_subsetting) do
   newparam(:path) do
     desc 'The ini file Puppet will ensure contains the specified setting.'
     validate do |value|
-      unless Puppet::Util.absolute_path?(value)
-        raise(Puppet::Error, _("File paths must be fully qualified, not '%{value}'") % { value: value })
-      end
+      raise(Puppet::Error, _("File paths must be fully qualified, not '%{value}'") % { value: value }) unless Puppet::Util.absolute_path?(value)
     end
   end
   newparam(:show_diff) do
@@ -77,9 +75,7 @@ Puppet::Type.newtype(:ini_subsetting) do
     defaultto('')
 
     validate do |value|
-      unless value.match?(%r{^["']?$})
-        raise Puppet::Error, _(%q(:quote_char valid values are '', '"' and "'"))
-      end
+      raise Puppet::Error, _(%q(:quote_char valid values are '', '"' and "'")) unless value.match?(%r{^["']?$})
     end
   end
 
