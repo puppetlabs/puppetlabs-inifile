@@ -99,13 +99,6 @@ RSpec/NamedSubject:
 RSpec/NestedGroups:
   Max: 6
 
-# # Offense count: 1
-# # This cop supports unsafe autocorrection (--autocorrect-all).
-# # Configuration parameters: .
-# # SupportedStyles: constant, string
-# RSpec/VerifiedDoubleReference:
-#   EnforcedStyle: string
-
 # Offense count: 4
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle.
@@ -117,11 +110,11 @@ Style/ClassAndModuleChildren:
     - 'lib/puppet/util/ini_file/section.rb'
     - 'lib/puppet/util/setting_value.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/EachForSimpleLoop:
-  Exclude:
-    - 'spec/unit/puppet/util/external_iterator_spec.rb'
+# # Offense count: 1
+# # This cop supports safe autocorrection (--autocorrect).
+# Style/EachForSimpleLoop:
+#   Exclude:
+#     - 'spec/unit/puppet/util/external_iterator_spec.rb'
 
 # Offense count: 5
 # This cop supports safe autocorrection (--autocorrect).

@@ -22,7 +22,7 @@ describe Puppet::Util::ExternalIterator do
 
   describe '#peek' do
     it 'returns the 0th item repeatedly' do
-      (0..2).each do |_i|
+      3.times do |_i|
         expect(subject_class.peek).to eq(expected_values[0])
       end
     end
