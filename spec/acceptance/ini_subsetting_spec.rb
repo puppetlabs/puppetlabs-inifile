@@ -211,7 +211,7 @@ describe 'ini_subsetting resource' do
           }
        EOS
 
-       context "show_diff => #{i[:show_diff]}" do
+       context "when show_diff => #{i[:show_diff]}" do
          res = apply_manifest(pp, expect_changes: true)
          it 'applies manifest and expects changed value to be logged in proper form' do
            expect(res.stdout).to match(i[:matcher])

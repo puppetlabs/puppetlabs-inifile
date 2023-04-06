@@ -178,7 +178,7 @@ describe Puppet::Util::IniFile do
     end
   end
 
-  context 'the file has quotation marks in its section names' do
+  context 'when the file has quotation marks in its section names' do
     let(:sample_content) do
       template = <<-EOS
         [branch "main"]
@@ -199,7 +199,7 @@ describe Puppet::Util::IniFile do
     end
   end
 
-  context 'Samba INI file with dollars in section names' do
+  context 'when Samba INI file with dollars in section names' do
     let(:sample_content) do
       template = <<-EOS
         [global]
@@ -229,7 +229,7 @@ describe Puppet::Util::IniFile do
     end
   end
 
-  context 'section names with forward slashes in them' do
+  context 'when section names with forward slashes in them' do
     let(:sample_content) do
       template = <<-EOS
         [monitor:///var/log/*.log]
@@ -243,7 +243,7 @@ describe Puppet::Util::IniFile do
     end
   end
 
-  context 'KDE Configuration with braces in setting names' do
+  context 'when KDE Configuration with braces in setting names' do
     let(:sample_content) do
       template = <<-EOS
               [khotkeys]
@@ -263,7 +263,7 @@ describe Puppet::Util::IniFile do
     end
   end
 
-  context 'Configuration with colons in setting names' do
+  context 'when Configuration with colons in setting names' do
     let(:sample_content) do
       template = <<-EOS
               [Drive names]
@@ -287,7 +287,7 @@ describe Puppet::Util::IniFile do
     end
   end
 
-  context 'Configuration with spaces in setting names' do
+  context 'when Configuration with spaces in setting names' do
     let(:sample_content) do
       template = <<-EOS
         [global]

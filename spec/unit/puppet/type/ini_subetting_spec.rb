@@ -8,7 +8,7 @@ describe ini_subsetting do
   describe 'quote_char validation' do
     subject { -> { described_class.new(name: 'foo', path: path, quote_char: quote_char) } }
 
-    context 'on posix platforms' do
+    context 'when on posix platforms' do
       let(:path) { '/absolute/path' }
       let(:quote_char) { '\”' }
 
@@ -19,7 +19,7 @@ describe ini_subsetting do
   describe 'path validation' do
     subject { -> { described_class.new(name: 'foo', path: path) } }
 
-    context 'on posix platforms' do
+    context 'when on posix platforms' do
       before(:each) do
         Puppet.features.stub(:posix?) { true }
         Puppet.features.stub(:microsoft_windows?) { false }
@@ -39,7 +39,7 @@ describe ini_subsetting do
       end
     end
 
-    context 'on windows platforms' do
+    context 'when on windows platforms' do
       before(:each) do
         Puppet.features.stub(:posix?) { false }
         Puppet.features.stub(:microsoft_windows?) { true }

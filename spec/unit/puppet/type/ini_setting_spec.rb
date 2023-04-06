@@ -8,7 +8,7 @@ describe ini_setting do
   describe 'path validation' do
     subject { -> { described_class.new(name: 'foo', path: path) } }
 
-    context 'on posix platforms' do
+    context 'when on posix platforms' do
       before(:each) do
         Puppet.features.stub(:posix?) { true }
         Puppet.features.stub(:microsoft_windows?) { false }
@@ -18,17 +18,17 @@ describe ini_setting do
       context 'with an absolute path' do
         let(:path) { '/absolute/path' }
 
-        it { is_expected.not_to raise_exception }
+        it { expect(subject).not_to raise_exception }
       end
 
       context 'with a relative path' do
         let(:path) { 'relative/path' }
 
-        it { is_expected.to raise_exception }
+        it { expect(subject).to raise_exception }
       end
     end
 
-    context 'on windows platforms' do
+    context 'when on windows platforms' do
       before(:each) do
         Puppet.features.stub(:posix?) { false }
         Puppet.features.stub(:microsoft_windows?) { true }
@@ -38,31 +38,31 @@ describe ini_setting do
       context 'with an absolute path with front slashes' do
         let(:path) { 'c:/absolute/path' }
 
-        it { is_expected.not_to raise_exception }
+        it { expect(subject).not_to raise_exception }
       end
 
       context 'with an absolute path with backslashes' do
         let(:path) { 'c:\absolute\path' }
 
-        it { is_expected.not_to raise_exception }
+        it { expect(subject).not_to raise_exception }
       end
 
       context 'with an absolute path with mixed slashes' do
         let(:path) { 'c:/absolute\path' }
 
-        it { is_expected.not_to raise_exception }
+        it { expect(subject).not_to raise_exception }
       end
 
       context 'with a relative path with front slashes' do
         let(:path) { 'relative/path' }
 
-        it { is_expected.to raise_exception }
+        it { expect(subject).to raise_exception }
       end
 
       context 'with a relative path with back slashes' do
         let(:path) { 'relative\path' }
 
-        it { is_expected.to raise_exception }
+        it { expect(subject).to raise_exception }
       end
     end
   end
@@ -151,7 +151,7 @@ describe ini_setting do
 
   describe 'when parent of :path is in the catalog' do
     ['posix', 'windows'].each do |platform|
-      context "on #{platform} platforms" do
+      context "when on #{platform} platforms" do
         before(:each) do
           Puppet.features.stub(:posix?) { platform == 'posix' }
           Puppet.features.stub(:microsoft_windows?) { platform == 'windows' }
