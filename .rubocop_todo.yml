@@ -41,9 +41,9 @@ Metrics/PerceivedComplexity:
   Max: 20
 
 # Offense count: 1
-Naming/AccessorMethodName:
-  Exclude:
-    - 'lib/puppet/util/setting_value.rb'
+# Naming/AccessorMethodName:
+#   Exclude:
+#     - 'lib/puppet/util/setting_value.rb'
 
 # Offense count: 114
 # Configuration parameters: ForbiddenDelimiters.

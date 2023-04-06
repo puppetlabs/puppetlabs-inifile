@@ -50,7 +50,7 @@ module Puppet::Util
     # Get the resulting setting value by joining all the
     # subsettings, separator and quote characters.
     # @return [String]
-    def get_value
+    def get_value # rubocop:disable Naming/AccessorMethodName
       value = @subsetting_items.join @subsetting_separator
       @quote_char + value + @quote_char
     end
