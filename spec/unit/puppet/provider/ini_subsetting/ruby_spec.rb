@@ -234,7 +234,7 @@ describe provider_class do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: 'fo', subsetting_separator: ','))
       provider = described_class.new(resource)
       provider.value = ''
-      validate_file(expected_content_one, tmpfile)
+      expect(validate_file(expected_content_one, tmpfile)).to be_truthy
     end
 
     expected_content_two = <<-EOS
@@ -247,7 +247,7 @@ describe provider_class do
       provider = described_class.new(resource)
       provider.value = ''
       provider.destroy
-      validate_file(expected_content_two, tmpfile)
+      expect(validate_file(expected_content_two, tmpfile)).to be_truthy
     end
   end
 
@@ -280,7 +280,7 @@ describe provider_class do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: 'c', value: '3'))
       provider = described_class.new(resource)
       provider.value = '3'
-      validate_file(expected_content_one, tmpfile)
+      expect(validate_file(expected_content_one, tmpfile)).to be_truthy
     end
 
     expected_content_two = <<-EOS
@@ -353,11 +353,11 @@ describe provider_class do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(setting: 'reports', subsetting: 'http', subsetting_separator: ','))
       provider = described_class.new(resource)
       provider.destroy
-      validate_file(expected_content_one, tmpfile)
+      expect(validate_file(expected_content_one, tmpfile)).to be_truthy
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(setting: 'something', subsetting: 'else', subsetting_separator: ','))
       provider = described_class.new(resource)
       provider.destroy
-      validate_file(expected_content_two, tmpfile)
+      expect(validate_file(expected_content_two, tmpfile)).to be_truthy
     end
   end
 end
