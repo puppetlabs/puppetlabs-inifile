@@ -93,7 +93,7 @@ describe provider_class do
             '/some/file/path'
           end
         end
-        expect(child_three).to receive(:file_path).exactly(2).times.and_return(tmpfile)
+        expect(child_three).to receive(:file_path).twice.and_return(tmpfile)
         expect(child_three.instances.size).to eq(7)
         expected_array = [
           { name: 'section1/foo', value: 'foovalue' },
