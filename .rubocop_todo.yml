@@ -110,11 +110,11 @@ Style/ClassAndModuleChildren:
     - 'lib/puppet/util/ini_file/section.rb'
     - 'lib/puppet/util/setting_value.rb'
 
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/SlicingWithRange:
-  Exclude:
-    - 'lib/puppet/util/setting_value.rb'
+# # Offense count: 1
+# # This cop supports unsafe autocorrection (--autocorrect-all).
+# Style/SlicingWithRange:
+#   Exclude:
+#     - 'lib/puppet/util/setting_value.rb'
 
 # Offense count: 7
 # This cop supports unsafe autocorrection (--autocorrect-all).

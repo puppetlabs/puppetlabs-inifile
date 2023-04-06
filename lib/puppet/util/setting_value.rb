@@ -69,7 +69,7 @@ module Puppet::Util
       return true if use_exact_match == :true
 
       item = @subsetting_items[index]
-      item[(subsetting.length + @key_val_separator.length)..-1]
+      item[(subsetting.length + @key_val_separator.length)..]
     end
 
     # Add a new subsetting item to the list of existing items
