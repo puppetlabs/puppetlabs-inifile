@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('../../../util/ini_file', __FILE__)
+require File.expand_path('../../util/ini_file', __dir__)
 
 Puppet::Type.type(:ini_setting).provide(:ruby) do
   def self.instances

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require File.expand_path('../external_iterator', __FILE__)
-require File.expand_path('../ini_file/section', __FILE__)
+require File.expand_path('external_iterator', __dir__)
+require File.expand_path('ini_file/section', __dir__)
 
 module Puppet::Util
   #
