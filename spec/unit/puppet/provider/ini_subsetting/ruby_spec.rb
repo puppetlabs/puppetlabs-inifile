@@ -14,9 +14,7 @@ describe provider_class do
   end
 
   before :each do
-    File.open(tmpfile, 'w') do |fh|
-      fh.write(orig_content)
-    end
+    File.write(tmpfile, orig_content)
   end
 
   context 'when ensuring that a subsetting is present' do

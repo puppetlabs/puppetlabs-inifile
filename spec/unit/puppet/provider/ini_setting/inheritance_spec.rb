@@ -16,9 +16,7 @@ describe Puppet::Type.type(:inherit_ini_setting).provider(:ini_setting) do
   end
 
   before :each do
-    File.open(tmpfile, 'w') do |fh|
-      fh.write(orig_content)
-    end
+    File.write(tmpfile, orig_content)
   end
 
   context 'when calling instances' do

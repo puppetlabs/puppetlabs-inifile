@@ -23,12 +23,8 @@ describe provider_class do
   end
 
   before :each do
-    File.open(tmpfile, 'w') do |fh|
-      fh.write(orig_content)
-    end
-    File.open(emptyfile, 'w') do |fh|
-      fh.write('')
-    end
+    File.write(tmpfile, orig_content)
+    File.write(emptyfile, '')
   end
 
   context 'when calling instances' do
