@@ -642,7 +642,7 @@ describe provider_class do
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
-      validate_file(orig_content + "\n[section]\n", tmpfile)
+      validate_file("#{orig_content}\n[section]\n", tmpfile)
     end
 
     it 'is able to handle variables of any type' do

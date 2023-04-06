@@ -92,7 +92,7 @@ Puppet::Type.newtype(:ini_subsetting) do
       if @resource[:show_diff] == :true && Puppet[:show_diff]
         newvalue
       elsif @resource[:show_diff] == :md5 && Puppet[:show_diff]
-        '{md5}' + Digest::MD5.hexdigest(newvalue.to_s)
+        "{md5}#{Digest::MD5.hexdigest(newvalue.to_s)}"
       else
         '[redacted sensitive information]'
       end
