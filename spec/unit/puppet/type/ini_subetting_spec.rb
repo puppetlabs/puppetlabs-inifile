@@ -12,7 +12,7 @@ describe ini_subsetting do
       let(:path) { '/absolute/path' }
       let(:quote_char) { '\”' }
 
-      it { is_expected.to raise_exception }
+      it { expect(subject).to raise_exception }
     end
   end
 
@@ -29,13 +29,13 @@ describe ini_subsetting do
       context 'with an absolute path' do
         let(:path) { '/absolute/path' }
 
-        it { is_expected.not_to raise_exception }
+        it { expect(subject).not_to raise_exception }
       end
 
       context 'with a relative path' do
         let(:path) { 'relative/path' }
 
-        it { is_expected.to raise_exception }
+        it { expect(subject).to raise_exception }
       end
     end
 
@@ -49,13 +49,13 @@ describe ini_subsetting do
       context 'with an absolute path with front slashes' do
         let(:path) { 'c:/absolute/path' }
 
-        it { is_expected.not_to raise_exception }
+        it { expect(subject).not_to raise_exception }
       end
 
       context 'with a relative path with back slashes' do
         let(:path) { 'relative\path' }
 
-        it { is_expected.to raise_exception }
+        it { expect(subject).to raise_exception }
       end
     end
   end
