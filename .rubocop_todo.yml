@@ -112,15 +112,9 @@ Style/ClassAndModuleChildren:
 
 # # Offense count: 1
 # # This cop supports safe autocorrection (--autocorrect).
-# Style/NegatedIfElseCondition:
+# Style/RedundantStringEscape:
 #   Exclude:
-#     - 'lib/puppet/util/setting_value.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantStringEscape:
-  Exclude:
-    - 'spec/acceptance/ini_setting_spec.rb'
+#     - 'spec/acceptance/ini_setting_spec.rb'
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).

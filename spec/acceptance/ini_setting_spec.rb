@@ -223,7 +223,7 @@ describe 'ini_setting resource' do
     before :each do
       ipp = <<-MANIFEST
         file { '#{basedir}/ini_setting.ini':
-          content => "[section1]\n valueinsection1 = 123\",
+          content => "[section1]\n valueinsection1 = 123",
           force   => true,
         }
       MANIFEST
