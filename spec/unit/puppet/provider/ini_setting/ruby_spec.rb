@@ -379,7 +379,7 @@ describe provider_class do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'main', value: false))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
-      transaction = instance_double('transaction', persistence: true)
+      transaction = instance_double('transaction', persistence: true) # rubocop:disable RSpec/VerifiedDoubleReference
       expect(Puppet::Transaction::ResourceHarness.new(transaction).evaluate(provider.resource).out_of_sync).to be(true)
       validate_file(expected_content_eight, tmpfile)
     end
