@@ -99,19 +99,14 @@ RSpec/NamedSubject:
 RSpec/NestedGroups:
   Max: 6
 
+
 # # Offense count: 1
 # # This cop supports safe autocorrection (--autocorrect).
-# RSpec/ReceiveCounts:
+# # Configuration parameters: EnforcedStyle.
+# # SupportedStyles: and_return, block
+# RSpec/ReturnFromStub:
 #   Exclude:
-#     - 'spec/unit/puppet/provider/ini_setting/ruby_spec.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: and_return, block
-RSpec/ReturnFromStub:
-  Exclude:
-    - 'spec/unit/puppet/util/ini_file_spec.rb'
+#     - 'spec/unit/puppet/util/ini_file_spec.rb'
 
 # Offense count: 1
 RSpec/StubbedMock:

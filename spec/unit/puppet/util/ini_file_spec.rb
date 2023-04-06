@@ -8,7 +8,7 @@ describe Puppet::Util::IniFile do
   subject(:ini_sub) { described_class.new('/my/ini/file/path') }
 
   before :each do
-    allow(File).to receive(:file?).with('/my/ini/file/path') { true }
+    allow(File).to receive(:file?).with('/my/ini/file/path').and_return(true)
     allow(described_class).to receive(:readlines).once.with('/my/ini/file/path') do
       sample_content
     end
