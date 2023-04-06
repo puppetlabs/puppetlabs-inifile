@@ -110,19 +110,13 @@ Style/ClassAndModuleChildren:
     - 'lib/puppet/util/ini_file/section.rb'
     - 'lib/puppet/util/setting_value.rb'
 
-# # Offense count: 1
-# # This cop supports safe autocorrection (--autocorrect).
-# Style/RedundantStringEscape:
-#   Exclude:
-#     - 'spec/acceptance/ini_setting_spec.rb'
-
 # Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: implicit, explicit
-Style/RescueStandardError:
-  Exclude:
-    - 'spec/spec_helper.rb'
+# # This cop supports safe autocorrection (--autocorrect).
+# # Configuration parameters: EnforcedStyle.
+# # SupportedStyles: implicit, explicit
+# Style/RescueStandardError:
+#   Exclude:
+#     - 'spec/spec_helper.rb'
 
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
