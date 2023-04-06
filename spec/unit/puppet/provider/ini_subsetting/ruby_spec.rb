@@ -24,7 +24,7 @@ describe provider_class do
         path: tmpfile,
         section: '',
         key_val_separator: '=',
-        setting: 'JAVA_ARGS',
+        setting: 'JAVA_ARGS'
       }
     end
 
@@ -151,7 +151,7 @@ describe provider_class do
         title: 'ini_setting_ensure_present_test',
         path: tmpfile,
         section: 'main',
-        setting: 'reports',
+        setting: 'reports'
       }
     end
 
@@ -211,7 +211,7 @@ describe provider_class do
         path: tmpfile,
         section: 'main',
         setting: 'reports',
-        use_exact_match: true,
+        use_exact_match: true
       }
     end
 
@@ -257,7 +257,7 @@ describe provider_class do
         section: 'main',
         setting: 'reports',
         subsetting_separator: ',',
-        subsetting_key_val_separator: ':',
+        subsetting_key_val_separator: ':'
       }
     end
 
@@ -328,7 +328,7 @@ describe provider_class do
         title: 'ini_setting_delete_if_empty_test',
         path: tmpfile,
         section: 'main',
-        delete_if_empty: true,
+        delete_if_empty: true
       }
     end
 

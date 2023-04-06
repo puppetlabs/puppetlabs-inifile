@@ -25,7 +25,7 @@ Puppet::Functions.create_function(:'inifile::create_ini_settings') do
         res["#{path} [#{section}] #{setting}"] = {
           'ensure' => 'present',
           'section' => section,
-          'setting' => setting,
+          'setting' => setting
         }.merge(if value.is_a?(Hash)
                   value
                 else

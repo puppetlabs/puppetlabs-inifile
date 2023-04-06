@@ -70,7 +70,7 @@ module Puppet::Util
       complete_setting = {
         setting: setting,
         separator: separator,
-        value: value,
+        value: value
       }
       add_section(Section.new(section_name, nil, nil, nil, nil)) unless @sections_hash.key?(section_name)
 

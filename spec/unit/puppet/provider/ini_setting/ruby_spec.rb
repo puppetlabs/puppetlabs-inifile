@@ -14,7 +14,7 @@ describe provider_class do
     {
       title: 'ini_setting_ensure_present_test',
       path: tmpfile,
-      section: 'section2',
+      section: 'section2'
     }
   end
 

@@ -143,7 +143,7 @@ describe 'ini_subsetting resource' do
       ['-Xmx'] => %r{args=""},
       ['-Xmx', '256m'] => %r{args=-Xmx256m},
       ['-Xmx', '512m'] => %r{args="-Xmx512m"},
-      ['-Xms', '256m'] => %r{args="-Xmx256m -Xms256m"},
+      ['-Xms', '256m'] => %r{args="-Xmx256m -Xms256m"}
     }.each do |parameter, content|
       context %(with '#{parameter.first}' #{(parameter.length > 1) ? "=> '#{parameter[1]}'" : 'absent'} makes '#{content}') do
         path = File.join(basedir, 'ini_subsetting.ini')
@@ -228,26 +228,26 @@ describe 'ini_subsetting resource' do
     [
       {
         insert_type: :start,
-        content: %r{d a b c},
+        content: %r{d a b c}
       },
       {
         insert_type: :end,
-        content: %r{a b c d},
+        content: %r{a b c d}
       },
       {
         insert_type: :before,
         insert_value: 'c',
-        content: %r{a b d c},
+        content: %r{a b d c}
       },
       {
         insert_type: :after,
         insert_value: 'a',
-        content: %r{a d b c},
+        content: %r{a d b c}
       },
       {
         insert_type: :index,
         insert_value: 2,
-        content: %r{a b d c},
+        content: %r{a b d c}
       },
     ].each do |params|
       context "with '#{params[:insert_type]}' makes '#{params[:content]}'" do
