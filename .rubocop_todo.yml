@@ -111,22 +111,6 @@ Style/ClassAndModuleChildren:
     - 'lib/puppet/util/setting_value.rb'
 
 # Offense count: 1
-# # This cop supports safe autocorrection (--autocorrect).
-# # Configuration parameters: EnforcedStyle.
-# # SupportedStyles: implicit, explicit
-# Style/RescueStandardError:
-#   Exclude:
-#     - 'spec/spec_helper.rb'
-
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: ConvertCodeThatCanStartToReturnNil, AllowedMethods, MaxChainLength.
-# AllowedMethods: present?, blank?, presence, try, try!
-Style/SafeNavigation:
-  Exclude:
-    - 'lib/puppet/util/ini_file.rb'
-
-# Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/SlicingWithRange:
   Exclude:

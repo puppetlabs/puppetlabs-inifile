@@ -16,7 +16,7 @@ module Puppet::Util
       @section_prefix = section_prefix
       @section_suffix = section_suffix
       @indent_char = indent_char
-      @indent_width = indent_width ? indent_width.to_i : nil
+      @indent_width = indent_width&.to_i
 
       @section_regex = section_regex
       @setting_regex = %r{^(\s*)([^#;\s]|[^#;\s].*?[^\s#{k_v_s}])(\s*#{k_v_s}[ \t]*)(.*)\s*$}
