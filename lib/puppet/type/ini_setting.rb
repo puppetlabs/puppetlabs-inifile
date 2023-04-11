@@ -47,9 +47,7 @@ Puppet::Type.newtype(:ini_setting) do
   newparam(:setting) do
     desc 'The name of the setting to be defined.'
     munge do |value|
-      if value.match?(%r{(^\s|\s$)})
-        Puppet.warn('Settings should not have spaces in the value, we are going to strip the whitespace')
-      end
+      Puppet.warn('Settings should not have spaces in the value, we are going to strip the whitespace') if value.match?(%r{(^\s|\s$)})
       value.strip
     end
   end
@@ -62,9 +60,7 @@ Puppet::Type.newtype(:ini_setting) do
   newparam(:path) do
     desc 'The ini file Puppet will ensure contains the specified setting.'
     validate do |value|
-      unless Puppet::Util.absolute_path?(value)
-        raise(Puppet::Error, _("File paths must be fully qualified, not '%{value}'") % { value: value })
-      end
+      raise(Puppet::Error, _("File paths must be fully qualified, not '%{value}'") % { value: value }) unless Puppet::Util.absolute_path?(value)
     end
   end
 
@@ -101,7 +97,7 @@ Puppet::Type.newtype(:ini_setting) do
       if @resource[:show_diff] == :true && Puppet[:show_diff]
         newvalue
       elsif @resource[:show_diff] == :md5 && Puppet[:show_diff]
-        '{md5}' + Digest::MD5.hexdigest(newvalue.to_s)
+        "{md5}#{Digest::MD5.hexdigest(newvalue.to_s)}"
       else
         '[redacted sensitive information]'
       end
@@ -145,9 +141,8 @@ Puppet::Type.newtype(:ini_setting) do
   end
 
   def refresh
-    if self[:ensure] == :absent && self[:refreshonly]
-      return provider.destroy
-    end
+    return provider.destroy if self[:ensure] == :absent && self[:refreshonly]
+
     # update the value in the provider, which will save the value to the ini file
     provider.value = self[:value] if self[:refreshonly]
   end

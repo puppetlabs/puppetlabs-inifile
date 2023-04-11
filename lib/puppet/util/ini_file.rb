@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require File.expand_path('../external_iterator', __FILE__)
-require File.expand_path('../ini_file/section', __FILE__)
+require File.expand_path('external_iterator', __dir__)
+require File.expand_path('ini_file/section', __dir__)
 
 module Puppet::Util
   #
   # ini_file.rb
   #
-  class IniFile
-    def initialize(path, key_val_separator = ' = ', section_prefix = '[', section_suffix = ']',
+  class IniFile # rubocop:disable Metrics/ClassLength
+    def initialize(path, key_val_separator = ' = ', section_prefix = '[', section_suffix = ']', # rubocop:disable Metrics/ParameterLists
                    indent_char = ' ', indent_width = nil)
 
       k_v_s = (key_val_separator =~ %r{^\s+$}) ? ' ' : key_val_separator.strip
@@ -16,7 +16,7 @@ module Puppet::Util
       @section_prefix = section_prefix
       @section_suffix = section_suffix
       @indent_char = indent_char
-      @indent_width = indent_width ? indent_width.to_i : nil
+      @indent_width = indent_width&.to_i
 
       @section_regex = section_regex
       @setting_regex = %r{^(\s*)([^#;\s]|[^#;\s].*?[^\s#{k_v_s}])(\s*#{k_v_s}[ \t]*)(.*)\s*$}
@@ -70,11 +70,9 @@ module Puppet::Util
       complete_setting = {
         setting: setting,
         separator: separator,
-        value: value,
+        value: value
       }
-      unless @sections_hash.key?(section_name)
-        add_section(Section.new(section_name, nil, nil, nil, nil))
-      end
+      add_section(Section.new(section_name, nil, nil, nil, nil)) unless @sections_hash.key?(section_name)
 
       section = @sections_hash[section_name]
 
@@ -110,6 +108,7 @@ module Puppet::Util
     def remove_setting(section_name, setting)
       section = @sections_hash[section_name]
       return unless section.existing_setting?(setting)
+
       # If the setting is found, we have some work to do.
       # First, we remove the line from our array of lines:
       remove_line(section, setting)
@@ -125,6 +124,7 @@ module Puppet::Util
       decrement_section_line_numbers(section_index + 1)
 
       return unless section.empty?
+
       # By convention, it's time to remove this newly emptied out section
       lines.delete_at(section.start_line)
       decrement_section_line_numbers(section_index + 1)
@@ -144,9 +144,7 @@ module Puppet::Util
           whitespace_buffer = []
 
           if section.new_section? && !section.global?
-            if index == 1 && !global_empty || index > 1
-              fh.puts('')
-            end
+            fh.puts('') if (index == 1 && !global_empty) || index > 1
 
             fh.puts("#{@section_prefix}#{section.name}#{@section_suffix}")
           end
@@ -247,18 +245,16 @@ module Puppet::Util
     def update_line(section, setting, value)
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
-        if match[2] == setting
-          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}"
-        end
+
+        lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}" if match[2] == setting
       end
     end
 
     def remove_line(section, setting)
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
-        if match[2] == setting
-          lines.delete_at(line_num)
-        end
+
+        lines.delete_at(line_num) if match[2] == setting
       end
     end
 
@@ -292,11 +288,10 @@ module Puppet::Util
     #               be used to mimic the whitespace from the comment line
     def find_commented_setting(section, setting)
       return nil if section.new_section?
+
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @commented_setting_regex.match(lines[line_num]))
-        if match[3] == setting
-          return { match: match, line_num: line_num }
-        end
+        return { match: match, line_num: line_num } if match[3] == setting
       end
       nil
     end
@@ -330,9 +325,10 @@ module Puppet::Util
       end
     end
 
-    def flush_buffer_to_file(buffer, fh)
+    def flush_buffer_to_file(buffer, file)
       return if buffer.empty?
-      buffer.each { |l| fh.puts(l) }
+
+      buffer.each { |l| file.puts(l) }
       buffer.clear
     end
   end

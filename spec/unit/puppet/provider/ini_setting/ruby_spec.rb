@@ -14,7 +14,7 @@ describe provider_class do
     {
       title: 'ini_setting_ensure_present_test',
       path: tmpfile,
-      section: 'section2',
+      section: 'section2'
     }
   end
 
@@ -23,12 +23,8 @@ describe provider_class do
   end
 
   before :each do
-    File.open(tmpfile, 'w') do |fh|
-      fh.write(orig_content)
-    end
-    File.open(emptyfile, 'w') do |fh|
-      fh.write('')
-    end
+    File.write(tmpfile, orig_content)
+    File.write(emptyfile, '')
   end
 
   context 'when calling instances' do
@@ -49,9 +45,10 @@ describe provider_class do
         end
       end
       it 'returns [] when file is empty' do
-        expect(child_one).to receive(:file_path).and_return(emptyfile)
+        allow(child_one).to receive(:file_path).and_return(emptyfile)
         expect(child_one.instances).to eq([])
       end
+
       child_two = Class.new(provider_class) do
         def self.file_path
           '/some/file/path'
@@ -92,7 +89,7 @@ describe provider_class do
             '/some/file/path'
           end
         end
-        expect(child_three).to receive(:file_path).exactly(2).times.and_return(tmpfile)
+        expect(child_three).to receive(:file_path).twice.and_return(tmpfile)
         expect(child_three.instances.size).to eq(7)
         expected_array = [
           { name: 'section1/foo', value: 'foovalue' },
@@ -114,57 +111,55 @@ describe provider_class do
         expect(ensure_array.uniq).to eq([:present])
         expect((real_array - expected_array) && (expected_array - real_array)).to eq([])
       end
-      # rubocop:enable RSpec/ExampleLength
-      # rubocop:enable RSpec/MultipleExpectations
     end
   end
 
   context 'when ensuring that a setting is present' do
     let(:orig_content) do
-      <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+      <<~EOS
+        # This is a comment
+        [section1]
+        ; This is also a comment
+        foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+        bar = barvalue
+        main = true
+        [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+        foo= foovalue2
+        baz=bazvalue
+        url = http://192.168.1.1:8080
+        [section:sub]
+        subby=bar
+            #another comment
+         ; yet another comment
 
--nonstandard-
-  shoes = purple
+        -nonstandard-
+          shoes = purple
       EOS
     end
 
-    expected_content_one = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_one = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-yahoo = yippee
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      yahoo = yippee
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
+      -nonstandard-
+        shoes = purple
     EOS
     it 'adds a missing setting to the correct section' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(setting: 'yahoo', value: 'yippee'))
@@ -174,27 +169,27 @@ subby=bar
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_two = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
-  yahoo = yippee
+      -nonstandard-
+        shoes = purple
+        yahoo = yippee
     EOS
     it 'adds a missing setting to the correct section with pre/suffix' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'yahoo', value: 'yippee', section_prefix: '-', section_suffix: '-'))
@@ -204,27 +199,27 @@ subby=bar
       validate_file(expected_content_two, tmpfile)
     end
 
-    expected_content_three = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_three = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
-		indented = weirdly
+      -nonstandard-
+        shoes = purple
+      		indented = weirdly
     EOS
     it 'adds a missing setting to the correct section with indent_char' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'indented', value: 'weirdly', section_prefix: '-', section_suffix: '-', indent_char: "\t"))
@@ -234,27 +229,27 @@ subby=bar
       validate_file(expected_content_three, tmpfile)
     end
 
-    expected_content_four = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_four = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
-				indented = weirdly
+      -nonstandard-
+        shoes = purple
+      				indented = weirdly
     EOS
     it 'adds a missing setting to the correct section indented by indent_char * indent_width' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'indented', value: 'weirdly',
@@ -265,27 +260,27 @@ subby=bar
       validate_file(expected_content_four, tmpfile)
     end
 
-    expected_content_five = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_five = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
-				indented = weirdly
+      -nonstandard-
+        shoes = purple
+      				indented = weirdly
     EOS
     it 'treats a string indent_width as an integer' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'indented', value: 'weirdly',
@@ -296,27 +291,27 @@ subby=bar
       validate_file(expected_content_five, tmpfile)
     end
 
-    expected_content_six = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_six = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
-yahoo = yippee
+      -nonstandard-
+        shoes = purple
+      yahoo = yippee
     EOS
     it 'adds a missing setting to the correct section with colon' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'yahoo', value: 'yippee'))
@@ -326,26 +321,26 @@ yahoo = yippee
       validate_file(expected_content_six, tmpfile)
     end
 
-    expected_content_seven = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_seven = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue2
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue2
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
+      -nonstandard-
+        shoes = purple
     EOS
     it 'modifies an existing setting with a different value' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(setting: 'baz', value: 'bazvalue2'))
@@ -355,57 +350,56 @@ subby=bar
       validate_file(expected_content_seven, tmpfile)
     end
 
-    expected_content_eight = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_eight = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = false
-[section2]
+      bar = barvalue
+      main = false
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
+      -nonstandard-
+        shoes = purple
     EOS
     it 'modifies an existing setting with a different boolean value' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'main', value: false))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
-      transaction = instance_double('transaction', persistence: true)
-      expect(Puppet::Transaction::ResourceHarness.new(transaction).evaluate(provider.resource).out_of_sync).to eq(true)
+      transaction = instance_double('transaction', persistence: true) # rubocop:disable RSpec/VerifiedDoubleReference
+      expect(Puppet::Transaction::ResourceHarness.new(transaction).evaluate(provider.resource).out_of_sync).to be(true)
       validate_file(expected_content_eight, tmpfile)
     end
-    # rubocop:enable RSpec/MultipleExpectations : Unable to reduce without altering test
 
-    expected_content_nine = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_nine = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = orange
+      -nonstandard-
+        shoes = orange
     EOS
     it 'modifies an existing setting with pre/suffix with a different value' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'shoes', value: 'orange', section_prefix: '-', section_suffix: '-'))
@@ -415,26 +409,26 @@ subby=bar
       validate_file(expected_content_nine, tmpfile)
     end
 
-    expected_content_ten = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_ten = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=foo
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=foo
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
+      -nonstandard-
+        shoes = purple
     EOS
     it 'modifies an existing setting with a different value - with colon in section' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'subby', value: 'foo'))
@@ -444,26 +438,26 @@ subby=foo
       validate_file(expected_content_ten, tmpfile)
     end
 
-    expected_content_eleven = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_eleven = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.0.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.0.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
+      -nonstandard-
+        shoes = purple
     EOS
     it 'is able to handle settings with non alphanumbering settings' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(setting: 'url', value: 'http://192.168.0.1:8080'))
@@ -473,26 +467,26 @@ subby=bar
       validate_file(expected_content_eleven, tmpfile)
     end
 
-    expected_content_twelve = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_twelve = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = http://192.168.0.1:8080
+      -nonstandard-
+        shoes = http://192.168.0.1:8080
     EOS
     it 'is able to handle settings with pre/suffix with non alphanumbering settings' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'shoes', value: 'http://192.168.0.1:8080', section_prefix: '-', section_suffix: '-'))
@@ -515,29 +509,29 @@ subby=bar
       expect(provider.exists?).to be true
     end
 
-    expected_content_thirteen = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_thirteen = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
+      -nonstandard-
+        shoes = purple
 
-[section3]
-huzzah = shazaam
+      [section3]
+      huzzah = shazaam
     EOS
     it 'adds a new section if the section does not exist' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'huzzah', value: 'shazaam'))
@@ -547,29 +541,29 @@ huzzah = shazaam
       validate_file(expected_content_thirteen, tmpfile)
     end
 
-    expected_content_fourteen = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_fourteen = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
+      -nonstandard-
+        shoes = purple
 
--section3-
-huzzah = shazaam
+      -section3-
+      huzzah = shazaam
     EOS
     it 'adds a new section with pre/suffix if the section does not exist' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'huzzah', value: 'shazaam', section_prefix: '-', section_suffix: '-'))
@@ -579,29 +573,29 @@ huzzah = shazaam
       validate_file(expected_content_fourteen, tmpfile)
     end
 
-    expected_content_fifteen = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_fifteen = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
+      -nonstandard-
+        shoes = purple
 
-[section:subsection]
-huzzah = shazaam
+      [section:subsection]
+      huzzah = shazaam
     EOS
     it 'adds a new section if the section does not exist - with colon' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:subsection', setting: 'huzzah', value: 'shazaam'))
@@ -611,29 +605,29 @@ huzzah = shazaam
       validate_file(expected_content_fifteen, tmpfile)
     end
 
-    expected_content_sixteen = <<-EOS
-# This is a comment
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_sixteen = <<~EOS
+      # This is a comment
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
--nonstandard-
-  shoes = purple
+      -nonstandard-
+        shoes = purple
 
--section:subsection-
-huzzah = shazaam
+      -section:subsection-
+      huzzah = shazaam
     EOS
     it 'adds a new section with pre/suffix if the section does not exist - with colon' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:subsection', setting: 'huzzah', value: 'shazaam', section_prefix: '-', section_suffix: '-'))
@@ -648,7 +642,7 @@ huzzah = shazaam
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
-      validate_file(orig_content + "\n[section]\n", tmpfile)
+      validate_file("#{orig_content}\n[section]\n", tmpfile)
     end
 
     it 'is able to handle variables of any type' do
@@ -741,22 +735,22 @@ setting1 = hellowworld
 
   context 'when dealing with a global section' do
     let(:orig_content) do
-      <<-EOS
-# This is a comment
-foo=blah
-[section2]
-foo = http://192.168.1.1:8080
- ; yet another comment
+      <<~EOS
+        # This is a comment
+        foo=blah
+        [section2]
+        foo = http://192.168.1.1:8080
+         ; yet another comment
       EOS
     end
 
-    expected_content_one = <<-EOS
-# This is a comment
-foo=blah
-bar = yippee
-[section2]
-foo = http://192.168.1.1:8080
- ; yet another comment
+    expected_content_one = <<~EOS
+      # This is a comment
+      foo=blah
+      bar = yippee
+      [section2]
+      foo = http://192.168.1.1:8080
+       ; yet another comment
     EOS
     it "adds a missing setting if it doesn't exist" do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: '', setting: 'bar', value: 'yippee'))
@@ -766,12 +760,12 @@ foo = http://192.168.1.1:8080
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<-EOS
-# This is a comment
-foo=yippee
-[section2]
-foo = http://192.168.1.1:8080
- ; yet another comment
+    expected_content_two = <<~EOS
+      # This is a comment
+      foo=yippee
+      [section2]
+      foo = http://192.168.1.1:8080
+       ; yet another comment
     EOS
     it 'modifies an existing setting with a different value' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: '', setting: 'foo', value: 'yippee'))
@@ -790,17 +784,17 @@ foo = http://192.168.1.1:8080
 
   context 'when the first line of the file is a section' do
     let(:orig_content) do
-      <<-EOS
-[section2]
-foo = http://192.168.1.1:8080
+      <<~EOS
+        [section2]
+        foo = http://192.168.1.1:8080
       EOS
     end
 
-    expected_content_one = <<-EOS
-foo = yippee
+    expected_content_one = <<~EOS
+      foo = yippee
 
-[section2]
-foo = http://192.168.1.1:8080
+      [section2]
+      foo = http://192.168.1.1:8080
     EOS
     it 'is able to add a global setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: '', setting: 'foo', value: 'yippee'))
@@ -810,9 +804,9 @@ foo = http://192.168.1.1:8080
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<-EOS
-[section2]
-foo = yippee
+    expected_content_two = <<~EOS
+      [section2]
+      foo = yippee
     EOS
     it 'modifies an existing setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee'))
@@ -822,10 +816,10 @@ foo = yippee
       validate_file(expected_content_two, tmpfile)
     end
 
-    expected_content_three = <<-EOS
-[section2]
-foo = http://192.168.1.1:8080
-bar = baz
+    expected_content_three = <<~EOS
+      [section2]
+      foo = http://192.168.1.1:8080
+      bar = baz
     EOS
     it 'adds a new setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'bar', value: 'baz'))
@@ -838,15 +832,15 @@ bar = baz
 
   context 'when overriding the separator' do
     let(:orig_content) do
-      <<-EOS
-[section2]
-foo=bar
+      <<~EOS
+        [section2]
+        foo=bar
       EOS
     end
 
-    expected_content_one = <<-EOS
-[section2]
-foo=yippee
+    expected_content_one = <<~EOS
+      [section2]
+      foo=yippee
     EOS
     it 'modifies an existing setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee', key_val_separator: '='))
@@ -859,15 +853,15 @@ foo=yippee
 
   context 'when overriding the separator to something other than =' do
     let(:orig_content) do
-      <<-EOS
-[section2]
-foo: bar
+      <<~EOS
+        [section2]
+        foo: bar
       EOS
     end
 
-    expected_content_one = <<-EOS
-[section2]
-foo: yippee
+    expected_content_one = <<~EOS
+      [section2]
+      foo: yippee
     EOS
     it 'modifies an existing setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee', key_val_separator: ': '))
@@ -877,10 +871,10 @@ foo: yippee
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<-EOS
-[section2]
-foo: bar
-bar: baz
+    expected_content_two = <<~EOS
+      [section2]
+      foo: bar
+      bar: baz
     EOS
     it 'adds a new setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'bar', value: 'baz', key_val_separator: ': '))
@@ -893,15 +887,15 @@ bar: baz
 
   context 'when overriding the separator to a space' do
     let(:orig_content) do
-      <<-EOS
-[section2]
-foo bar
+      <<~EOS
+        [section2]
+        foo bar
       EOS
     end
 
-    expected_content_one = <<-EOS
-[section2]
-foo yippee
+    expected_content_one = <<~EOS
+      [section2]
+      foo yippee
     EOS
     it 'modifies an existing setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee', key_val_separator: ' '))
@@ -911,10 +905,10 @@ foo yippee
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<-EOS
-[section2]
-foo bar
-bar baz
+    expected_content_two = <<~EOS
+      [section2]
+      foo bar
+      bar baz
     EOS
     it 'adds a new setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'bar', value: 'baz', key_val_separator: ' '))
@@ -927,56 +921,56 @@ bar baz
 
   context 'when ensuring that a setting is absent' do
     let(:orig_content) do
-      <<-EOS
-[section1]
-; This is also a comment
-foo=foovalue
+      <<~EOS
+        [section1]
+        ; This is also a comment
+        foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+        bar = barvalue
+        main = true
+        [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section3]
-# com = ment
-uncom = ment
-[section4]
-uncom = ment
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+        foo= foovalue2
+        baz=bazvalue
+        url = http://192.168.1.1:8080
+        [section3]
+        # com = ment
+        uncom = ment
+        [section4]
+        uncom = ment
+        [section:sub]
+        subby=bar
+            #another comment
+         ; yet another comment
 
- -nonstandard-
-   shoes = purple
-EOS
+         -nonstandard-
+           shoes = purple
+      EOS
     end
 
-    expected_content_one = <<-EOS
-[section1]
-; This is also a comment
+    expected_content_one = <<~EOS
+      [section1]
+      ; This is also a comment
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section3]
-# com = ment
-uncom = ment
-[section4]
-uncom = ment
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section3]
+      # com = ment
+      uncom = ment
+      [section4]
+      uncom = ment
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
- -nonstandard-
-   shoes = purple
+       -nonstandard-
+         shoes = purple
     EOS
     it 'removes a setting that exists' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', ensure: 'absent'))
@@ -986,27 +980,27 @@ subby=bar
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<-EOS
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_two = <<~EOS
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section3]
-# com = ment
-uncom = ment
-[section4]
-uncom = ment
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section3]
+      # com = ment
+      uncom = ment
+      [section4]
+      uncom = ment
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
     EOS
     it 'removes a setting with pre/suffix that exists' do
@@ -1017,30 +1011,30 @@ subby=bar
       validate_file(expected_content_two, tmpfile)
     end
 
-    expected_content_three = <<-EOS
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_three = <<~EOS
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section3]
-# com = ment
-uncom = ment
-[section4]
-uncom = ment
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section3]
+      # com = ment
+      uncom = ment
+      [section4]
+      uncom = ment
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
- -nonstandard-
-   shoes = purple
+       -nonstandard-
+         shoes = purple
     EOS
     it 'does nothing for a setting that does not exist' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'foo', ensure: 'absent'))
@@ -1050,30 +1044,30 @@ subby=bar
       validate_file(expected_content_three, tmpfile)
     end
 
-    expected_content_four = <<-EOS
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_four = <<~EOS
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section3]
-# com = ment
-uncom = ment
-[section4]
-uncom = ment
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section3]
+      # com = ment
+      uncom = ment
+      [section4]
+      uncom = ment
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
- -nonstandard-
-   shoes = purple
+       -nonstandard-
+         shoes = purple
     EOS
     it 'does nothing for a setting with pre/suffix that does not exist' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'foo', ensure: 'absent', section_prefix: '-', section_suffix: '-'))
@@ -1083,29 +1077,29 @@ subby=bar
       validate_file(expected_content_four, tmpfile)
     end
 
-    expected_content_five = <<-EOS
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_five = <<~EOS
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section3]
-# com = ment
-[section4]
-uncom = ment
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section3]
+      # com = ment
+      [section4]
+      uncom = ment
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
- -nonstandard-
-   shoes = purple
+       -nonstandard-
+         shoes = purple
     EOS
     it 'does not remove a section when the last uncommented setting is removed if there are comments' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'uncom', ensure: 'absent'))
@@ -1115,28 +1109,28 @@ subby=bar
       validate_file(expected_content_five, tmpfile)
     end
 
-    expected_content_six = <<-EOS
-[section1]
-; This is also a comment
-foo=foovalue
+    expected_content_six = <<~EOS
+      [section1]
+      ; This is also a comment
+      foo=foovalue
 
-bar = barvalue
-main = true
-[section2]
+      bar = barvalue
+      main = true
+      [section2]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section3]
-# com = ment
-uncom = ment
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+      foo= foovalue2
+      baz=bazvalue
+      url = http://192.168.1.1:8080
+      [section3]
+      # com = ment
+      uncom = ment
+      [section:sub]
+      subby=bar
+          #another comment
+       ; yet another comment
 
- -nonstandard-
-   shoes = purple
+       -nonstandard-
+         shoes = purple
     EOS
     it 'removes the section when removing the last line in the section' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section4', setting: 'uncom', ensure: 'absent'))
@@ -1149,46 +1143,46 @@ subby=bar
 
   context 'when dealing with indentation in sections' do
     let(:orig_content) do
-      <<-EOS
-# This is a comment
-     [section1]
-     ; This is also a comment
-     foo=foovalue
+      <<~EOS
+        # This is a comment
+             [section1]
+             ; This is also a comment
+             foo=foovalue
 
-     bar = barvalue
-     main = true
+             bar = barvalue
+             main = true
 
-[section2]
-  foo= foovalue2
-  baz=bazvalue
-  url = http://192.168.1.1:8080
-[section:sub]
- subby=bar
-    #another comment
-  fleezy = flam
- ; yet another comment
+        [section2]
+          foo= foovalue2
+          baz=bazvalue
+          url = http://192.168.1.1:8080
+        [section:sub]
+         subby=bar
+            #another comment
+          fleezy = flam
+         ; yet another comment
       EOS
     end
 
-    expected_content_one = <<-EOS
-# This is a comment
-     [section1]
-     ; This is also a comment
-     foo=foovalue
+    expected_content_one = <<~EOS
+      # This is a comment
+           [section1]
+           ; This is also a comment
+           foo=foovalue
 
-     bar = barvalue
-     main = true
-     yahoo = yippee
+           bar = barvalue
+           main = true
+           yahoo = yippee
 
-[section2]
-  foo= foovalue2
-  baz=bazvalue
-  url = http://192.168.1.1:8080
-[section:sub]
- subby=bar
-    #another comment
-  fleezy = flam
- ; yet another comment
+      [section2]
+        foo= foovalue2
+        baz=bazvalue
+        url = http://192.168.1.1:8080
+      [section:sub]
+       subby=bar
+          #another comment
+        fleezy = flam
+       ; yet another comment
     EOS
     it 'adds a missing setting at the correct indentation when the header is aligned' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'yahoo', value: 'yippee'))
@@ -1198,24 +1192,24 @@ subby=bar
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<-EOS
-# This is a comment
-     [section1]
-     ; This is also a comment
-     foo=foovalue
+    expected_content_two = <<~EOS
+      # This is a comment
+           [section1]
+           ; This is also a comment
+           foo=foovalue
 
-     bar = barvalue2
-     main = true
+           bar = barvalue2
+           main = true
 
-[section2]
-  foo= foovalue2
-  baz=bazvalue
-  url = http://192.168.1.1:8080
-[section:sub]
- subby=bar
-    #another comment
-  fleezy = flam
- ; yet another comment
+      [section2]
+        foo= foovalue2
+        baz=bazvalue
+        url = http://192.168.1.1:8080
+      [section:sub]
+       subby=bar
+          #another comment
+        fleezy = flam
+       ; yet another comment
     EOS
     it 'updates an existing setting at the correct indentation when the header is aligned' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'bar', value: 'barvalue2'))
@@ -1225,25 +1219,25 @@ subby=bar
       validate_file(expected_content_two, tmpfile)
     end
 
-    expected_content_three = <<-EOS
-# This is a comment
-     [section1]
-     ; This is also a comment
-     foo=foovalue
+    expected_content_three = <<~EOS
+      # This is a comment
+           [section1]
+           ; This is also a comment
+           foo=foovalue
 
-     bar = barvalue
-     main = true
+           bar = barvalue
+           main = true
 
-[section2]
-  foo= foovalue2
-  baz=bazvalue
-  url = http://192.168.1.1:8080
-  yahoo = yippee
-[section:sub]
- subby=bar
-    #another comment
-  fleezy = flam
- ; yet another comment
+      [section2]
+        foo= foovalue2
+        baz=bazvalue
+        url = http://192.168.1.1:8080
+        yahoo = yippee
+      [section:sub]
+       subby=bar
+          #another comment
+        fleezy = flam
+       ; yet another comment
     EOS
     it 'adds a missing setting at the correct indentation when the header is not aligned' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'yahoo', value: 'yippee'))
@@ -1253,24 +1247,24 @@ subby=bar
       validate_file(expected_content_three, tmpfile)
     end
 
-    expected_content_four = <<-EOS
-# This is a comment
-     [section1]
-     ; This is also a comment
-     foo=foovalue
+    expected_content_four = <<~EOS
+      # This is a comment
+           [section1]
+           ; This is also a comment
+           foo=foovalue
 
-     bar = barvalue
-     main = true
+           bar = barvalue
+           main = true
 
-[section2]
-  foo= foovalue2
-  baz=bazvalue2
-  url = http://192.168.1.1:8080
-[section:sub]
- subby=bar
-    #another comment
-  fleezy = flam
- ; yet another comment
+      [section2]
+        foo= foovalue2
+        baz=bazvalue2
+        url = http://192.168.1.1:8080
+      [section:sub]
+       subby=bar
+          #another comment
+        fleezy = flam
+       ; yet another comment
     EOS
     it 'updates an existing setting at the correct indentation when the header is not aligned' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'baz', value: 'bazvalue2'))
@@ -1280,25 +1274,25 @@ subby=bar
       validate_file(expected_content_four, tmpfile)
     end
 
-    expected_content_five = <<-EOS
-# This is a comment
-     [section1]
-     ; This is also a comment
-     foo=foovalue
+    expected_content_five = <<~EOS
+      # This is a comment
+           [section1]
+           ; This is also a comment
+           foo=foovalue
 
-     bar = barvalue
-     main = true
+           bar = barvalue
+           main = true
 
-[section2]
-  foo= foovalue2
-  baz=bazvalue
-  url = http://192.168.1.1:8080
-[section:sub]
- subby=bar
-    #another comment
-  fleezy = flam
- ; yet another comment
- yahoo = yippee
+      [section2]
+        foo= foovalue2
+        baz=bazvalue
+        url = http://192.168.1.1:8080
+      [section:sub]
+       subby=bar
+          #another comment
+        fleezy = flam
+       ; yet another comment
+       yahoo = yippee
     EOS
     it 'adds a missing setting at the min indentation when the section is not aligned' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'yahoo', value: 'yippee'))
@@ -1308,24 +1302,24 @@ subby=bar
       validate_file(expected_content_five, tmpfile)
     end
 
-    expected_content_six = <<-EOS
-# This is a comment
-     [section1]
-     ; This is also a comment
-     foo=foovalue
+    expected_content_six = <<~EOS
+      # This is a comment
+           [section1]
+           ; This is also a comment
+           foo=foovalue
 
-     bar = barvalue
-     main = true
+           bar = barvalue
+           main = true
 
-[section2]
-  foo= foovalue2
-  baz=bazvalue
-  url = http://192.168.1.1:8080
-[section:sub]
- subby=bar
-    #another comment
-  fleezy = flam2
- ; yet another comment
+      [section2]
+        foo= foovalue2
+        baz=bazvalue
+        url = http://192.168.1.1:8080
+      [section:sub]
+       subby=bar
+          #another comment
+        fleezy = flam2
+       ; yet another comment
     EOS
     it 'updates an existing setting at the previous indentation when the section is not aligned' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'fleezy', value: 'flam2'))
@@ -1335,24 +1329,24 @@ subby=bar
       validate_file(expected_content_six, tmpfile)
     end
 
-    expected_content_seven = <<-EOS
-# This is a comment
-     [section1]
-     ; This is also a comment
-     foo=foovalue
+    expected_content_seven = <<~EOS
+      # This is a comment
+           [section1]
+           ; This is also a comment
+           foo=foovalue
 
-     bar = barvalue
-     main = true
+           bar = barvalue
+           main = true
 
-[section2]
-  foo= foovalue2
-  baz=bazvalue
-  url = http://192.168.1.1:8080
-[section:sub]
- subby=bar
-    #another comment
-  fleezy = flam2
- ; yet another comment
+      [section2]
+        foo= foovalue2
+        baz=bazvalue
+        url = http://192.168.1.1:8080
+      [section:sub]
+       subby=bar
+          #another comment
+        fleezy = flam2
+       ; yet another comment
     EOS
     it 'updates an existing setting at the previous indentation regardless of indent_char and indent_width settings' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'fleezy', value: 'flam2', indent_char: 'ignore this', indent_width: 10))
@@ -1365,32 +1359,32 @@ subby=bar
 
   context 'when dealing settings that have a commented version present' do
     let(:orig_content) do
-      <<-EOS
-     [section1]
-     # foo=foovalue
-     bar=barvalue
-     foo = foovalue2
+      <<~EOS
+             [section1]
+             # foo=foovalue
+             bar=barvalue
+             foo = foovalue2
 
-[section2]
-# foo = foovalue
-;bar=barvalue
-blah = blah
-#baz=
+        [section2]
+        # foo = foovalue
+        ;bar=barvalue
+        blah = blah
+        #baz=
       EOS
     end
 
-    expected_content_eight = <<-EOS
-     [section1]
-     # foo=foovalue
-     bar=barvalue
-     foo = foovalue2
+    expected_content_eight = <<~EOS
+           [section1]
+           # foo=foovalue
+           bar=barvalue
+           foo = foovalue2
 
-[section2]
-# foo = foovalue
-foo = foo3
-;bar=barvalue
-blah = blah
-#baz=
+      [section2]
+      # foo = foovalue
+      foo = foo3
+      ;bar=barvalue
+      blah = blah
+      #baz=
     EOS
     it 'adds a new setting below a commented version of that setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'foo3'))
@@ -1400,17 +1394,17 @@ blah = blah
       validate_file(expected_content_eight, tmpfile)
     end
 
-    expected_content_nine = <<-EOS
-     [section1]
-     # foo=foovalue
-     bar=barvalue
-     foo = foo3
+    expected_content_nine = <<~EOS
+           [section1]
+           # foo=foovalue
+           bar=barvalue
+           foo = foo3
 
-[section2]
-# foo = foovalue
-;bar=barvalue
-blah = blah
-#baz=
+      [section2]
+      # foo = foovalue
+      ;bar=barvalue
+      blah = blah
+      #baz=
     EOS
     it 'updates an existing setting in place, even if there is a commented version of that setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', value: 'foo3'))
@@ -1420,18 +1414,18 @@ blah = blah
       validate_file(expected_content_nine, tmpfile)
     end
 
-    expected_content_ten = <<-EOS
-     [section1]
-     # foo=foovalue
-     bar=barvalue
-     foo = foovalue2
+    expected_content_ten = <<~EOS
+           [section1]
+           # foo=foovalue
+           bar=barvalue
+           foo = foovalue2
 
-[section2]
-# foo = foovalue
-;bar=barvalue
-bar = bar3
-blah = blah
-#baz=
+      [section2]
+      # foo = foovalue
+      ;bar=barvalue
+      bar = bar3
+      blah = blah
+      #baz=
     EOS
     it 'adds a new setting below a commented version of that setting, respecting semicolons as comments' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'bar', value: 'bar3'))
@@ -1441,18 +1435,18 @@ blah = blah
       validate_file(expected_content_ten, tmpfile)
     end
 
-    expected_content_four = <<-EOS
-     [section1]
-     # foo=foovalue
-     bar=barvalue
-     foo = foovalue2
+    expected_content_four = <<~EOS
+           [section1]
+           # foo=foovalue
+           bar=barvalue
+           foo = foovalue2
 
-[section2]
-# foo = foovalue
-;bar=barvalue
-blah = blah
-#baz=
-baz = bazvalue
+      [section2]
+      # foo = foovalue
+      ;bar=barvalue
+      blah = blah
+      #baz=
+      baz = bazvalue
     EOS
     it 'adds a new setting below an empty commented version of that setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'baz', value: 'bazvalue'))
@@ -1464,18 +1458,18 @@ baz = bazvalue
 
     context 'when a section only contains comments' do
       let(:orig_content) do
-        <<-EOS
-[section1]
-# foo=foovalue
-# bar=bar2
-EOS
+        <<~EOS
+          [section1]
+          # foo=foovalue
+          # bar=bar2
+        EOS
       end
 
-      expected_content_one = <<-EOS
-[section1]
-# foo=foovalue
-foo = foovalue2
-# bar=bar2
+      expected_content_one = <<~EOS
+        [section1]
+        # foo=foovalue
+        foo = foovalue2
+        # bar=bar2
       EOS
       it 'is able to add a new setting when a section contains only comments' do
         resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', value: 'foovalue2'))
@@ -1485,11 +1479,11 @@ foo = foovalue2
         validate_file(expected_content_one, tmpfile)
       end
 
-      expected_content_two = <<-EOS
-[section1]
-# foo=foovalue
-# bar=bar2
-bar = barvalue2
+      expected_content_two = <<~EOS
+        [section1]
+        # foo=foovalue
+        # bar=bar2
+        bar = barvalue2
       EOS
       it 'is able to add a new setting when it matches a commented out line other than the first one' do
         resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'bar', value: 'barvalue2'))
@@ -1502,44 +1496,44 @@ bar = barvalue2
 
     context 'when sections have spaces and dashes' do
       let(:orig_content) do
-        <<-EOS
-# This is a comment
-[section - one]
-; This is also a comment
-foo=foovalue
+        <<~EOS
+          # This is a comment
+          [section - one]
+          ; This is also a comment
+          foo=foovalue
 
-bar = barvalue
-main = true
-[section - two]
+          bar = barvalue
+          main = true
+          [section - two]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+          foo= foovalue2
+          baz=bazvalue
+          url = http://192.168.1.1:8080
+          [section:sub]
+          subby=bar
+              #another comment
+           ; yet another comment
         EOS
       end
 
-      expected_content_one = <<-EOS
-# This is a comment
-[section - one]
-; This is also a comment
-foo=foovalue
+      expected_content_one = <<~EOS
+        # This is a comment
+        [section - one]
+        ; This is also a comment
+        foo=foovalue
 
-bar = barvalue
-main = true
-[section - two]
+        bar = barvalue
+        main = true
+        [section - two]
 
-foo= foovalue2
-baz=bazvalue
-url = http://192.168.1.1:8080
-yahoo = yippee
-[section:sub]
-subby=bar
-    #another comment
- ; yet another comment
+        foo= foovalue2
+        baz=bazvalue
+        url = http://192.168.1.1:8080
+        yahoo = yippee
+        [section:sub]
+        subby=bar
+            #another comment
+         ; yet another comment
       EOS
       it 'adds a missing setting to the correct section' do
         resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section - two', setting: 'yahoo', value: 'yippee'))
@@ -1553,30 +1547,30 @@ subby=bar
 
   context 'when sections have spaces and quotations' do
     let(:orig_content) do
-      <<-EOS
-[branch "main"]
-        remote = origin
-        merge = refs/heads/main
+      <<~EOS
+        [branch "main"]
+                remote = origin
+                merge = refs/heads/main
 
-[alias]
-to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/main
-[branch "production"]
-        remote = origin
-        merge = refs/heads/production
+        [alias]
+        to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/main
+        [branch "production"]
+                remote = origin
+                merge = refs/heads/production
       EOS
     end
 
-    expected_content_one = <<-EOS
-[branch "main"]
-        remote = origin
-        merge = refs/heads/main
+    expected_content_one = <<~EOS
+      [branch "main"]
+              remote = origin
+              merge = refs/heads/main
 
-[alias]
-to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/main
-foo = bar
-[branch "production"]
-        remote = origin
-        merge = refs/heads/production
+      [alias]
+      to-deploy = log --merges --grep='pull request' --format='%s (%cN)' origin/production..origin/main
+      foo = bar
+      [branch "production"]
+              remote = origin
+              merge = refs/heads/production
     EOS
     it 'adds a missing setting to the correct section' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'alias', setting: 'foo', value: 'bar'))
@@ -1586,5 +1580,4 @@ foo = bar
       validate_file(expected_content_one, tmpfile)
     end
   end
-  # rubocop:enable Layout/IndentHeredoc
 end

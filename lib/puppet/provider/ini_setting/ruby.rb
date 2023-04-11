@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('../../../util/ini_file', __FILE__)
+require File.expand_path('../../util/ini_file', __dir__)
 
 Puppet::Type.type(:ini_setting).provide(:ruby) do
   def self.instances
@@ -10,6 +10,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
     self.file_path, and that will provide the value for the path to the
     ini file.'
     raise(Puppet::Error, 'Ini_settings only support collecting instances when a file path is hard coded') unless respond_to?(:file_path)
+
     # figure out what to do about the seperator
     ini_file  = Puppet::Util::IniFile.new(file_path, '=')
     resources = []

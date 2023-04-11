@@ -16,9 +16,7 @@ describe Puppet::Type.type(:inherit_ini_setting).provider(:ini_setting) do
   end
 
   before :each do
-    File.open(tmpfile, 'w') do |fh|
-      fh.write(orig_content)
-    end
+    File.write(tmpfile, orig_content)
   end
 
   context 'when calling instances' do
@@ -57,7 +55,7 @@ describe Puppet::Type.type(:inherit_ini_setting).provider(:ini_setting) do
       resource = Puppet::Type::Inherit_ini_setting.new(setting: 'set_this', value: 'to_that')
       provider = described_class.new(resource)
       provider.create
-      validate_file("set_this=to_that\n", tmpfile)
+      expect(validate_file("set_this=to_that\n", tmpfile)).to be_truthy
     end
   end
 end

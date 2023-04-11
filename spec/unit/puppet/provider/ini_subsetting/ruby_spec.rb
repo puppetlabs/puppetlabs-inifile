@@ -14,9 +14,7 @@ describe provider_class do
   end
 
   before :each do
-    File.open(tmpfile, 'w') do |fh|
-      fh.write(orig_content)
-    end
+    File.write(tmpfile, orig_content)
   end
 
   context 'when ensuring that a subsetting is present' do
@@ -26,7 +24,7 @@ describe provider_class do
         path: tmpfile,
         section: '',
         key_val_separator: '=',
-        setting: 'JAVA_ARGS',
+        setting: 'JAVA_ARGS'
       }
     end
 
@@ -153,7 +151,7 @@ describe provider_class do
         title: 'ini_setting_ensure_present_test',
         path: tmpfile,
         section: 'main',
-        setting: 'reports',
+        setting: 'reports'
       }
     end
 
@@ -213,7 +211,7 @@ describe provider_class do
         path: tmpfile,
         section: 'main',
         setting: 'reports',
-        use_exact_match: true,
+        use_exact_match: true
       }
     end
 
@@ -234,7 +232,7 @@ describe provider_class do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: 'fo', subsetting_separator: ','))
       provider = described_class.new(resource)
       provider.value = ''
-      validate_file(expected_content_one, tmpfile)
+      expect(validate_file(expected_content_one, tmpfile)).to be_truthy
     end
 
     expected_content_two = <<-EOS
@@ -247,7 +245,7 @@ describe provider_class do
       provider = described_class.new(resource)
       provider.value = ''
       provider.destroy
-      validate_file(expected_content_two, tmpfile)
+      expect(validate_file(expected_content_two, tmpfile)).to be_truthy
     end
   end
 
@@ -259,7 +257,7 @@ describe provider_class do
         section: 'main',
         setting: 'reports',
         subsetting_separator: ',',
-        subsetting_key_val_separator: ':',
+        subsetting_key_val_separator: ':'
       }
     end
 
@@ -280,7 +278,7 @@ describe provider_class do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: 'c', value: '3'))
       provider = described_class.new(resource)
       provider.value = '3'
-      validate_file(expected_content_one, tmpfile)
+      expect(validate_file(expected_content_one, tmpfile)).to be_truthy
     end
 
     expected_content_two = <<-EOS
@@ -330,7 +328,7 @@ describe provider_class do
         title: 'ini_setting_delete_if_empty_test',
         path: tmpfile,
         section: 'main',
-        delete_if_empty: true,
+        delete_if_empty: true
       }
     end
 
@@ -353,11 +351,11 @@ describe provider_class do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(setting: 'reports', subsetting: 'http', subsetting_separator: ','))
       provider = described_class.new(resource)
       provider.destroy
-      validate_file(expected_content_one, tmpfile)
+      expect(validate_file(expected_content_one, tmpfile)).to be_truthy
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(setting: 'something', subsetting: 'else', subsetting_separator: ','))
       provider = described_class.new(resource)
       provider.destroy
-      validate_file(expected_content_two, tmpfile)
+      expect(validate_file(expected_content_two, tmpfile)).to be_truthy
     end
   end
 end
