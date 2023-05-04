@@ -29,11 +29,11 @@ describe Puppet::Type.type(:inherit_ini_setting).provider(:ini_setting) do
 
     context 'when the file has contents' do
       let(:orig_content) do
-        <<-EOS
+        <<-INIFILE
           # A comment
           red = blue
           green = purple
-        EOS
+        INIFILE
       end
 
       it 'parses the results' do

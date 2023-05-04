@@ -16,7 +16,7 @@ describe Puppet::Util::IniFile do
 
   context 'when parsing a file' do
     let(:sample_content) do
-      template = <<-EOS
+      template = <<-INIFILE
         # This is a comment
         [section1]
         ; This is also a comment
@@ -34,7 +34,7 @@ describe Puppet::Util::IniFile do
          zot = multi word value
          xyzzy['thing1']['thing2']=xyzzyvalue
          l=git log
-      EOS
+      INIFILE
       template.split("\n")
     end
 
@@ -65,11 +65,11 @@ describe Puppet::Util::IniFile do
 
   context 'when parsing a file whose first line is a section' do
     let(:sample_content) do
-      template = <<-EOS
+      template = <<-INIFILE
         [section1]
         ; This is a comment
         foo=foovalue
-      EOS
+      INIFILE
       template.split("\n")
     end
 
@@ -90,12 +90,12 @@ describe Puppet::Util::IniFile do
 
   context "when parsing a file with a 'global' section" do
     let(:sample_content) do
-      template = <<-EOS
+      template = <<-INIFILE
         foo = bar
         [section1]
         ; This is a comment
         foo=foovalue
-      EOS
+      INIFILE
       template.split("\n")
     end
 
@@ -120,12 +120,12 @@ describe Puppet::Util::IniFile do
 
   context 'when updating a file with existing empty values' do
     let(:sample_content) do
-      template = <<-EOS
+      template = <<-INIFILE
         [section1]
         foo=
         #bar=
         #xyzzy['thing1']['thing2']='xyzzyvalue'
-      EOS
+      INIFILE
       template.split("\n")
     end
 
@@ -180,7 +180,7 @@ describe Puppet::Util::IniFile do
 
   context 'when the file has quotation marks in its section names' do
     let(:sample_content) do
-      template = <<-EOS
+      template = <<-INIFILE
         [branch "main"]
                 remote = origin
                 merge = refs/heads/main
@@ -190,7 +190,7 @@ describe Puppet::Util::IniFile do
         [branch "production"]
                 remote = origin
                 merge = refs/heads/production
-      EOS
+      INIFILE
       template.split("\n")
     end
 
@@ -201,7 +201,7 @@ describe Puppet::Util::IniFile do
 
   context 'when Samba INI file with dollars in section names' do
     let(:sample_content) do
-      template = <<-EOS
+      template = <<-INIFILE
         [global]
           workgroup = FELLOWSHIP
           ; ...
@@ -220,7 +220,7 @@ describe Puppet::Util::IniFile do
           path = /home/shares
           read only = No
           guest ok = Yes
-      EOS
+      INIFILE
       template.split("\n")
     end
 
@@ -231,10 +231,10 @@ describe Puppet::Util::IniFile do
 
   context 'when section names with forward slashes in them' do
     let(:sample_content) do
-      template = <<-EOS
+      template = <<-INIFILE
         [monitor:///var/log/*.log]
         disabled = test_value
-      EOS
+      INIFILE
       template.split("\n")
     end
 
@@ -245,12 +245,12 @@ describe Puppet::Util::IniFile do
 
   context 'when KDE Configuration with braces in setting names' do
     let(:sample_content) do
-      template = <<-EOS
+      template = <<-INIFILE
               [khotkeys]
         _k_friendly_name=khotkeys
         {5465e8c7-d608-4493-a48f-b99d99fdb508}=Print,none,PrintScreen
         {d03619b6-9b3c-48cc-9d9c-a2aadb485550}=Search,none,Search
-      EOS
+      INIFILE
       template.split("\n")
     end
 
@@ -265,12 +265,12 @@ describe Puppet::Util::IniFile do
 
   context 'when Configuration with colons in setting names' do
     let(:sample_content) do
-      template = <<-EOS
+      template = <<-INIFILE
               [Drive names]
         A:=5.25" Floppy
         B:=3.5" Floppy
         C:=Winchester
-      EOS
+      INIFILE
       template.split("\n")
     end
 
@@ -289,7 +289,7 @@ describe Puppet::Util::IniFile do
 
   context 'when Configuration with spaces in setting names' do
     let(:sample_content) do
-      template = <<-EOS
+      template = <<-INIFILE
         [global]
           # log files split per-machine:
           log file = /var/log/samba/log.%m
@@ -297,7 +297,7 @@ describe Puppet::Util::IniFile do
           kerberos method = system keytab
           passdb backend = tdbsam
           security = ads
-      EOS
+      INIFILE
       template.split("\n")
     end
 

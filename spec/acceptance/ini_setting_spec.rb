@@ -44,7 +44,7 @@ describe 'ini_setting resource' do
   end
 
   context 'when ensure parameter => present for global and section' do
-    pp = <<-EOS
+    pp = <<-MANIFEST
     ini_setting { 'ensure => present for section':
       ensure  => present,
       path    => "#{basedir}/ini_setting.ini",
@@ -59,7 +59,7 @@ describe 'ini_setting resource' do
       setting => 'four',
       value   => 'five',
     }
-    EOS
+    MANIFEST
 
     it_behaves_like 'has_content', "#{basedir}/ini_setting.ini", pp, %r{four = five\R\R\[one\]\Rtwo = three}
   end
@@ -76,7 +76,7 @@ describe 'ini_setting resource' do
       apply_manifest(ipp)
     end
 
-    pp = <<-EOS
+    pp = <<-MANIFEST
     ini_setting { 'ensure => absent for key/value':
       ensure  => absent,
       path    => "#{basedir}/ini_setting.ini",
@@ -84,7 +84,7 @@ describe 'ini_setting resource' do
       setting => 'two',
       value   => 'three',
     }
-    EOS
+    MANIFEST
 
     it 'applies the manifest twice' do
       expect { idempotent_apply(pp) }.not_to raise_error
@@ -119,7 +119,7 @@ describe 'ini_setting resource' do
       run_shell("rm #{basedir}/ini_setting.ini", expect_failures: true)
     end
 
-    pp = <<-EOS
+    pp = <<-MANIFEST
     ini_setting { 'ensure => absent for global':
       ensure  => absent,
       path    => "#{basedir}/ini_setting.ini",
@@ -127,7 +127,7 @@ describe 'ini_setting resource' do
       setting => 'four',
       value   => 'five',
     }
-    EOS
+    MANIFEST
 
     it 'applies the manifest twice' do
       expect { idempotent_apply(pp) }.not_to raise_error
@@ -148,7 +148,7 @@ describe 'ini_setting resource' do
 
   describe 'path parameter' do
     context 'when path => foo' do
-      pp = <<-EOS
+      pp = <<-MANIFEST
         ini_setting { 'path => foo':
           ensure     => present,
           section    => 'one',
@@ -156,20 +156,20 @@ describe 'ini_setting resource' do
           value      => 'three',
           path       => 'foo',
         }
-      EOS
+      MANIFEST
 
       it_behaves_like 'has_error', 'foo', pp, %r{must be fully qualified}
     end
   end
 
   context 'when ensure parameter => present and only section' do
-    pp = <<-EOS
+    pp = <<-MANIFEST
     ini_setting { 'ensure => present for section':
       ensure  => present,
       path    => "#{basedir}/ini_setting.ini",
       section => 'one',
     }
-    EOS
+    MANIFEST
 
     it_behaves_like 'has_content', "#{basedir}/ini_setting.ini", pp, %r{\[one\]}
   end
@@ -181,7 +181,7 @@ describe 'ini_setting resource' do
      { value: 'public_value', matcher: %r{initial_value.*public_value}, show_diff: true },
      { value: 'secret_value', matcher: %r{redacted sensitive information.*redacted sensitive information}, show_diff: false },
      { value: 'md5_value', matcher: %r{\{md5\}881671aa2bbc680bc530c4353125052b.*\{md5\}ed0903a7fa5de7886ca1a7a9ad06cf51}, show_diff: :md5 }].each do |i|
-      pp = <<-EOS
+      pp = <<-MANIFEST
           ini_setting { 'test_show_diff':
             ensure      => present,
             section     => 'test',
@@ -190,7 +190,7 @@ describe 'ini_setting resource' do
             path        => "#{basedir}/test_show_diff.ini",
             show_diff   => #{i[:show_diff]}
           }
-      EOS
+      MANIFEST
 
       context "when show_diff => #{i[:show_diff]}" do
         res = apply_manifest(pp, expect_changes: true)
@@ -206,7 +206,7 @@ describe 'ini_setting resource' do
   end
 
   describe 'values with spaces in the value part at the beginning or at the end' do
-    pp = <<-EOS
+    pp = <<-MANIFEST
       ini_setting { 'path => foo':
           ensure     => present,
           section    => 'one',
@@ -214,7 +214,7 @@ describe 'ini_setting resource' do
           value      => '               123',
           path       => '#{basedir}/ini_setting.ini',
         }
-    EOS
+    MANIFEST
 
     it_behaves_like 'has_content', "#{basedir}/ini_setting.ini", pp, %r{\[one\]\Rtwo = 123}
   end
@@ -238,7 +238,7 @@ describe 'ini_setting resource' do
     context 'when event is triggered' do
       context 'when update setting value' do
         let(:update_value_manifest) do
-          <<-EOS
+          <<-MANIFEST
           notify { foo:
             notify => Ini_Setting['updateSetting'],
           }
@@ -251,7 +251,7 @@ describe 'ini_setting resource' do
             value   => "newValue",
             refreshonly => true,
           }
-          EOS
+          MANIFEST
         end
 
         before(:each) do
@@ -271,7 +271,7 @@ describe 'ini_setting resource' do
 
       context 'when remove setting value' do
         let(:remove_setting_manifest) do
-          <<-EOS
+          <<-MANIFEST
           notify { foo:
             notify => Ini_Setting['removeSetting'],
           }
@@ -283,7 +283,7 @@ describe 'ini_setting resource' do
             setting => 'valueinsection1',
             refreshonly => true,
           }
-          EOS
+          MANIFEST
         end
 
         before(:each) do
@@ -305,7 +305,7 @@ describe 'ini_setting resource' do
     context 'when not receiving an event' do
       context 'when does not update setting' do
         let(:does_not_update_value_manifest) do
-          <<-EOS
+          <<-MANIFEST
           file { "#{basedir}/ini_setting.ini":
             ensure => present,
             notify => Ini_Setting['updateSetting'],
@@ -318,7 +318,7 @@ describe 'ini_setting resource' do
             value   => "newValue",
             refreshonly => true,
           }
-          EOS
+          MANIFEST
         end
 
         before(:each) do
@@ -339,7 +339,7 @@ describe 'ini_setting resource' do
 
       context 'when does not remove setting' do
         let(:does_not_remove_setting_manifest) do
-          <<-EOS
+          <<-MANIFEST
           file { "#{basedir}/ini_setting.ini":
             ensure => present,
             notify => Ini_Setting['removeSetting'],
@@ -352,7 +352,7 @@ describe 'ini_setting resource' do
             setting => 'valueinsection1',
             refreshonly => true,
           }
-          EOS
+          MANIFEST
         end
 
         before(:each) do

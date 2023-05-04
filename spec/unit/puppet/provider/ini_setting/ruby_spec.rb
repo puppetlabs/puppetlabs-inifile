@@ -63,7 +63,7 @@ describe provider_class do
 
     context 'when file has contecnts' do
       let(:orig_content) do
-        <<-EOS
+        <<-INIFILE
           # This is a comment
           [section1]
           ; This is also a comment
@@ -80,7 +80,7 @@ describe provider_class do
           subby=bar
               #another comment
            ; yet another comment
-        EOS
+        INIFILE
       end
 
       it 'is able to parse the results' do
@@ -116,7 +116,7 @@ describe provider_class do
 
   context 'when ensuring that a setting is present' do
     let(:orig_content) do
-      <<~EOS
+      <<~INIFILE
         # This is a comment
         [section1]
         ; This is also a comment
@@ -136,10 +136,10 @@ describe provider_class do
 
         -nonstandard-
           shoes = purple
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<~EOS
+    expected_content_one = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -160,7 +160,7 @@ describe provider_class do
 
       -nonstandard-
         shoes = purple
-    EOS
+    INIFILE
     it 'adds a missing setting to the correct section' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(setting: 'yahoo', value: 'yippee'))
       provider = described_class.new(resource)
@@ -169,7 +169,7 @@ describe provider_class do
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<~EOS
+    expected_content_two = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -190,7 +190,7 @@ describe provider_class do
       -nonstandard-
         shoes = purple
         yahoo = yippee
-    EOS
+    INIFILE
     it 'adds a missing setting to the correct section with pre/suffix' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'yahoo', value: 'yippee', section_prefix: '-', section_suffix: '-'))
       provider = described_class.new(resource)
@@ -199,7 +199,7 @@ describe provider_class do
       validate_file(expected_content_two, tmpfile)
     end
 
-    expected_content_three = <<~EOS
+    expected_content_three = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -220,7 +220,7 @@ describe provider_class do
       -nonstandard-
         shoes = purple
       		indented = weirdly
-    EOS
+    INIFILE
     it 'adds a missing setting to the correct section with indent_char' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'indented', value: 'weirdly', section_prefix: '-', section_suffix: '-', indent_char: "\t"))
       provider = described_class.new(resource)
@@ -229,7 +229,7 @@ describe provider_class do
       validate_file(expected_content_three, tmpfile)
     end
 
-    expected_content_four = <<~EOS
+    expected_content_four = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -250,7 +250,7 @@ describe provider_class do
       -nonstandard-
         shoes = purple
       				indented = weirdly
-    EOS
+    INIFILE
     it 'adds a missing setting to the correct section indented by indent_char * indent_width' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'indented', value: 'weirdly',
                                                                    section_prefix: '-', section_suffix: '-', indent_char: "\t", indent_width: 4))
@@ -260,7 +260,7 @@ describe provider_class do
       validate_file(expected_content_four, tmpfile)
     end
 
-    expected_content_five = <<~EOS
+    expected_content_five = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -281,7 +281,7 @@ describe provider_class do
       -nonstandard-
         shoes = purple
       				indented = weirdly
-    EOS
+    INIFILE
     it 'treats a string indent_width as an integer' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'indented', value: 'weirdly',
                                                                    section_prefix: '-', section_suffix: '-', indent_char: "\t", indent_width: '4'))
@@ -291,7 +291,7 @@ describe provider_class do
       validate_file(expected_content_five, tmpfile)
     end
 
-    expected_content_six = <<~EOS
+    expected_content_six = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -312,7 +312,7 @@ describe provider_class do
       -nonstandard-
         shoes = purple
       yahoo = yippee
-    EOS
+    INIFILE
     it 'adds a missing setting to the correct section with colon' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'yahoo', value: 'yippee'))
       provider = described_class.new(resource)
@@ -321,7 +321,7 @@ describe provider_class do
       validate_file(expected_content_six, tmpfile)
     end
 
-    expected_content_seven = <<~EOS
+    expected_content_seven = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -341,7 +341,7 @@ describe provider_class do
 
       -nonstandard-
         shoes = purple
-    EOS
+    INIFILE
     it 'modifies an existing setting with a different value' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(setting: 'baz', value: 'bazvalue2'))
       provider = described_class.new(resource)
@@ -350,7 +350,7 @@ describe provider_class do
       validate_file(expected_content_seven, tmpfile)
     end
 
-    expected_content_eight = <<~EOS
+    expected_content_eight = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -370,7 +370,7 @@ describe provider_class do
 
       -nonstandard-
         shoes = purple
-    EOS
+    INIFILE
     it 'modifies an existing setting with a different boolean value' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'main', value: false))
       provider = described_class.new(resource)
@@ -380,7 +380,7 @@ describe provider_class do
       validate_file(expected_content_eight, tmpfile)
     end
 
-    expected_content_nine = <<~EOS
+    expected_content_nine = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -400,7 +400,7 @@ describe provider_class do
 
       -nonstandard-
         shoes = orange
-    EOS
+    INIFILE
     it 'modifies an existing setting with pre/suffix with a different value' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'shoes', value: 'orange', section_prefix: '-', section_suffix: '-'))
       provider = described_class.new(resource)
@@ -409,7 +409,7 @@ describe provider_class do
       validate_file(expected_content_nine, tmpfile)
     end
 
-    expected_content_ten = <<~EOS
+    expected_content_ten = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -429,7 +429,7 @@ describe provider_class do
 
       -nonstandard-
         shoes = purple
-    EOS
+    INIFILE
     it 'modifies an existing setting with a different value - with colon in section' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'subby', value: 'foo'))
       provider = described_class.new(resource)
@@ -438,7 +438,7 @@ describe provider_class do
       validate_file(expected_content_ten, tmpfile)
     end
 
-    expected_content_eleven = <<~EOS
+    expected_content_eleven = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -458,7 +458,7 @@ describe provider_class do
 
       -nonstandard-
         shoes = purple
-    EOS
+    INIFILE
     it 'is able to handle settings with non alphanumbering settings' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(setting: 'url', value: 'http://192.168.0.1:8080'))
       provider = described_class.new(resource)
@@ -467,7 +467,7 @@ describe provider_class do
       validate_file(expected_content_eleven, tmpfile)
     end
 
-    expected_content_twelve = <<~EOS
+    expected_content_twelve = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -487,7 +487,7 @@ describe provider_class do
 
       -nonstandard-
         shoes = http://192.168.0.1:8080
-    EOS
+    INIFILE
     it 'is able to handle settings with pre/suffix with non alphanumbering settings' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'shoes', value: 'http://192.168.0.1:8080', section_prefix: '-', section_suffix: '-'))
       provider = described_class.new(resource)
@@ -509,7 +509,7 @@ describe provider_class do
       expect(provider.exists?).to be true
     end
 
-    expected_content_thirteen = <<~EOS
+    expected_content_thirteen = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -532,7 +532,7 @@ describe provider_class do
 
       [section3]
       huzzah = shazaam
-    EOS
+    INIFILE
     it 'adds a new section if the section does not exist' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'huzzah', value: 'shazaam'))
       provider = described_class.new(resource)
@@ -541,7 +541,7 @@ describe provider_class do
       validate_file(expected_content_thirteen, tmpfile)
     end
 
-    expected_content_fourteen = <<~EOS
+    expected_content_fourteen = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -564,7 +564,7 @@ describe provider_class do
 
       -section3-
       huzzah = shazaam
-    EOS
+    INIFILE
     it 'adds a new section with pre/suffix if the section does not exist' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'huzzah', value: 'shazaam', section_prefix: '-', section_suffix: '-'))
       provider = described_class.new(resource)
@@ -573,7 +573,7 @@ describe provider_class do
       validate_file(expected_content_fourteen, tmpfile)
     end
 
-    expected_content_fifteen = <<~EOS
+    expected_content_fifteen = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -596,7 +596,7 @@ describe provider_class do
 
       [section:subsection]
       huzzah = shazaam
-    EOS
+    INIFILE
     it 'adds a new section if the section does not exist - with colon' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:subsection', setting: 'huzzah', value: 'shazaam'))
       provider = described_class.new(resource)
@@ -605,7 +605,7 @@ describe provider_class do
       validate_file(expected_content_fifteen, tmpfile)
     end
 
-    expected_content_sixteen = <<~EOS
+    expected_content_sixteen = <<~INIFILE
       # This is a comment
       [section1]
       ; This is also a comment
@@ -628,7 +628,7 @@ describe provider_class do
 
       -section:subsection-
       huzzah = shazaam
-    EOS
+    INIFILE
     it 'adds a new section with pre/suffix if the section does not exist - with colon' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:subsection', setting: 'huzzah', value: 'shazaam', section_prefix: '-', section_suffix: '-'))
       provider = described_class.new(resource)
@@ -735,23 +735,23 @@ setting1 = hellowworld
 
   context 'when dealing with a global section' do
     let(:orig_content) do
-      <<~EOS
+      <<~INIFILE
         # This is a comment
         foo=blah
         [section2]
         foo = http://192.168.1.1:8080
          ; yet another comment
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<~EOS
+    expected_content_one = <<~INIFILE
       # This is a comment
       foo=blah
       bar = yippee
       [section2]
       foo = http://192.168.1.1:8080
        ; yet another comment
-    EOS
+    INIFILE
     it "adds a missing setting if it doesn't exist" do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: '', setting: 'bar', value: 'yippee'))
       provider = described_class.new(resource)
@@ -760,13 +760,13 @@ setting1 = hellowworld
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<~EOS
+    expected_content_two = <<~INIFILE
       # This is a comment
       foo=yippee
       [section2]
       foo = http://192.168.1.1:8080
        ; yet another comment
-    EOS
+    INIFILE
     it 'modifies an existing setting with a different value' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: '', setting: 'foo', value: 'yippee'))
       provider = described_class.new(resource)
@@ -784,18 +784,18 @@ setting1 = hellowworld
 
   context 'when the first line of the file is a section' do
     let(:orig_content) do
-      <<~EOS
+      <<~INIFILE
         [section2]
         foo = http://192.168.1.1:8080
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<~EOS
+    expected_content_one = <<~INIFILE
       foo = yippee
 
       [section2]
       foo = http://192.168.1.1:8080
-    EOS
+    INIFILE
     it 'is able to add a global setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: '', setting: 'foo', value: 'yippee'))
       provider = described_class.new(resource)
@@ -804,10 +804,10 @@ setting1 = hellowworld
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<~EOS
+    expected_content_two = <<~INIFILE
       [section2]
       foo = yippee
-    EOS
+    INIFILE
     it 'modifies an existing setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee'))
       provider = described_class.new(resource)
@@ -816,11 +816,11 @@ setting1 = hellowworld
       validate_file(expected_content_two, tmpfile)
     end
 
-    expected_content_three = <<~EOS
+    expected_content_three = <<~INIFILE
       [section2]
       foo = http://192.168.1.1:8080
       bar = baz
-    EOS
+    INIFILE
     it 'adds a new setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'bar', value: 'baz'))
       provider = described_class.new(resource)
@@ -832,16 +832,16 @@ setting1 = hellowworld
 
   context 'when overriding the separator' do
     let(:orig_content) do
-      <<~EOS
+      <<~INIFILE
         [section2]
         foo=bar
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<~EOS
+    expected_content_one = <<~INIFILE
       [section2]
       foo=yippee
-    EOS
+    INIFILE
     it 'modifies an existing setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee', key_val_separator: '='))
       provider = described_class.new(resource)
@@ -853,16 +853,16 @@ setting1 = hellowworld
 
   context 'when overriding the separator to something other than =' do
     let(:orig_content) do
-      <<~EOS
+      <<~INIFILE
         [section2]
         foo: bar
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<~EOS
+    expected_content_one = <<~INIFILE
       [section2]
       foo: yippee
-    EOS
+    INIFILE
     it 'modifies an existing setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee', key_val_separator: ': '))
       provider = described_class.new(resource)
@@ -871,11 +871,11 @@ setting1 = hellowworld
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<~EOS
+    expected_content_two = <<~INIFILE
       [section2]
       foo: bar
       bar: baz
-    EOS
+    INIFILE
     it 'adds a new setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'bar', value: 'baz', key_val_separator: ': '))
       provider = described_class.new(resource)
@@ -887,16 +887,16 @@ setting1 = hellowworld
 
   context 'when overriding the separator to a space' do
     let(:orig_content) do
-      <<~EOS
+      <<~INIFILE
         [section2]
         foo bar
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<~EOS
+    expected_content_one = <<~INIFILE
       [section2]
       foo yippee
-    EOS
+    INIFILE
     it 'modifies an existing setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee', key_val_separator: ' '))
       provider = described_class.new(resource)
@@ -905,11 +905,11 @@ setting1 = hellowworld
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<~EOS
+    expected_content_two = <<~INIFILE
       [section2]
       foo bar
       bar baz
-    EOS
+    INIFILE
     it 'adds a new setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'bar', value: 'baz', key_val_separator: ' '))
       provider = described_class.new(resource)
@@ -921,7 +921,7 @@ setting1 = hellowworld
 
   context 'when ensuring that a setting is absent' do
     let(:orig_content) do
-      <<~EOS
+      <<~INIFILE
         [section1]
         ; This is also a comment
         foo=foovalue
@@ -945,10 +945,10 @@ setting1 = hellowworld
 
          -nonstandard-
            shoes = purple
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<~EOS
+    expected_content_one = <<~INIFILE
       [section1]
       ; This is also a comment
 
@@ -971,7 +971,7 @@ setting1 = hellowworld
 
        -nonstandard-
          shoes = purple
-    EOS
+    INIFILE
     it 'removes a setting that exists' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', ensure: 'absent'))
       provider = described_class.new(resource)
@@ -980,7 +980,7 @@ setting1 = hellowworld
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<~EOS
+    expected_content_two = <<~INIFILE
       [section1]
       ; This is also a comment
       foo=foovalue
@@ -1002,7 +1002,7 @@ setting1 = hellowworld
           #another comment
        ; yet another comment
 
-    EOS
+    INIFILE
     it 'removes a setting with pre/suffix that exists' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'shoes', ensure: 'absent', section_prefix: '-', section_suffix: '-'))
       provider = described_class.new(resource)
@@ -1011,7 +1011,7 @@ setting1 = hellowworld
       validate_file(expected_content_two, tmpfile)
     end
 
-    expected_content_three = <<~EOS
+    expected_content_three = <<~INIFILE
       [section1]
       ; This is also a comment
       foo=foovalue
@@ -1035,7 +1035,7 @@ setting1 = hellowworld
 
        -nonstandard-
          shoes = purple
-    EOS
+    INIFILE
     it 'does nothing for a setting that does not exist' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'foo', ensure: 'absent'))
       provider = described_class.new(resource)
@@ -1044,7 +1044,7 @@ setting1 = hellowworld
       validate_file(expected_content_three, tmpfile)
     end
 
-    expected_content_four = <<~EOS
+    expected_content_four = <<~INIFILE
       [section1]
       ; This is also a comment
       foo=foovalue
@@ -1068,7 +1068,7 @@ setting1 = hellowworld
 
        -nonstandard-
          shoes = purple
-    EOS
+    INIFILE
     it 'does nothing for a setting with pre/suffix that does not exist' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'foo', ensure: 'absent', section_prefix: '-', section_suffix: '-'))
       provider = described_class.new(resource)
@@ -1077,7 +1077,7 @@ setting1 = hellowworld
       validate_file(expected_content_four, tmpfile)
     end
 
-    expected_content_five = <<~EOS
+    expected_content_five = <<~INIFILE
       [section1]
       ; This is also a comment
       foo=foovalue
@@ -1100,7 +1100,7 @@ setting1 = hellowworld
 
        -nonstandard-
          shoes = purple
-    EOS
+    INIFILE
     it 'does not remove a section when the last uncommented setting is removed if there are comments' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'uncom', ensure: 'absent'))
       provider = described_class.new(resource)
@@ -1109,7 +1109,7 @@ setting1 = hellowworld
       validate_file(expected_content_five, tmpfile)
     end
 
-    expected_content_six = <<~EOS
+    expected_content_six = <<~INIFILE
       [section1]
       ; This is also a comment
       foo=foovalue
@@ -1131,7 +1131,7 @@ setting1 = hellowworld
 
        -nonstandard-
          shoes = purple
-    EOS
+    INIFILE
     it 'removes the section when removing the last line in the section' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section4', setting: 'uncom', ensure: 'absent'))
       provider = described_class.new(resource)
@@ -1143,7 +1143,7 @@ setting1 = hellowworld
 
   context 'when dealing with indentation in sections' do
     let(:orig_content) do
-      <<~EOS
+      <<~INIFILE
         # This is a comment
              [section1]
              ; This is also a comment
@@ -1161,10 +1161,10 @@ setting1 = hellowworld
             #another comment
           fleezy = flam
          ; yet another comment
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<~EOS
+    expected_content_one = <<~INIFILE
       # This is a comment
            [section1]
            ; This is also a comment
@@ -1183,7 +1183,7 @@ setting1 = hellowworld
           #another comment
         fleezy = flam
        ; yet another comment
-    EOS
+    INIFILE
     it 'adds a missing setting at the correct indentation when the header is aligned' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'yahoo', value: 'yippee'))
       provider = described_class.new(resource)
@@ -1192,7 +1192,7 @@ setting1 = hellowworld
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<~EOS
+    expected_content_two = <<~INIFILE
       # This is a comment
            [section1]
            ; This is also a comment
@@ -1210,7 +1210,7 @@ setting1 = hellowworld
           #another comment
         fleezy = flam
        ; yet another comment
-    EOS
+    INIFILE
     it 'updates an existing setting at the correct indentation when the header is aligned' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'bar', value: 'barvalue2'))
       provider = described_class.new(resource)
@@ -1219,7 +1219,7 @@ setting1 = hellowworld
       validate_file(expected_content_two, tmpfile)
     end
 
-    expected_content_three = <<~EOS
+    expected_content_three = <<~INIFILE
       # This is a comment
            [section1]
            ; This is also a comment
@@ -1238,7 +1238,7 @@ setting1 = hellowworld
           #another comment
         fleezy = flam
        ; yet another comment
-    EOS
+    INIFILE
     it 'adds a missing setting at the correct indentation when the header is not aligned' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'yahoo', value: 'yippee'))
       provider = described_class.new(resource)
@@ -1247,7 +1247,7 @@ setting1 = hellowworld
       validate_file(expected_content_three, tmpfile)
     end
 
-    expected_content_four = <<~EOS
+    expected_content_four = <<~INIFILE
       # This is a comment
            [section1]
            ; This is also a comment
@@ -1265,7 +1265,7 @@ setting1 = hellowworld
           #another comment
         fleezy = flam
        ; yet another comment
-    EOS
+    INIFILE
     it 'updates an existing setting at the correct indentation when the header is not aligned' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'baz', value: 'bazvalue2'))
       provider = described_class.new(resource)
@@ -1274,7 +1274,7 @@ setting1 = hellowworld
       validate_file(expected_content_four, tmpfile)
     end
 
-    expected_content_five = <<~EOS
+    expected_content_five = <<~INIFILE
       # This is a comment
            [section1]
            ; This is also a comment
@@ -1293,7 +1293,7 @@ setting1 = hellowworld
         fleezy = flam
        ; yet another comment
        yahoo = yippee
-    EOS
+    INIFILE
     it 'adds a missing setting at the min indentation when the section is not aligned' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'yahoo', value: 'yippee'))
       provider = described_class.new(resource)
@@ -1302,7 +1302,7 @@ setting1 = hellowworld
       validate_file(expected_content_five, tmpfile)
     end
 
-    expected_content_six = <<~EOS
+    expected_content_six = <<~INIFILE
       # This is a comment
            [section1]
            ; This is also a comment
@@ -1320,7 +1320,7 @@ setting1 = hellowworld
           #another comment
         fleezy = flam2
        ; yet another comment
-    EOS
+    INIFILE
     it 'updates an existing setting at the previous indentation when the section is not aligned' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'fleezy', value: 'flam2'))
       provider = described_class.new(resource)
@@ -1329,7 +1329,7 @@ setting1 = hellowworld
       validate_file(expected_content_six, tmpfile)
     end
 
-    expected_content_seven = <<~EOS
+    expected_content_seven = <<~INIFILE
       # This is a comment
            [section1]
            ; This is also a comment
@@ -1347,7 +1347,7 @@ setting1 = hellowworld
           #another comment
         fleezy = flam2
        ; yet another comment
-    EOS
+    INIFILE
     it 'updates an existing setting at the previous indentation regardless of indent_char and indent_width settings' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'fleezy', value: 'flam2', indent_char: 'ignore this', indent_width: 10))
       provider = described_class.new(resource)
@@ -1359,7 +1359,7 @@ setting1 = hellowworld
 
   context 'when dealing settings that have a commented version present' do
     let(:orig_content) do
-      <<~EOS
+      <<~INIFILE
              [section1]
              # foo=foovalue
              bar=barvalue
@@ -1370,10 +1370,10 @@ setting1 = hellowworld
         ;bar=barvalue
         blah = blah
         #baz=
-      EOS
+      INIFILE
     end
 
-    expected_content_eight = <<~EOS
+    expected_content_eight = <<~INIFILE
            [section1]
            # foo=foovalue
            bar=barvalue
@@ -1385,7 +1385,7 @@ setting1 = hellowworld
       ;bar=barvalue
       blah = blah
       #baz=
-    EOS
+    INIFILE
     it 'adds a new setting below a commented version of that setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'foo3'))
       provider = described_class.new(resource)
@@ -1394,7 +1394,7 @@ setting1 = hellowworld
       validate_file(expected_content_eight, tmpfile)
     end
 
-    expected_content_nine = <<~EOS
+    expected_content_nine = <<~INIFILE
            [section1]
            # foo=foovalue
            bar=barvalue
@@ -1405,7 +1405,7 @@ setting1 = hellowworld
       ;bar=barvalue
       blah = blah
       #baz=
-    EOS
+    INIFILE
     it 'updates an existing setting in place, even if there is a commented version of that setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', value: 'foo3'))
       provider = described_class.new(resource)
@@ -1414,7 +1414,7 @@ setting1 = hellowworld
       validate_file(expected_content_nine, tmpfile)
     end
 
-    expected_content_ten = <<~EOS
+    expected_content_ten = <<~INIFILE
            [section1]
            # foo=foovalue
            bar=barvalue
@@ -1426,7 +1426,7 @@ setting1 = hellowworld
       bar = bar3
       blah = blah
       #baz=
-    EOS
+    INIFILE
     it 'adds a new setting below a commented version of that setting, respecting semicolons as comments' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'bar', value: 'bar3'))
       provider = described_class.new(resource)
@@ -1435,7 +1435,7 @@ setting1 = hellowworld
       validate_file(expected_content_ten, tmpfile)
     end
 
-    expected_content_four = <<~EOS
+    expected_content_four = <<~INIFILE
            [section1]
            # foo=foovalue
            bar=barvalue
@@ -1447,7 +1447,7 @@ setting1 = hellowworld
       blah = blah
       #baz=
       baz = bazvalue
-    EOS
+    INIFILE
     it 'adds a new setting below an empty commented version of that setting' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'baz', value: 'bazvalue'))
       provider = described_class.new(resource)
@@ -1458,19 +1458,19 @@ setting1 = hellowworld
 
     context 'when a section only contains comments' do
       let(:orig_content) do
-        <<~EOS
+        <<~INIFILE
           [section1]
           # foo=foovalue
           # bar=bar2
-        EOS
+        INIFILE
       end
 
-      expected_content_one = <<~EOS
+      expected_content_one = <<~INIFILE
         [section1]
         # foo=foovalue
         foo = foovalue2
         # bar=bar2
-      EOS
+      INIFILE
       it 'is able to add a new setting when a section contains only comments' do
         resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', value: 'foovalue2'))
         provider = described_class.new(resource)
@@ -1479,12 +1479,12 @@ setting1 = hellowworld
         validate_file(expected_content_one, tmpfile)
       end
 
-      expected_content_two = <<~EOS
+      expected_content_two = <<~INIFILE
         [section1]
         # foo=foovalue
         # bar=bar2
         bar = barvalue2
-      EOS
+      INIFILE
       it 'is able to add a new setting when it matches a commented out line other than the first one' do
         resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'bar', value: 'barvalue2'))
         provider = described_class.new(resource)
@@ -1496,7 +1496,7 @@ setting1 = hellowworld
 
     context 'when sections have spaces and dashes' do
       let(:orig_content) do
-        <<~EOS
+        <<~INIFILE
           # This is a comment
           [section - one]
           ; This is also a comment
@@ -1513,10 +1513,10 @@ setting1 = hellowworld
           subby=bar
               #another comment
            ; yet another comment
-        EOS
+        INIFILE
       end
 
-      expected_content_one = <<~EOS
+      expected_content_one = <<~INIFILE
         # This is a comment
         [section - one]
         ; This is also a comment
@@ -1534,7 +1534,7 @@ setting1 = hellowworld
         subby=bar
             #another comment
          ; yet another comment
-      EOS
+      INIFILE
       it 'adds a missing setting to the correct section' do
         resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section - two', setting: 'yahoo', value: 'yippee'))
         provider = described_class.new(resource)
@@ -1547,7 +1547,7 @@ setting1 = hellowworld
 
   context 'when sections have spaces and quotations' do
     let(:orig_content) do
-      <<~EOS
+      <<~INIFILE
         [branch "main"]
                 remote = origin
                 merge = refs/heads/main
@@ -1557,10 +1557,10 @@ setting1 = hellowworld
         [branch "production"]
                 remote = origin
                 merge = refs/heads/production
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<~EOS
+    expected_content_one = <<~INIFILE
       [branch "main"]
               remote = origin
               merge = refs/heads/main
@@ -1571,7 +1571,7 @@ setting1 = hellowworld
       [branch "production"]
               remote = origin
               merge = refs/heads/production
-    EOS
+    INIFILE
     it 'adds a missing setting to the correct section' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'alias', setting: 'foo', value: 'bar'))
       provider = described_class.new(resource)
