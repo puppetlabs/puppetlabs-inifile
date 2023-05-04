@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Puppet::Util::IniFile
+class Puppet::Util::IniFile # rubocop:disable Style/ClassAndModuleChildren
   #
   # section.rb
   #

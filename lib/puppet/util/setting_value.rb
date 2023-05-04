@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Puppet::Util
+module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
   # This class can work with a list of subsettings inside
   # an ini file setting string to add, remove, extract and set their values.
   class SettingValue

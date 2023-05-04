@@ -3,7 +3,7 @@
 require File.expand_path('external_iterator', __dir__)
 require File.expand_path('ini_file/section', __dir__)
 
-module Puppet::Util
+module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
   #
   # ini_file.rb
   #
