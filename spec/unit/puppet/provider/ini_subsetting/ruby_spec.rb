@@ -29,14 +29,14 @@ describe provider_class do
     end
 
     let(:orig_content) do
-      <<-EOS
+      <<-JAVAARGS
         JAVA_ARGS="-Xmx192m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
-      EOS
+      JAVAARGS
     end
 
-    expected_content_one = <<-EOS
+    expected_content_one = <<-JAVAARGS
         JAVA_ARGS="-Xmx192m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof -Xms128m"
-    EOS
+    JAVAARGS
     it 'adds a missing subsetting' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: '-Xms', value: '128m'))
       provider = described_class.new(resource)
@@ -45,9 +45,9 @@ describe provider_class do
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<-EOS
+    expected_content_two = <<-JAVAARGS
         JAVA_ARGS="-Xms128m -Xmx192m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
-    EOS
+    JAVAARGS
     it 'adds a missing subsetting element at the beginning of the line' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: '-Xms', value: '128m', insert_type: :start))
       provider = described_class.new(resource)
@@ -56,9 +56,9 @@ describe provider_class do
       validate_file(expected_content_two, tmpfile)
     end
 
-    expected_content_three = <<-EOS
+    expected_content_three = <<-JAVAARGS
         JAVA_ARGS="-Xmx192m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof -Xms128m"
-    EOS
+    JAVAARGS
     it 'adds a missing subsetting element at the end of the line' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: '-Xms', value: '128m', insert_type: :end))
       provider = described_class.new(resource)
@@ -67,9 +67,9 @@ describe provider_class do
       validate_file(expected_content_three, tmpfile)
     end
 
-    expected_content_four = <<-EOS
+    expected_content_four = <<-JAVAARGS
         JAVA_ARGS="-Xmx192m -Xms128m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
-    EOS
+    JAVAARGS
     it 'adds a missing subsetting element after the given item' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: '-Xms', value: '128m', insert_type: :after, insert_value: '-Xmx'))
       provider = described_class.new(resource)
@@ -78,9 +78,9 @@ describe provider_class do
       validate_file(expected_content_four, tmpfile)
     end
 
-    expected_content_five = <<-EOS
+    expected_content_five = <<-JAVAARGS
         JAVA_ARGS="-Xms128m -Xmx192m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
-    EOS
+    JAVAARGS
     it 'adds a missing subsetting element before the given item' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: '-Xms', value: '128m', insert_type: :before, insert_value: '-Xmx'))
       provider = described_class.new(resource)
@@ -89,9 +89,9 @@ describe provider_class do
       validate_file(expected_content_five, tmpfile)
     end
 
-    expected_content_six = <<-EOS
+    expected_content_six = <<-JAVAARGS
         JAVA_ARGS="-Xmx192m -Xms128m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
-    EOS
+    JAVAARGS
     it 'adds a missing subsetting element at the given index' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: '-Xms', value: '128m', insert_type: :index, insert_value: '1'))
       provider = described_class.new(resource)
@@ -100,9 +100,9 @@ describe provider_class do
       validate_file(expected_content_six, tmpfile)
     end
 
-    expected_content_seven = <<-EOS
+    expected_content_seven = <<-JAVAARGS
         JAVA_ARGS="-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
-    EOS
+    JAVAARGS
     it 'removes an existing subsetting' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: '-Xmx'))
       provider = described_class.new(resource)
@@ -111,9 +111,9 @@ describe provider_class do
       validate_file(expected_content_seven, tmpfile)
     end
 
-    expected_content_eight = <<-EOS
+    expected_content_eight = <<-JAVAARGS
         JAVA_ARGS="-Xmx192m"
-    EOS
+    JAVAARGS
     it 'is able to remove several subsettings with the same name' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: '-XX'))
       provider = described_class.new(resource)
@@ -122,9 +122,9 @@ describe provider_class do
       validate_file(expected_content_eight, tmpfile)
     end
 
-    expected_content_nine = <<-EOS
+    expected_content_nine = <<-JAVAARGS
         JAVA_ARGS="-Xmx256m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/pe-puppetdb/puppetdb-oom.hprof"
-    EOS
+    JAVAARGS
     it 'modifies an existing subsetting' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: '-Xmx', value: '256m'))
       provider = described_class.new(resource)
@@ -133,9 +133,9 @@ describe provider_class do
       validate_file(expected_content_nine, tmpfile)
     end
 
-    expected_content_ten = <<-EOS
+    expected_content_ten = <<-JAVAARGS
         JAVA_ARGS="-Xmx192m -XXtest -XXtest"
-    EOS
+    JAVAARGS
     it 'is able to modify several subsettings with the same name' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: '-XX', value: 'test'))
       provider = described_class.new(resource)
@@ -156,18 +156,18 @@ describe provider_class do
     end
 
     let(:orig_content) do
-      <<-EOS
+      <<-INIFILE
         [main]
 
         reports = http,foo
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<-EOS
+    expected_content_one = <<-INIFILE
         [main]
 
         reports = foo
-    EOS
+    INIFILE
     it 'removes an existing subsetting' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: 'http', subsetting_separator: ','))
       provider = described_class.new(resource)
@@ -176,11 +176,11 @@ describe provider_class do
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<-EOS
+    expected_content_two = <<-INIFILE
         [main]
 
         reports = http,foo,puppetdb
-    EOS
+    INIFILE
     it "adds a new subsetting when the 'parent' setting already exists" do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: 'puppetdb', subsetting_separator: ','))
       provider = described_class.new(resource)
@@ -189,12 +189,12 @@ describe provider_class do
       validate_file(expected_content_two, tmpfile)
     end
 
-    expected_content_three = <<-EOS
+    expected_content_three = <<-INIFILE
         [main]
 
         reports = http,foo
         somenewsetting = puppetdb
-    EOS
+    INIFILE
     it "adds a new subsetting when the 'parent' setting does not already exist" do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(setting: 'somenewsetting', subsetting: 'puppetdb', subsetting_separator: ','))
       provider = described_class.new(resource)
@@ -216,18 +216,18 @@ describe provider_class do
     end
 
     let(:orig_content) do
-      <<-EOS
+      <<-INIFILE
         [main]
 
         reports = http,foo
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<-EOS
+    expected_content_one = <<-INIFILE
         [main]
 
         reports = http,foo,fo
-    EOS
+    INIFILE
     it "adds a new subsetting when the 'parent' setting already exists" do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: 'fo', subsetting_separator: ','))
       provider = described_class.new(resource)
@@ -235,11 +235,11 @@ describe provider_class do
       expect(validate_file(expected_content_one, tmpfile)).to be_truthy
     end
 
-    expected_content_two = <<-EOS
+    expected_content_two = <<-INIFILE
         [main]
 
         reports = http,foo
-    EOS
+    INIFILE
     it 'does not remove substring subsettings' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: 'fo', subsetting_separator: ','))
       provider = described_class.new(resource)
@@ -262,18 +262,18 @@ describe provider_class do
     end
 
     let(:orig_content) do
-      <<-EOS
+      <<-INIFILE
         [main]
 
         reports = a:1,b:2
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<-EOS
+    expected_content_one = <<-INIFILE
         [main]
 
         reports = a:1,b:2,c:3
-    EOS
+    INIFILE
     it "adds a new subsetting when the 'parent' setting already exists" do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: 'c', value: '3'))
       provider = described_class.new(resource)
@@ -281,12 +281,12 @@ describe provider_class do
       expect(validate_file(expected_content_one, tmpfile)).to be_truthy
     end
 
-    expected_content_two = <<-EOS
+    expected_content_two = <<-INIFILE
         [main]
 
         reports = a:1,b:2
         somenewsetting = c:3
-    EOS
+    INIFILE
     it "adds a new subsetting when the 'parent' setting does not already exist" do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: 'c', value: '3', setting: 'somenewsetting'))
       provider = described_class.new(resource)
@@ -295,11 +295,11 @@ describe provider_class do
       validate_file(expected_content_two, tmpfile)
     end
 
-    expected_content_three = <<-EOS
+    expected_content_three = <<-INIFILE
         [main]
 
         reports = a:1
-    EOS
+    INIFILE
     it 'is able to remove the existing subsetting' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: 'b'))
       provider = described_class.new(resource)
@@ -308,11 +308,11 @@ describe provider_class do
       validate_file(expected_content_three, tmpfile)
     end
 
-    expected_content_four = <<-EOS
+    expected_content_four = <<-INIFILE
         [main]
 
         reports = a:1,b:5
-    EOS
+    INIFILE
     it 'is able to modify the existing subsetting' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(subsetting: 'b', value: '5'))
       provider = described_class.new(resource)
@@ -333,17 +333,17 @@ describe provider_class do
     end
 
     let(:orig_content) do
-      <<-EOS
+      <<-INIFILE
         [main]
         reports = http
         something = else
-      EOS
+      INIFILE
     end
 
-    expected_content_one = <<-EOS
+    expected_content_one = <<-INIFILE
         [main]
         something = else
-    EOS
+    INIFILE
 
     expected_content_two = ''
 

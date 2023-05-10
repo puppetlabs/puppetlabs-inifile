@@ -46,7 +46,7 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'ensure, section, setting, subsetting, & value parameters => present with subsections' do
-    pp = <<-EOS
+    pp = <<-MANIFEST
     ini_subsetting { 'ensure => present for alpha':
       ensure     => present,
       path       => "#{basedir}/ini_subsetting.ini",
@@ -64,7 +64,7 @@ describe 'ini_subsetting resource' do
       value      => 'trons',
       require    => Ini_subsetting['ensure => present for alpha'],
     }
-    EOS
+    MANIFEST
 
     describe file("#{basedir}/ini_subsetting.ini") do
       it_behaves_like 'has_content', "#{basedir}/ini_subsetting.ini", pp, %r{\[one\]\Rkey = alphabet betatrons}
@@ -72,7 +72,7 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'ensure => absent' do
-    pp = <<-EOS
+    pp = <<-MANIFEST
     ini_subsetting { 'ensure => absent for subsetting':
       ensure     => absent,
       path       => "#{basedir}/ini_subsetting.ini",
@@ -80,7 +80,7 @@ describe 'ini_subsetting resource' do
       setting    => 'key',
       subsetting => 'alpha',
     }
-    EOS
+    MANIFEST
 
     it 'applies the manifest twice' do
       expect { idempotent_apply(pp) }.not_to raise_error
@@ -100,7 +100,7 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'delete_if_empty => true' do
-    pp = <<-EOS
+    pp = <<-MANIFEST
     ini_subsetting { 'ensure => absent for alpha':
       ensure          => absent,
       path            => "#{basedir}/ini_subsetting.ini",
@@ -117,7 +117,7 @@ describe 'ini_subsetting resource' do
       subsetting      => 'beta',
       delete_if_empty => true,
     }
-    EOS
+    MANIFEST
 
     it 'applies the manifest twice' do
       run_shell("echo -e [one]\\\\nkey = alphabet betatrons > #{basedir}/ini_subsetting.ini", expect_failures: true)
@@ -163,7 +163,7 @@ describe 'ini_subsetting resource' do
           run_shell("rm #{path}", expect_failures: true)
         end
 
-        pp = <<-EOS
+        pp = <<-MANIFEST
         ini_subsetting { '#{parameter.first}':
           ensure     => #{(parameter.length > 1) ? 'present' : 'absent'},
           path       => '#{path}',
@@ -173,7 +173,7 @@ describe 'ini_subsetting resource' do
           subsetting => '#{parameter.first}',
           value      => '#{(parameter.length > 1) ? parameter[1] : ''}'
         }
-        EOS
+        MANIFEST
 
         it 'applies the manifest twice' do
           expect { idempotent_apply(pp) }.not_to raise_error
@@ -199,7 +199,7 @@ describe 'ini_subsetting resource' do
      { value: 'public_value', matcher: %r{initial_value.*public_value}, show_diff: true },
      { value: 'secret_value', matcher: %r{redacted sensitive information.*redacted sensitive information}, show_diff: false },
      { value: 'md5_value', matcher: %r{\{md5\}881671aa2bbc680bc530c4353125052b.*\{md5\}ed0903a7fa5de7886ca1a7a9ad06cf51}, show_diff: :md5 }].each do |i|
-       pp = <<-EOS
+       pp = <<-MANIFEST
           ini_subsetting { 'test_show_diff':
             ensure      => present,
             section     => 'test',
@@ -209,7 +209,7 @@ describe 'ini_subsetting resource' do
             path        => "#{basedir}/test_show_diff.ini",
             show_diff   => #{i[:show_diff]}
           }
-       EOS
+       MANIFEST
 
        context "when show_diff => #{i[:show_diff]}" do
          res = apply_manifest(pp, expect_changes: true)
@@ -251,7 +251,7 @@ describe 'ini_subsetting resource' do
       },
     ].each do |params|
       context "with '#{params[:insert_type]}' makes '#{params[:content]}'" do
-        pp = <<-EOS
+        pp = <<-MANIFEST
         ini_subsetting { "a":
           ensure     => present,
           section    => 'one',
@@ -282,7 +282,7 @@ describe 'ini_subsetting resource' do
           insert_type  => '#{params[:insert_type]}',
           insert_value => '#{params[:insert_value]}',
         }
-        EOS
+        MANIFEST
 
         it_behaves_like 'has_content', "#{basedir}/insert_types.ini", pp, params[:content]
       end

@@ -40,19 +40,6 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Max: 20
 
-# Offense count: 114
-# Configuration parameters: ForbiddenDelimiters.
-# ForbiddenDelimiters: (?i-mx:(^|\s)(EO[A-Z]{1}|END)(\s|$))
-Naming/HeredocDelimiterNaming:
-  Exclude:
-    - 'lib/puppet/type/ini_subsetting.rb'
-    - 'spec/acceptance/ini_setting_spec.rb'
-    - 'spec/acceptance/ini_subsetting_spec.rb'
-    - 'spec/unit/puppet/provider/ini_setting/inheritance_spec.rb'
-    - 'spec/unit/puppet/provider/ini_setting/ruby_spec.rb'
-    - 'spec/unit/puppet/provider/ini_subsetting/ruby_spec.rb'
-    - 'spec/unit/puppet/util/ini_file_spec.rb'
-
 # Offense count: 12
 # Configuration parameters: IgnoredMetadata.
 RSpec/DescribeClass:
@@ -98,13 +85,3 @@ RSpec/NamedSubject:
 RSpec/NestedGroups:
   Max: 6
 
-# Offense count: 4
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: nested, compact
-Style/ClassAndModuleChildren:
-  Exclude:
-    - 'lib/puppet/util/external_iterator.rb'
-    - 'lib/puppet/util/ini_file.rb'
-    - 'lib/puppet/util/ini_file/section.rb'
-    - 'lib/puppet/util/setting_value.rb'
