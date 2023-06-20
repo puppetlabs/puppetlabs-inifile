@@ -1,550 +1,485 @@
-# Change log
+<!-- markdownlint-disable MD024 -->
+# Changelog
 
-All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
+All notable changes to this project will be documented in this file.
 
-## [v6.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v6.0.0) (2023-04-11)
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
+
+## [v6.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v6.1.0) - 2023-06-16
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v6.0.0...v6.1.0)
+
+### Added
+
+- pdksync - (MAINT) - Allow Stdlib 9.x [#514](https://github.com/puppetlabs/puppetlabs-inifile/pull/514) ([LukasAud](https://github.com/LukasAud))
+
+### Other
+
+- Fix Heredoc rubocop and Disable Style/ClassAndModuleChildren where needed [#510](https://github.com/puppetlabs/puppetlabs-inifile/pull/510) ([jstraw](https://github.com/jstraw))
+
+## [v6.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v6.0.0) - 2023-04-11
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.4.1...v6.0.0)
 
 ### Changed
+- (CONT-783) - Add puppet 8 support/Drop puppet 6 support [#505](https://github.com/puppetlabs/puppetlabs-inifile/pull/505) ([jordanbreen28](https://github.com/jordanbreen28))
 
-- \(CONT-783\) - Add puppet 8 support/Drop puppet 6 support [\#505](https://github.com/puppetlabs/puppetlabs-inifile/pull/505) ([jordanbreen28](https://github.com/jordanbreen28))
-
-## [v5.4.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.4.1) (2023-04-06)
+## [v5.4.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.4.1) - 2023-04-06
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.4.0...v5.4.1)
 
 ### Fixed
 
-- pdksync - \(CONT-189\) Remove support for RedHat6 / OracleLinux6 / Scientific6 [\#492](https://github.com/puppetlabs/puppetlabs-inifile/pull/492) ([david22swan](https://github.com/david22swan))
-- pdksync - \(CONT-130\) - Dropping Support for Debian 9 [\#489](https://github.com/puppetlabs/puppetlabs-inifile/pull/489) ([jordanbreen28](https://github.com/jordanbreen28))
+- pdksync - (CONT-189) Remove support for RedHat6 / OracleLinux6 / Scientific6 [#492](https://github.com/puppetlabs/puppetlabs-inifile/pull/492) ([david22swan](https://github.com/david22swan))
+- pdksync - (CONT-130) - Dropping Support for Debian 9 [#489](https://github.com/puppetlabs/puppetlabs-inifile/pull/489) ([jordanbreen28](https://github.com/jordanbreen28))
 
-## [v5.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.4.0) (2022-10-03)
+## [v5.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.4.0) - 2022-10-03
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.3.0...v5.4.0)
 
 ### Added
 
-- pdksync - \(GH-cat-11\) Certify Support for Ubuntu 22.04 [\#484](https://github.com/puppetlabs/puppetlabs-inifile/pull/484) ([david22swan](https://github.com/david22swan))
-- pdksync - \(GH-cat-12\) Add Support for Redhat 9 [\#480](https://github.com/puppetlabs/puppetlabs-inifile/pull/480) ([david22swan](https://github.com/david22swan))
+- pdksync - (GH-cat-11) Certify Support for Ubuntu 22.04 [#484](https://github.com/puppetlabs/puppetlabs-inifile/pull/484) ([david22swan](https://github.com/david22swan))
+- pdksync - (GH-cat-12) Add Support for Redhat 9 [#480](https://github.com/puppetlabs/puppetlabs-inifile/pull/480) ([david22swan](https://github.com/david22swan))
 
 ### Fixed
 
-- \(MAINT\) Drop support for Solaris 10, Windows Server 2008 R2, and AIX 5.3 and 6.1 [\#485](https://github.com/puppetlabs/puppetlabs-inifile/pull/485) ([jordanbreen28](https://github.com/jordanbreen28))
-- Fix broken idempotency with empty sections [\#483](https://github.com/puppetlabs/puppetlabs-inifile/pull/483) ([kajinamit](https://github.com/kajinamit))
+- (MAINT) Drop support for Solaris 10, Windows Server 2008 R2, and AIX 5.3 and 6.1 [#485](https://github.com/puppetlabs/puppetlabs-inifile/pull/485) ([jordanbreen28](https://github.com/jordanbreen28))
+- Fix broken idempotency with empty sections [#483](https://github.com/puppetlabs/puppetlabs-inifile/pull/483) ([kajinamit](https://github.com/kajinamit))
 
-## [v5.3.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.3.0) (2022-05-23)
+## [v5.3.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.3.0) - 2022-05-23
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.2.0...v5.3.0)
 
 ### Added
 
-- pdksync - \(FM-8922\) - Add Support for Windows 2022 [\#468](https://github.com/puppetlabs/puppetlabs-inifile/pull/468) ([david22swan](https://github.com/david22swan))
-- pdksync - \(IAC-1753\) - Add Support for AlmaLinux 8 [\#463](https://github.com/puppetlabs/puppetlabs-inifile/pull/463) ([david22swan](https://github.com/david22swan))
-- pdksync - \(IAC-1751\) - Add Support for Rocky 8 [\#462](https://github.com/puppetlabs/puppetlabs-inifile/pull/462) ([david22swan](https://github.com/david22swan))
-- match section names containing prefix character \(normally \[\) [\#457](https://github.com/puppetlabs/puppetlabs-inifile/pull/457) ([tja523](https://github.com/tja523))
+- pdksync - (FM-8922) - Add Support for Windows 2022 [#468](https://github.com/puppetlabs/puppetlabs-inifile/pull/468) ([david22swan](https://github.com/david22swan))
+- pdksync - (IAC-1753) - Add Support for AlmaLinux 8 [#463](https://github.com/puppetlabs/puppetlabs-inifile/pull/463) ([david22swan](https://github.com/david22swan))
+- pdksync - (IAC-1751) - Add Support for Rocky 8 [#462](https://github.com/puppetlabs/puppetlabs-inifile/pull/462) ([david22swan](https://github.com/david22swan))
+- match section names containing prefix character (normally [) [#457](https://github.com/puppetlabs/puppetlabs-inifile/pull/457) ([tja523](https://github.com/tja523))
 
 ### Fixed
 
-- pdksync - \(GH-iac-334\) Remove Support for Ubuntu 14.04/16.04 [\#471](https://github.com/puppetlabs/puppetlabs-inifile/pull/471) ([david22swan](https://github.com/david22swan))
-- pdksync - \(IAC-1787\) Remove Support for CentOS 6 [\#466](https://github.com/puppetlabs/puppetlabs-inifile/pull/466) ([david22swan](https://github.com/david22swan))
-- pdksync - \(IAC-1598\) - Remove Support for Debian 8 [\#461](https://github.com/puppetlabs/puppetlabs-inifile/pull/461) ([david22swan](https://github.com/david22swan))
+- pdksync - (GH-iac-334) Remove Support for Ubuntu 14.04/16.04 [#471](https://github.com/puppetlabs/puppetlabs-inifile/pull/471) ([david22swan](https://github.com/david22swan))
+- pdksync - (IAC-1787) Remove Support for CentOS 6 [#466](https://github.com/puppetlabs/puppetlabs-inifile/pull/466) ([david22swan](https://github.com/david22swan))
+- pdksync - (IAC-1598) - Remove Support for Debian 8 [#461](https://github.com/puppetlabs/puppetlabs-inifile/pull/461) ([david22swan](https://github.com/david22swan))
 
-## [v5.2.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.2.0) (2021-08-26)
+## [v5.2.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.2.0) - 2021-08-26
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.1.0...v5.2.0)
 
 ### Added
 
-- pdksync - \(IAC-1709\) - Add Support for Debian 11 [\#458](https://github.com/puppetlabs/puppetlabs-inifile/pull/458) ([david22swan](https://github.com/david22swan))
+- pdksync - (IAC-1709) - Add Support for Debian 11 [#458](https://github.com/puppetlabs/puppetlabs-inifile/pull/458) ([david22swan](https://github.com/david22swan))
 
 ### Fixed
 
-- \(IAC-1741\) Allow stdlib v8.0.0 [\#459](https://github.com/puppetlabs/puppetlabs-inifile/pull/459) ([david22swan](https://github.com/david22swan))
+- (IAC-1741) Allow stdlib v8.0.0 [#459](https://github.com/puppetlabs/puppetlabs-inifile/pull/459) ([david22swan](https://github.com/david22swan))
 
-## [v5.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.1.0) (2021-06-28)
+## [v5.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.1.0) - 2021-06-28
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.0.1...v5.1.0)
 
 ### Added
 
-- Accept Datatype Sensitive [\#454](https://github.com/puppetlabs/puppetlabs-inifile/pull/454) ([cocker-cc](https://github.com/cocker-cc))
+- Accept Datatype Sensitive [#454](https://github.com/puppetlabs/puppetlabs-inifile/pull/454) ([cocker-cc](https://github.com/cocker-cc))
 
-## [v5.0.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.0.1) (2021-03-29)
+## [v5.0.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.0.1) - 2021-03-29
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.0.0...v5.0.1)
 
 ### Fixed
 
-- \(IAC-149\) - Removal of Unsupported Translate Module [\#442](https://github.com/puppetlabs/puppetlabs-inifile/pull/442) ([david22swan](https://github.com/david22swan))
+- (IAC-149) - Removal of Unsupported Translate Module [#442](https://github.com/puppetlabs/puppetlabs-inifile/pull/442) ([david22swan](https://github.com/david22swan))
 
-## [v5.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.0.0) (2021-03-02)
+## [v5.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.0.0) - 2021-03-03
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v4.4.0...v5.0.0)
 
 ### Changed
+- pdksync - Remove Puppet 5 from testing and bump minimal version to 6.0.0 [#432](https://github.com/puppetlabs/puppetlabs-inifile/pull/432) ([carabasdaniel](https://github.com/carabasdaniel))
 
-- pdksync - Remove Puppet 5 from testing and bump minimal version to 6.0.0 [\#432](https://github.com/puppetlabs/puppetlabs-inifile/pull/432) ([carabasdaniel](https://github.com/carabasdaniel))
-
-## [v4.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.4.0) (2020-12-08)
+## [v4.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.4.0) - 2020-12-08
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v4.3.1...v4.4.0)
 
 ### Added
 
-- \(feat\) - Add Puppet 7 support [\#422](https://github.com/puppetlabs/puppetlabs-inifile/pull/422) ([daianamezdrea](https://github.com/daianamezdrea))
+- (feat) - Add Puppet 7 support [#422](https://github.com/puppetlabs/puppetlabs-inifile/pull/422) ([daianamezdrea](https://github.com/daianamezdrea))
 
-## [v4.3.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.3.1) (2020-11-09)
+## [v4.3.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.3.1) - 2020-11-09
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v4.3.0...v4.3.1)
 
 ### Fixed
 
-- \(IAC-992\) - Removal of inappropriate terminology [\#415](https://github.com/puppetlabs/puppetlabs-inifile/pull/415) ([david22swan](https://github.com/david22swan))
+- (IAC-992) - Removal of inappropriate terminology [#415](https://github.com/puppetlabs/puppetlabs-inifile/pull/415) ([david22swan](https://github.com/david22swan))
 
-## [v4.3.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.3.0) (2020-09-10)
+## [v4.3.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.3.0) - 2020-09-10
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v4.2.0...v4.3.0)
 
 ### Added
 
-- pdksync - \(IAC-973\) - Update travis/appveyor to run on new default branch `main` [\#407](https://github.com/puppetlabs/puppetlabs-inifile/pull/407) ([david22swan](https://github.com/david22swan))
-- Add delete\_if\_empty parameter to the ini\_subsetting type/provider [\#405](https://github.com/puppetlabs/puppetlabs-inifile/pull/405) ([mmarod](https://github.com/mmarod))
-- \(IAC-746\) - Add ubuntu 20.04 support [\#396](https://github.com/puppetlabs/puppetlabs-inifile/pull/396) ([david22swan](https://github.com/david22swan))
+- pdksync - (IAC-973) - Update travis/appveyor to run on new default branch `main` [#407](https://github.com/puppetlabs/puppetlabs-inifile/pull/407) ([david22swan](https://github.com/david22swan))
+- Add delete_if_empty parameter to the ini_subsetting type/provider [#405](https://github.com/puppetlabs/puppetlabs-inifile/pull/405) ([mmarod](https://github.com/mmarod))
+- (IAC-746) - Add ubuntu 20.04 support [#396](https://github.com/puppetlabs/puppetlabs-inifile/pull/396) ([david22swan](https://github.com/david22swan))
 
-## [v4.2.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.2.0) (2020-04-27)
+## [v4.2.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.2.0) - 2020-04-27
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v4.1.0...v4.2.0)
 
 ### Added
 
-- Finish API conversion of `create\_ini\_settings` [\#387](https://github.com/puppetlabs/puppetlabs-inifile/pull/387) ([alexjfisher](https://github.com/alexjfisher))
+- Finish API conversion of `create_ini_settings` [#387](https://github.com/puppetlabs/puppetlabs-inifile/pull/387) ([alexjfisher](https://github.com/alexjfisher))
 
-## [v4.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.1.0) (2020-01-15)
+## [v4.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.1.0) - 2020-01-15
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v4.0.0...v4.1.0)
 
 ### Added
 
-- pdksync - \(FM-8581\) - Debian 10 added to travis and provision file refactored [\#374](https://github.com/puppetlabs/puppetlabs-inifile/pull/374) ([david22swan](https://github.com/david22swan))
-- Puppet 4 functions [\#373](https://github.com/puppetlabs/puppetlabs-inifile/pull/373) ([binford2k](https://github.com/binford2k))
-- pdksync - "MODULES-10242 Add ubuntu14 support back to the modules" [\#368](https://github.com/puppetlabs/puppetlabs-inifile/pull/368) ([sheenaajay](https://github.com/sheenaajay))
-- \(FM-8689\) - Addition of Support for CentOS 8 [\#366](https://github.com/puppetlabs/puppetlabs-inifile/pull/366) ([david22swan](https://github.com/david22swan))
+- pdksync - (FM-8581) - Debian 10 added to travis and provision file refactored [#374](https://github.com/puppetlabs/puppetlabs-inifile/pull/374) ([david22swan](https://github.com/david22swan))
+- Puppet 4 functions [#373](https://github.com/puppetlabs/puppetlabs-inifile/pull/373) ([binford2k](https://github.com/binford2k))
+- pdksync - "MODULES-10242 Add ubuntu14 support back to the modules" [#368](https://github.com/puppetlabs/puppetlabs-inifile/pull/368) ([sheenaajay](https://github.com/sheenaajay))
+- (FM-8689) - Addition of Support for CentOS 8 [#366](https://github.com/puppetlabs/puppetlabs-inifile/pull/366) ([david22swan](https://github.com/david22swan))
 
-## [v4.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.0.0) (2019-11-11)
+## [v4.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.0.0) - 2019-11-11
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v3.1.0...v4.0.0)
 
-### Changed
-
-- pdksync - FM-8499 - remove ubuntu14 support [\#363](https://github.com/puppetlabs/puppetlabs-inifile/pull/363) ([lionce](https://github.com/lionce))
-
 ### Added
 
-- FM-8402 add debian 10 support [\#352](https://github.com/puppetlabs/puppetlabs-inifile/pull/352) ([lionce](https://github.com/lionce))
+- FM-8402 add debian 10 support [#352](https://github.com/puppetlabs/puppetlabs-inifile/pull/352) ([lionce](https://github.com/lionce))
 
-## [v3.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v3.1.0) (2019-07-31)
+### Changed
+- pdksync - FM-8499 - remove ubuntu14 support [#363](https://github.com/puppetlabs/puppetlabs-inifile/pull/363) ([lionce](https://github.com/lionce))
+
+## [v3.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v3.1.0) - 2019-08-01
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v3.0.0...v3.1.0)
 
 ### Added
 
-- FM-8222 - Port Module inifile to Litmus [\#344](https://github.com/puppetlabs/puppetlabs-inifile/pull/344) ([lionce](https://github.com/lionce))
-- \(FM-8154\) Add Windows Server 2019 support [\#340](https://github.com/puppetlabs/puppetlabs-inifile/pull/340) ([eimlav](https://github.com/eimlav))
-- \(FM-8041\) Add RedHat 8 support [\#339](https://github.com/puppetlabs/puppetlabs-inifile/pull/339) ([eimlav](https://github.com/eimlav))
+- FM-8222 - Port Module inifile to Litmus [#344](https://github.com/puppetlabs/puppetlabs-inifile/pull/344) ([lionce](https://github.com/lionce))
+- (FM-8154) Add Windows Server 2019 support [#340](https://github.com/puppetlabs/puppetlabs-inifile/pull/340) ([eimlav](https://github.com/eimlav))
+- (FM-8041) Add RedHat 8 support [#339](https://github.com/puppetlabs/puppetlabs-inifile/pull/339) ([eimlav](https://github.com/eimlav))
 
-## [v3.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v3.0.0) (2019-04-22)
+## [v3.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v3.0.0) - 2019-05-09
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.5.0...v3.0.0)
 
 ### Changed
-
-- pdksync - \(MODULES-8444\) - Raise lower Puppet bound [\#335](https://github.com/puppetlabs/puppetlabs-inifile/pull/335) ([david22swan](https://github.com/david22swan))
+- pdksync - (MODULES-8444) - Raise lower Puppet bound [#335](https://github.com/puppetlabs/puppetlabs-inifile/pull/335) ([david22swan](https://github.com/david22swan))
 
 ### Fixed
 
-- FM-7779 - Cleanup Inifile [\#328](https://github.com/puppetlabs/puppetlabs-inifile/pull/328) ([lionce](https://github.com/lionce))
+- FM-7779 - Cleanup Inifile [#328](https://github.com/puppetlabs/puppetlabs-inifile/pull/328) ([lionce](https://github.com/lionce))
 
-## [2.5.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.5.0) (2018-12-28)
+## [2.5.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.5.0) - 2019-01-07
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.4.0...2.5.0)
 
 ### Added
 
-- \(MODULES-8142\) - Addition of support for SLES 15 [\#315](https://github.com/puppetlabs/puppetlabs-inifile/pull/315) ([david22swan](https://github.com/david22swan))
-- \(MODULES-7560\) - removed spaces from the beginning or from the end of the value [\#311](https://github.com/puppetlabs/puppetlabs-inifile/pull/311) ([lionce](https://github.com/lionce))
+- (MODULES-8142) - Addition of support for SLES 15 [#315](https://github.com/puppetlabs/puppetlabs-inifile/pull/315) ([david22swan](https://github.com/david22swan))
+- (MODULES-7560) - removed spaces from the beginning or from the end of the value [#311](https://github.com/puppetlabs/puppetlabs-inifile/pull/311) ([lionce](https://github.com/lionce))
+- MODULES-1821 support empty sections [#274](https://github.com/puppetlabs/puppetlabs-inifile/pull/274) ([cjepeway](https://github.com/cjepeway))
 
 ### Fixed
 
-- pdksync - \(FM-7655\) Fix rubygems-update for ruby \< 2.3 [\#320](https://github.com/puppetlabs/puppetlabs-inifile/pull/320) ([tphoney](https://github.com/tphoney))
-- \(MODULES-6714\) - inifile: ensure absent not working with refreshonly = true [\#313](https://github.com/puppetlabs/puppetlabs-inifile/pull/313) ([Lavinia-Dan](https://github.com/Lavinia-Dan))
-- \(FM-7483\) - update module to the latest version [\#310](https://github.com/puppetlabs/puppetlabs-inifile/pull/310) ([lionce](https://github.com/lionce))
-- \(FM-7331\)-Fix japanese test [\#308](https://github.com/puppetlabs/puppetlabs-inifile/pull/308) ([lionce](https://github.com/lionce))
+- pdksync - (FM-7655) Fix rubygems-update for ruby < 2.3 [#320](https://github.com/puppetlabs/puppetlabs-inifile/pull/320) ([tphoney](https://github.com/tphoney))
+- (MODULES-6714) - inifile: ensure absent not working with refreshonly = true [#313](https://github.com/puppetlabs/puppetlabs-inifile/pull/313) ([Lavinia-Dan](https://github.com/Lavinia-Dan))
+- (FM-7483) - update module to the latest version [#310](https://github.com/puppetlabs/puppetlabs-inifile/pull/310) ([lionce](https://github.com/lionce))
+- (FM-7331)-Fix japanese test [#308](https://github.com/puppetlabs/puppetlabs-inifile/pull/308) ([lionce](https://github.com/lionce))
 
-## [2.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.4.0) (2018-09-27)
+## [2.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.4.0) - 2018-09-28
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.3.0...2.4.0)
 
 ### Added
 
-- pdksync - \(FM-7392\) - Puppet 6 Testing Changes [\#300](https://github.com/puppetlabs/puppetlabs-inifile/pull/300) ([pmcmaw](https://github.com/pmcmaw))
-- pdksync - \(MODULES-7658\) use beaker4 in puppet-module-gems [\#296](https://github.com/puppetlabs/puppetlabs-inifile/pull/296) ([tphoney](https://github.com/tphoney))
-- \(MODULES-7552\) - Addition of support for Ubuntu 18.04 to inifile [\#292](https://github.com/puppetlabs/puppetlabs-inifile/pull/292) ([david22swan](https://github.com/david22swan))
+- pdksync - (FM-7392) - Puppet 6 Testing Changes [#300](https://github.com/puppetlabs/puppetlabs-inifile/pull/300) ([pmcmaw](https://github.com/pmcmaw))
+- pdksync - (MODULES-7658) use beaker4 in puppet-module-gems [#296](https://github.com/puppetlabs/puppetlabs-inifile/pull/296) ([tphoney](https://github.com/tphoney))
+- (MODULES-7552) - Addition of support for Ubuntu 18.04 to inifile [#292](https://github.com/puppetlabs/puppetlabs-inifile/pull/292) ([david22swan](https://github.com/david22swan))
 
 ### Fixed
 
-- \(MODULES-7625\) - Update README Limitations section [\#293](https://github.com/puppetlabs/puppetlabs-inifile/pull/293) ([eimlav](https://github.com/eimlav))
+- (MODULES-7625) - Update README Limitations section [#293](https://github.com/puppetlabs/puppetlabs-inifile/pull/293) ([eimlav](https://github.com/eimlav))
 
-## 2.3.0
-### Summary
-This release uses the PDK convert functionality which in return makes the module PDK compliant. It also includes a feature for `force_new_section_creation` and a roll up of maintenance changes.
+## [2.3.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.3.0) - 2018-07-05
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.2.2...2.3.0)
 
 ### Added
-- Added `force_new_section_creation` parameter.
-- PDK convert and update to use pdk 1.5.0 (MODULES-6326).
 
-### Removed
-- Support for Scientific Linux 5
-- Support for Debian 7
-
-## Supported Release [2.2.2]
-### Summary
-This is a bug fix release that corrects type autoloading.
+- Nitish add force parameter to create new section [#286](https://github.com/puppetlabs/puppetlabs-inifile/pull/286) ([hsitin](https://github.com/hsitin))
 
 ### Fixed
-- Correct type autoload ([FM-6932](https://tickets.puppet.com/browse/FM-6932)).
 
-## Supported Release [2.2.1]
-### Summary
-This is a bug fix release for a problem with managing existing lines in Puppet > 5.4.0
+- Handle backwards compatibility with force_new_section_creation [#288](https://github.com/puppetlabs/puppetlabs-inifile/pull/288) ([mwhahaha](https://github.com/mwhahaha))
+
+## [2.2.2](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.2.2) - 2018-05-10
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.2.1...2.2.2)
 
 ### Fixed
-- issue with ini_setting's :refreshonly parameter validation ([MODULES-6687](https://tickets.puppet.com/browse/MODULES-6687))
 
-## Supported Release [2.2.0]
-### Summary
-This release uses the PDK convert functionality which in return makes the module PDK compliant. It also includes a roll up of maintenance changes.
+- (FM-6932) - Fix type autoload [#275](https://github.com/puppetlabs/puppetlabs-inifile/pull/275) ([pmcmaw](https://github.com/pmcmaw))
+
+## [2.2.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.2.1) - 2018-04-17
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.2.0...2.2.1)
+
+## [2.2.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.2.0) - 2018-01-29
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.1.1...2.2.0)
 
 ### Added
-- PDK convert inifile ([MODULES-6453](https://tickets.puppet.com/browse/MODULES-6453)).
-- Modulesync updates.
 
-### Fixed
-- Changes to address additional Rubocop failures.
-- Addressing puppet-lint doc warnings.
+- (MODULES-6453) - PDK convert inifile [#260](https://github.com/puppetlabs/puppetlabs-inifile/pull/260) ([pmcmaw](https://github.com/pmcmaw))
 
-### Removed
-- `gem update bundler` command in .travis.yml due to ([MODULES-6339](https://tickets.puppet.com/browse/MODULES-6339)).
+## [2.1.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.1.1) - 2017-12-07
 
-## Supported Release 2.1.1
-### Summary
-This release is in order to implement Rubocop within the module and includes a wide array of formatting changes throughout the code and the enabling of rubocop checks to be run against all pull requests against the module.
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.1.0...2.1.1)
+
+### Added
+
+- Rubocop checks will now be run against any PRs made towards the module [#251](https://github.com/puppetlabs/puppetlabs-inifile/pull/251) ([david22swan](https://github.com/david22swan))
+
+## [2.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.1.0) - 2017-12-01
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.0.0...2.1.0)
 
 ### Changed
-- Rubocop checks will now be run against any PRs made towards the module.
-- The module has undergone a substantial reformatting in order to comply with the designated standards.
+- Updates to metadata [#247](https://github.com/puppetlabs/puppetlabs-inifile/pull/247) ([pmcmaw](https://github.com/pmcmaw))
+- (MODULES-5501) - Remove unsupported Ubuntu [#245](https://github.com/puppetlabs/puppetlabs-inifile/pull/245) ([pmcmaw](https://github.com/pmcmaw))
 
-## Supported Release 2.1.0
-### Summary
-This is a clean release prior to the implementation of rubocop within the module.
+### Other
+
+- MODULES-3624 Allow setting indent character [#237](https://github.com/puppetlabs/puppetlabs-inifile/pull/237) ([jamesmcdonald](https://github.com/jamesmcdonald))
+
+## [2.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/2.0.0) - 2017-07-24
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.6.0...2.0.0)
 
 ### Added
-- Several Modulesync updates have been made.
-- Indent Character can now be set.
-- Support for Debian 9 has been added.
 
-### Removed
-- Support for Ubuntu 1004 and 1204 has been removed.
-- Support for SLES 10 SP4 has been removed.
-- Support for Debian 6 has been removed.
-- Support for Solaris 12 has been removed.
-- Support for Windows Server 2003 R2 has been removed.
-
-## Supported Release 2.0.0
-### Summary
-This is a major release that includes a few bugfixes as well as some general module updates.
-
-**This release drops Puppet 3 support**
+- (MODULES-5144) Prep for puppet 5 [#238](https://github.com/puppetlabs/puppetlabs-inifile/pull/238) ([hunner](https://github.com/hunner))
 
 ### Changed
-- Moved lower Puppet version requirement to 4.7.0, MODULES-4830
+- MODULES-4830 Updating Puppet version requirement [#236](https://github.com/puppetlabs/puppetlabs-inifile/pull/236) ([HelenCampbell](https://github.com/HelenCampbell))
 
 ### Fixed
-- Fix path validation on windows MODULES-4170
-- Fix headings in README
-- Fix for mimicking commented settings MODULES-4932
-- Fix for Backwards compatible ini_file.set_value MODULES-5172
 
-## Supported Release 1.6.0
-### Summary
-This release expands functionality around sub-settings and adds the `refreshonly` parameter so the user can specify whether a resource should or should not respond to a refresh event.
+- (MODULES-5172) Backwards compatible ini_file.set_value [#240](https://github.com/puppetlabs/puppetlabs-inifile/pull/240) ([mwhahaha](https://github.com/mwhahaha))
+- (MODULES-4932) fix for mimicking commented settings [#239](https://github.com/puppetlabs/puppetlabs-inifile/pull/239) ([eputnam](https://github.com/eputnam))
+- (MODULES-4170) Fix path validation on windows [#224](https://github.com/puppetlabs/puppetlabs-inifile/pull/224) ([mullr](https://github.com/mullr))
 
-### Features
-- `refreshonly` decide whether or not a value should be updated as part of a refresh
-- `insert_type` choose where the sub-setting is placed in the final string
-- `subsetting_key_val_separator` specify a key/value separator for sub-settings
+## [1.6.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.6.0) - 2016-09-06
 
-### Bugfixes
-- MODULES-3145 Cast values to strings before passing to provider
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.5.0...1.6.0)
 
+### Added
 
-## Supported Release 1.5.0
-### Summary
-This release adds the long-awaited `show_diff` parameter for diffing the complete file on changes (or can also just show the md5 sums).
+- Add insert_type and subsetting_key_val_separator [#208](https://github.com/puppetlabs/puppetlabs-inifile/pull/208) ([dmitryilyin](https://github.com/dmitryilyin))
+- Added refreshonly Parameter [#207](https://github.com/puppetlabs/puppetlabs-inifile/pull/207) ([jonnytdevops](https://github.com/jonnytdevops))
 
-### Features
-- Added `show_diff` parameter to show diffs on changes.
-- Remove empty ini sections when the last line in the section is removed.
+### Fixed
 
-### Bugfixes
-- Workaround `create_ini_settings()` duplicate resources puppet bug PUP-4709
+- (MODULES-3472) Fix backwards compatability for create_ini_settings [#211](https://github.com/puppetlabs/puppetlabs-inifile/pull/211) ([HelenCampbell](https://github.com/HelenCampbell))
+- (MODULES-3145) Cast values to strings before passing to provider [#204](https://github.com/puppetlabs/puppetlabs-inifile/pull/204) ([hunner](https://github.com/hunner))
 
-## Supported Release 1.4.3
-###Summary
+## [1.5.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.5.0) - 2016-03-09
 
-Small release for support of newer PE versions. This increments the version of PE in the metadata.json file.
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.4.3...1.5.0)
 
-## 2015-09-01 - Supported Release 1.4.2
-### Summary
-This release adds some bugfixes.
+### Added
 
-####Bugfixes
-- MODULES-2212 Add use_exact_match parameter for subsettings
-- MODULES-1908 Munge the setting to ensure we always strip the whitespace
-- MODULES-2369 Support a space as a key_val_separator
+- Remove empty sections after last setting is removed [#199](https://github.com/puppetlabs/puppetlabs-inifile/pull/199) ([hunner](https://github.com/hunner))
+- Update metadata to note Debian 8 support [#198](https://github.com/puppetlabs/puppetlabs-inifile/pull/198) ([DavidS](https://github.com/DavidS))
+- Added keep_secret parameter feature [#152](https://github.com/puppetlabs/puppetlabs-inifile/pull/152) ([stepanstipl](https://github.com/stepanstipl))
 
-## 2015-07-15 - Supported Release 1.4.1
-### Summary
-This release bumps the metadata for PE up.
+### Fixed
 
-##2015-07-07 - Supported Releases 1.4.0
-###Summary
+- Remove brackets from ini_setting titles to workaround PUP-4709 [#196](https://github.com/puppetlabs/puppetlabs-inifile/pull/196) ([domcleal](https://github.com/domcleal))
 
-This is primarily a release which includes acceptance tests updates, but also includes some minor bug fixes and improvements
+## [1.4.3](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.4.3) - 2015-12-07
 
-####Features
-- Solaris 12 Support
-- Acceptance testing improvements
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.4.2...1.4.3)
 
-####Bugfixes
-- MODULES-1599 Match only on space and tab whitespace after k/v separator
+## [1.4.2](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.4.2) - 2015-09-01
 
-##2015-06-09 - Supported Releases 1.3.0
-###Summary
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.4.1...1.4.2)
 
-This is primarily a feature release, but also includes test fixes, documentation updates and synchronization of files with modulesync.
+### Added
 
-####Features
-- Synchronized files using modulesync
-- Improved documentation
-- Allow changing key value separator beyond indentation
-- Adding the ability to change regex match for $section in inifile
+- Adding path to create_ini_settings resources [#185](https://github.com/puppetlabs/puppetlabs-inifile/pull/185) ([danzilio](https://github.com/danzilio))
+- [MODULES-2369] Support a space as a key_val_separator [#184](https://github.com/puppetlabs/puppetlabs-inifile/pull/184) ([glarizza](https://github.com/glarizza))
+- MODULES-2212 - Add use_exact_match parameter for subsettings [#182](https://github.com/puppetlabs/puppetlabs-inifile/pull/182) ([underscorgan](https://github.com/underscorgan))
 
-####Bugfixes
-- pin beaker-rspec for windows testing
-- pin rspec gems for testing
-- Adds default values for section
-- Fixed names containing spaces
+### Fixed
 
-##2014-11-11 - Supported Releases 1.2.0
-###Summary
+- (MODULES-1908) Munge the setting to ensure we always strip the whitespace [#183](https://github.com/puppetlabs/puppetlabs-inifile/pull/183) ([cyberious](https://github.com/cyberious))
 
-This is primarily a bugfix release, but also includes documentation updates and synchronization of files with modulesync.
+## [1.4.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.4.1) - 2015-07-29
 
-####Features
-- Synchronized files using modulesync
-- Improved documentation with a warning about old, manually installed inifile with PE3.3+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.4.0...1.4.1)
 
-####Bugfixes
-- Fix issue where single character settings were not being saved
+## [1.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.4.0) - 2015-07-08
 
-##2014-09-30 - Supported Releases 1.1.4
-###Summary
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.3.0...1.4.0)
 
-This release includes documentation and test updates.
+### Added
 
-##2014-07-15 - Supported Release 1.1.3
-###Summary
+- Add support for Solaris 12 [#172](https://github.com/puppetlabs/puppetlabs-inifile/pull/172) ([drewfisher314](https://github.com/drewfisher314))
 
-This release merely updates metadata.json so the module can be uninstalled and
-upgraded via the puppet module command.
+### Fixed
 
-##2014-07-10 - Supported Release 1.1.2
-###Summary
+- MODULES-1599 Match only on space and tab whitespace after k/v separator [#171](https://github.com/puppetlabs/puppetlabs-inifile/pull/171) ([misterdorm](https://github.com/misterdorm))
 
-This is a re-packaging release.
+## [1.3.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.3.0) - 2015-06-09
 
-##2014-07-07 - Release 1.1.1
-###Summary
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.2.0...1.3.0)
 
-This supported bugfix release corrects the inifile section header detection
-regex (so you can use more characters in your section titles).
+### Added
 
-####Bugfixes
-- Correct section regex to allow anything other than ]
-- Correct `exists?` to return a boolean
-- Lots of test updates
-- Add missing CONTRIBUTING.md
+- Adding the ability to change regex match for $section in inifile [#159](https://github.com/puppetlabs/puppetlabs-inifile/pull/159) ([WhatsARanjit](https://github.com/WhatsARanjit))
+- Flexible key val [#139](https://github.com/puppetlabs/puppetlabs-inifile/pull/139) ([underscorgan](https://github.com/underscorgan))
+- introduce create_ini_settings [#129](https://github.com/puppetlabs/puppetlabs-inifile/pull/129) ([duritong](https://github.com/duritong))
 
-##2014-06-04 - Release 1.1.0
-###Summary
+### Fixed
 
-This is a compatibility and feature release.  This release adds one new
-feature, the ability to control the quote character used.  This allows you to
-do things like:
+- Modules 1876 - Setting names containing spaces fail [#158](https://github.com/puppetlabs/puppetlabs-inifile/pull/158) ([bmjen](https://github.com/bmjen))
+- Adds default values for section [#157](https://github.com/puppetlabs/puppetlabs-inifile/pull/157) ([hunner](https://github.com/hunner))
+- Less restrictive setting names [#134](https://github.com/puppetlabs/puppetlabs-inifile/pull/134) ([johnsyweb](https://github.com/johnsyweb))
 
-```
-ini_subsetting { '-Xms':
-    ensure     => present,
-    path       => '/some/config/file',
-    section    => '',
-    setting    => 'JAVA_ARGS',
-    quote_char => '"',
-    subsetting => '-Xms'
-    value      => '256m',
-  }
-```
+## [1.2.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.2.0) - 2014-11-10
 
-Which builds:
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.1.4...1.2.0)
 
-```
-JAVA_ARGS="-Xmx256m -Xms256m"
-```
+### Fixed
 
-####Features
-- Add quote_char parameter to the ini_subsetting resource type
+- fix issue where single characters settings were not being saved. [#126](https://github.com/puppetlabs/puppetlabs-inifile/pull/126) ([doboy](https://github.com/doboy))
 
-####Bugfixes
+## [1.1.4](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.1.4) - 2014-09-30
 
-####Known Bugs
-* No known bugs
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.1.3...1.1.4)
 
-##2014-03-04 - Supported Release 1.0.3
-###Summary
+## [1.1.3](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.1.3) - 2014-07-15
 
-This is a supported release.  It has only test changes.
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.1.2...1.1.3)
 
-####Features
+## [1.1.2](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.1.2) - 2014-07-09
 
-####Bugfixes
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.1.1...1.1.2)
 
-####Known Bugs
-* No known bugs
+## [1.1.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.1.1) - 2014-07-07
 
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.1.0...1.1.1)
 
-##2014-02-26 - Version 1.0.2
-###Summary
-This release adds supported platforms to metadata.json and contains spec fixes
+### Fixed
 
+- Handle quotation marks in section names [#115](https://github.com/puppetlabs/puppetlabs-inifile/pull/115) ([johnsyweb](https://github.com/johnsyweb))
 
-##2014-02-12 - Version 1.0.1
-###Summary
-This release is a bugfix for handling whitespace/[]'s better, and adding a
-bunch of tests.
+## [1.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.1.0) - 2014-06-05
 
-####Bugfixes
-- Handle whitespace in sections
-- Handle square brances in values
-- Add metadata.json
-- Update some travis testing
-- Tons of beaker-rspec tests
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.0.4...1.1.0)
 
+## [1.0.4](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.0.4) - 2014-06-04
 
-##2013-07-16 - Version 1.0.0
-####Features
-- Handle empty values.
-- Handle whitespace in settings names (aka: server role = something)
-- Add mechanism for allowing ini_setting subclasses to override the
-formation of the namevar during .instances, to allow for ini_setting
-derived types that manage flat ini-file-like files and still purge
-them.
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.0.3...1.0.4)
 
----
-##2013-05-28 - Chris Price <chris@puppetlabs.com> - 0.10.3
- * Fix bug in subsetting handling for new settings (cbea5dc)
+### Added
 
-##2013-05-22 - Chris Price <chris@puppetlabs.com> - 0.10.2
- * Better handling of quotes for subsettings (1aa7e60)
+- Add RHEL7 and Ubuntu 14.04 support. [#97](https://github.com/puppetlabs/puppetlabs-inifile/pull/97) ([apenney](https://github.com/apenney))
+- Add quote_char parameter to the ini_subsetting resource type [#95](https://github.com/puppetlabs/puppetlabs-inifile/pull/95) ([mruzicka](https://github.com/mruzicka))
 
-##2013-05-21 - Chris Price <chris@puppetlabs.com> - 0.10.1
- * Change constants to class variables to avoid ruby warnings (6b19864)
+## [1.0.3](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.0.3) - 2014-03-03
 
-##2013-04-10 - Erik Dalén <dalen@spotify.com> - 0.10.1
- * Style fixes (c4af8c3)
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.0.1...1.0.3)
 
-##2013-04-02 - Dan Bode <dan@puppetlabs.com> - 0.10.1
- * Add travisfile and Gemfile (c2052b3)
+## [1.0.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.0.1) - 2014-02-12
 
-##2013-04-02 - Chris Price <chris@puppetlabs.com> - 0.10.1
- * Update README.markdown (ad38a08)
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.0.0...1.0.1)
 
-##2013-02-15 - Karel Brezina <karel.brezina@gmail.com> - 0.10.0
- * Added 'ini_subsetting' custom resource type (4351d8b)
+### Added
 
-##2013-03-11 - Dan Bode <dan@puppetlabs.com> - 0.10.0
- * guard against nil indentation values (5f71d7f)
+- Adding whitespace capability to section header regex [#59](https://github.com/puppetlabs/puppetlabs-inifile/pull/59) ([antroy](https://github.com/antroy))
 
-##2013-01-07 - Dan Bode <dan@puppetlabs.com> - 0.10.0
- * Add purging support to ini file (2f22483)
+### Fixed
 
-##2013-02-05 - James Sweeny <james.sweeny@puppetlabs.com> - 0.10.0
- * Fix test to use correct key_val_parameter (b1aff63)
+- Update settings regexes to support settings containing square brackets [#65](https://github.com/puppetlabs/puppetlabs-inifile/pull/65) ([shrug](https://github.com/shrug))
+- Support spaces in sections [#58](https://github.com/puppetlabs/puppetlabs-inifile/pull/58) ([jnewland](https://github.com/jnewland))
 
-##2012-11-06 - Chris Price <chris@puppetlabs.com> - 0.10.0
- * Added license file w/Apache 2.0 license (5e1d203)
+## [1.0.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/1.0.0) - 2013-07-16
 
-##2012-11-02 - Chris Price <chris@puppetlabs.com> - 0.9.0
- * Version 0.9.0 released
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/0.10.3...1.0.0)
 
-##2012-10-26 - Chris Price <chris@puppetlabs.com> - 0.9.0
- * Add detection for commented versions of settings (a45ab65)
+### Fixed
 
-##2012-10-20 - Chris Price <chris@puppetlabs.com> - 0.9.0
- * Refactor to clarify implementation of `save` (f0d443f)
+- Support for whitespaces in settings names [#53](https://github.com/puppetlabs/puppetlabs-inifile/pull/53) ([apenney](https://github.com/apenney))
+- Properly handle empty values [#52](https://github.com/puppetlabs/puppetlabs-inifile/pull/52) ([otherwiseguy](https://github.com/otherwiseguy))
+- Bug/inherited purging [#50](https://github.com/puppetlabs/puppetlabs-inifile/pull/50) ([richardc](https://github.com/richardc))
+- Bug/master/better handling of quotes for subsettings [#47](https://github.com/puppetlabs/puppetlabs-inifile/pull/47) ([cprice404](https://github.com/cprice404))
 
-##2012-10-20 - Chris Price <chris@puppetlabs.com> - 0.9.0
- * Add example for `ensure=absent` (e517148)
+## [0.10.3](https://github.com/puppetlabs/puppetlabs-inifile/tree/0.10.3) - 2013-05-28
 
-##2012-10-20 - Chris Price <chris@puppetlabs.com> - 0.9.0
- * Better handling of whitespace lines at ends of sections (845fa70)
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/0.10.2...0.10.3)
 
-##2012-10-20 - Chris Price <chris@puppetlabs.com> - 0.9.0
- * Respect indentation / spacing for existing sections and settings (c2c26de)
+### Fixed
 
-##2012-10-17 - Chris Price <chris@puppetlabs.com> - 0.9.0
- * Minor tweaks to handling of removing settings (cda30a6)
+- Bug/master/better handling of quotes for subsettings [#45](https://github.com/puppetlabs/puppetlabs-inifile/pull/45) ([cprice404](https://github.com/cprice404))
 
-##2012-10-10 - Dan Bode <dan@puppetlabs.com> - 0.9.0
- * Add support for removing lines (1106d70)
+## [0.10.2](https://github.com/puppetlabs/puppetlabs-inifile/tree/0.10.2) - 2013-05-22
 
-##2012-10-02 - Dan Bode <dan@puppetlabs.com> - 0.9.0
- * Make value a property (cbc90d3)
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/0.10.1...0.10.2)
 
-##2012-10-02 - Dan Bode <dan@puppetlabs.com> - 0.9.0
- * Make ruby provider a better parent. (1564c47)
+## [0.10.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/0.10.1) - 2013-05-21
 
-##2012-09-29 - Reid Vandewiele <reid@puppetlabs.com> - 0.9.0
- * Allow values with spaces to be parsed and set (3829e20)
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/0.10.0...0.10.1)
 
-##2012-09-24 - Chris Price <chris@pupppetlabs.com> - 0.0.3
- * Version 0.0.3 released
+## [0.10.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/0.10.0) - 2013-04-02
 
-##2012-09-20 - Chris Price <chris@puppetlabs.com> - 0.0.3
- * Add validation for key_val_separator (e527908)
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/0.9.0...0.10.0)
 
-##2012-09-19 - Chris Price <chris@puppetlabs.com> - 0.0.3
- * Allow overriding separator string between key/val pairs (8d1fdc5)
+### Added
 
-##2012-08-20 - Chris Price <chris@pupppetlabs.com> - 0.0.2
- * Version 0.0.2 released
+- Added 'ini_subsetting' custom resource type [#29](https://github.com/puppetlabs/puppetlabs-inifile/pull/29) ([kbrezina](https://github.com/kbrezina))
+- Add purging support to ini file [#25](https://github.com/puppetlabs/puppetlabs-inifile/pull/25) ([bodepd](https://github.com/bodepd))
 
-##2012-08-17 - Chris Price <chris@pupppetlabs.com> - 0.0.2
- * Add support for "global" section at beginning of file (c57dab4)
+### Fixed
 
-[2.3.0]:https://github.com/puppetlabs/puppetlabs-apt/compare/2.2.2...2.3.0
-[2.2.2]:https://github.com/puppetlabs/puppetlabs-apt/compare/2.2.1...2.2.2
-[2.2.1]:https://github.com/puppetlabs/puppetlabs-apt/compare/2.2.0...2.2.1
-[2.2.0]:https://github.com/puppetlabs/puppetlabs-apt/compare/2.1.1...2.2.0
+- guard against nil indentation values [#30](https://github.com/puppetlabs/puppetlabs-inifile/pull/30) ([bodepd](https://github.com/bodepd))
 
+## [0.9.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/0.9.0) - 2012-11-02
 
-\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/0.0.3...0.9.0)
+
+### Added
+
+- Add detection for commented versions of settings [#20](https://github.com/puppetlabs/puppetlabs-inifile/pull/20) ([cprice404](https://github.com/cprice404))
+- Feature/master/use existing indentation [#19](https://github.com/puppetlabs/puppetlabs-inifile/pull/19) ([cprice404](https://github.com/cprice404))
+- Feature/master/tweaks to setting removal [#18](https://github.com/puppetlabs/puppetlabs-inifile/pull/18) ([cprice404](https://github.com/cprice404))
+- add ensure=absent support [#17](https://github.com/puppetlabs/puppetlabs-inifile/pull/17) ([bodepd](https://github.com/bodepd))
+
+### Fixed
+
+- Allow values with spaces to be parsed and set [#15](https://github.com/puppetlabs/puppetlabs-inifile/pull/15) ([reidmv](https://github.com/reidmv))
+
+## [0.0.3](https://github.com/puppetlabs/puppetlabs-inifile/tree/0.0.3) - 2012-09-24
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/0.0.2...0.0.3)
+
+### Added
+
+- Allow overriding separator string between key/val pairs [#9](https://github.com/puppetlabs/puppetlabs-inifile/pull/9) ([cprice404](https://github.com/cprice404))
+- Added support for colons in section names [#5](https://github.com/puppetlabs/puppetlabs-inifile/pull/5) ([jtopjian](https://github.com/jtopjian))
+
+## [0.0.2](https://github.com/puppetlabs/puppetlabs-inifile/tree/0.0.2) - 2012-08-20
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/0.0.1...0.0.2)
+
+## [0.0.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/0.0.1) - 2012-08-16
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/74fbedcf5b0cef8e5272a95ab55fc6bd83a13228...0.0.1)
