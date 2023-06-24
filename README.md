@@ -1,7 +1,5 @@
 # inifile
 
-[![Build Status](https://travis-ci.org/puppetlabs/puppetlabs-inifile.png?branch=main)](https://travis-ci.org/puppetlabs/puppetlabs-inifile)
-
 #### Table of Contents
 
 1. [Overview](#overview)
