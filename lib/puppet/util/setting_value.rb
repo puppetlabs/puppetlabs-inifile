@@ -50,7 +50,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
     # Get the resulting setting value by joining all the
     # subsettings, separator and quote characters.
     # @return [String]
-    def get_value # rubocop:disable Naming/AccessorMethodName
+    def get_value
       value = @subsetting_items.join @subsetting_separator
       @quote_char + value + @quote_char
     end
@@ -112,7 +112,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
         before_index = insert_value.to_i
         before_index = @subsetting_items.length if before_index > @subsetting_items.length
         @subsetting_items.insert(before_index, new_item)
-      else # rubocop:disable Lint/DuplicateBranch
+      else
         @subsetting_items.push(new_item)
       end
 
