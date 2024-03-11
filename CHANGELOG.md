@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v6.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v6.1.0) - 2023-06-16
+## [v6.1.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v6.1.1) - 2024-03-11
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v6.1.0...v6.1.1)
+
+### Fixed
+
+- (CAT-1646) - Remove section if it has empty line but does not have any settings  [#532](https://github.com/puppetlabs/puppetlabs-inifile/pull/532) ([Ramesh7](https://github.com/Ramesh7))
+
+## [v6.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v6.1.0) - 2023-06-20
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v6.0.0...v6.1.0)
 
@@ -148,12 +156,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v3.1.0...v4.0.0)
 
+### Changed
+- pdksync - FM-8499 - remove ubuntu14 support [#363](https://github.com/puppetlabs/puppetlabs-inifile/pull/363) ([lionce](https://github.com/lionce))
+
 ### Added
 
 - FM-8402 add debian 10 support [#352](https://github.com/puppetlabs/puppetlabs-inifile/pull/352) ([lionce](https://github.com/lionce))
-
-### Changed
-- pdksync - FM-8499 - remove ubuntu14 support [#363](https://github.com/puppetlabs/puppetlabs-inifile/pull/363) ([lionce](https://github.com/lionce))
 
 ## [v3.1.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v3.1.0) - 2019-08-01
 
@@ -263,12 +271,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.6.0...2.0.0)
 
+### Changed
+- MODULES-4830 Updating Puppet version requirement [#236](https://github.com/puppetlabs/puppetlabs-inifile/pull/236) ([HelenCampbell](https://github.com/HelenCampbell))
+
 ### Added
 
 - (MODULES-5144) Prep for puppet 5 [#238](https://github.com/puppetlabs/puppetlabs-inifile/pull/238) ([hunner](https://github.com/hunner))
-
-### Changed
-- MODULES-4830 Updating Puppet version requirement [#236](https://github.com/puppetlabs/puppetlabs-inifile/pull/236) ([HelenCampbell](https://github.com/HelenCampbell))
 
 ### Fixed
 
