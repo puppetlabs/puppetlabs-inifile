@@ -120,7 +120,7 @@ describe 'ini_subsetting resource' do
     MANIFEST
 
     it 'applies the manifest twice' do
-      run_shell("echo -e [one]\\\\nkey = alphabet betatrons > #{basedir}/ini_subsetting.ini", expect_failures: true)
+      run_shell("printf \"[one]\\nkey = alphabet betatrons\n\" > #{basedir}/ini_subsetting.ini", expect_failures: true)
       expect { idempotent_apply(pp) }.not_to raise_error
     end
 
