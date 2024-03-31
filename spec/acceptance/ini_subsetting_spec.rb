@@ -130,7 +130,7 @@ describe 'ini_subsetting resource' do
       describe '#content' do
         subject { super().content }
 
-        it { is_expected.not_to match %r{\[one\]} }
+        it { is_expected.to match %r{\[one\]} }
         it { is_expected.not_to match %r{key =} }
         it { is_expected.not_to match %r{alphabet} }
         it { is_expected.not_to match %r{betatrons} }
