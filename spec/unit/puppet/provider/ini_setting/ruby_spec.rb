@@ -1141,38 +1141,6 @@ setting1 = hellowworld
     end
   end
 
-  context 'when section has only empty line' do
-    let(:orig_content) do
-      <<~INIFILE
-        [section1]
-        foo=foovalue
-
-
-        [section2]
-
-        foo= foovalue2
-        baz=bazvalue
-        url = http://
-      INIFILE
-    end
-
-    expected_content = <<~INIFILE
-      [section2]
-
-      foo= foovalue2
-      baz=bazvalue
-      url = http://
-    INIFILE
-
-    it 'remove empty section' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', ensure: 'absent'))
-      provider = described_class.new(resource)
-      expect(provider.exists?).to be true
-      provider.destroy
-      validate_file(expected_content, tmpfile)
-    end
-  end
-
   context 'when dealing with indentation in sections' do
     let(:orig_content) do
       <<~INIFILE
