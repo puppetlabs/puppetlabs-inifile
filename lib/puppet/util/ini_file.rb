@@ -222,7 +222,6 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       end_line_num = start_line
       min_indentation = nil
       empty = true
-      empty_line_count = 0
       loop do
         line, line_num = line_iter.peek
         if line_num.nil? || @section_regex.match(line)
@@ -230,7 +229,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
           # when it's empty, we must be sure it's thought of as new,
           # which is signalled with a nil ending line
           end_line_num = nil if name == '' && empty
-          return Section.new(name, start_line, end_line_num, settings, min_indentation, empty_line_count)
+          return Section.new(name, start_line, end_line_num, settings, min_indentation)
         end
         if (match = @setting_regex.match(line))
           settings[match[2]] = match[4]
@@ -238,8 +237,6 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
           min_indentation = [indentation, min_indentation || indentation].min
         end
         end_line_num = line_num
-        empty_line_count += 1 if line == "\n"
-
         empty = false
         line_iter.next
       end
