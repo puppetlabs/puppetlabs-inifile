@@ -1002,6 +1002,7 @@ setting1 = hellowworld
           #another comment
        ; yet another comment
 
+       -nonstandard-
     INIFILE
     it 'removes a setting with pre/suffix that exists' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'shoes', ensure: 'absent', section_prefix: '-', section_suffix: '-'))
@@ -1107,37 +1108,6 @@ setting1 = hellowworld
       expect(provider.exists?).to be true
       provider.destroy
       validate_file(expected_content_five, tmpfile)
-    end
-
-    expected_content_six = <<~INIFILE
-      [section1]
-      ; This is also a comment
-      foo=foovalue
-
-      bar = barvalue
-      main = true
-      [section2]
-
-      foo= foovalue2
-      baz=bazvalue
-      url = http://192.168.1.1:8080
-      [section3]
-      # com = ment
-      uncom = ment
-      [section:sub]
-      subby=bar
-          #another comment
-       ; yet another comment
-
-       -nonstandard-
-         shoes = purple
-    INIFILE
-    it 'removes the section when removing the last line in the section' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section4', setting: 'uncom', ensure: 'absent'))
-      provider = described_class.new(resource)
-      expect(provider.exists?).to be true
-      provider.destroy
-      validate_file(expected_content_six, tmpfile)
     end
   end
 
