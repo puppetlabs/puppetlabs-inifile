@@ -124,6 +124,19 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       decrement_section_line_numbers(section_index + 1)
     end
 
+    def remove_section(section_name)
+      section = @sections_hash[section_name]
+      return unless section
+
+      lines.replace(lines[0..(section.start_line - 1)] + lines[(section.end_line + 1)..-1])
+
+      section_index = @section_names.index(section.name)
+      decrement_section_line_numbers(section_index + 1, amount: section.length)
+
+      @section_names.delete_at(section_index)
+      @sections_hash.delete(section.name)
+    end
+
     def save
       global_empty = @sections_hash[''].empty? && @sections_hash[''].additional_settings.empty?
       File.open(@path, 'w') do |fh|
@@ -300,10 +313,10 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
     # Utility method; given a section index (index into the @section_names
     # array), decrement the start/end line numbers for that section and all
     # all of the other sections that appear *after* the specified section.
-    def decrement_section_line_numbers(section_index)
+    def decrement_section_line_numbers(section_index, amount: 1)
       @section_names[section_index..(@section_names.length - 1)].each do |name|
         section = @sections_hash[name]
-        section.decrement_line_nums
+        section.decrement_line_nums(amount)
       end
     end
 
