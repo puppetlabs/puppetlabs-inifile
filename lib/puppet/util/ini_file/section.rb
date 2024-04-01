@@ -53,6 +53,10 @@ class Puppet::Util::IniFile # rubocop:disable Style/ClassAndModuleChildren
       global? ? new_section? : start_line == end_line
     end
 
+    def length
+      end_line - start_line + 1
+    end
+
     def update_existing_setting(setting_name, value)
       existing_value = @existing_settings[setting_name]
 

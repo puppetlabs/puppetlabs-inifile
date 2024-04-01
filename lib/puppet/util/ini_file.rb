@@ -136,6 +136,19 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       decrement_section_line_numbers(section_index + 1, existing_value.length)
     end
 
+    def remove_section(section_name)
+      section = @sections_hash[section_name]
+      return unless section
+
+      lines.replace(lines[0..(section.start_line - 1)] + lines[(section.end_line + 1)..-1])
+
+      section_index = @section_names.index(section.name)
+      decrement_section_line_numbers(section_index + 1, section.length)
+
+      @section_names.delete_at(section_index)
+      @sections_hash.delete(section.name)
+    end
+
     def save
       global_empty = @sections_hash[''].empty? && @sections_hash[''].additional_settings.empty?
       File.open(@path, 'w') do |fh|
