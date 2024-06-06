@@ -345,7 +345,9 @@ describe provider_class do
         something = else
     INIFILE
 
-    expected_content_two = ''
+    expected_content_two = <<-INIFILE
+        [main]
+    INIFILE
 
     it 'removes the subsetting when the it is empty' do
       resource = Puppet::Type::Ini_subsetting.new(common_params.merge(setting: 'reports', subsetting: 'http', subsetting_separator: ','))
