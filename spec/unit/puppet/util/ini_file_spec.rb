@@ -348,4 +348,41 @@ describe Puppet::Util::IniFile do
       expect(ini_sub.get_value('section', 'foo')).to eq(['value2'])
     end
   end
+
+  context 'when saving a setting that has a commented-out version' do
+    let(:sample_content) do
+      template = <<-INIFILE
+        [section1]
+        #bar=oldvalue
+      INIFILE
+      template.split("\n")
+    end
+    let(:written) { StringIO.new }
+
+    before :each do
+      allow(File).to receive(:open).with('/my/ini/file/path', 'w').and_yield(written)
+    end
+
+    it 'uses the default key_val_separator when no separator is given' do
+      ini_sub.set_value('section1', 'bar', 'barvalue')
+      ini_sub.save
+      expect(written.string).to match(%r{^\s*bar = barvalue$})
+    end
+
+    it 'uses an explicitly passed separator over the default' do
+      ini_sub.set_value('section1', 'bar', ': ', 'barvalue')
+      ini_sub.save
+      expect(written.string).to match(%r{^\s*bar: barvalue$})
+    end
+
+    context 'with a custom key_val_separator' do
+      subject(:ini_sub) { described_class.new('/my/ini/file/path', '=') }
+
+      it 'uses the custom key_val_separator when no separator is given' do
+        ini_sub.set_value('section1', 'bar', 'barvalue')
+        ini_sub.save
+        expect(written.string).to match(%r{^\s*bar=barvalue$})
+      end
+    end
+  end
 end
