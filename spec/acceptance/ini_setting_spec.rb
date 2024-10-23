@@ -97,7 +97,7 @@ describe 'ini_setting resource' do
         subject { super().content }
 
         it { is_expected.to match %r{four = five} }
-        it { is_expected.not_to match %r{\[one\]} }
+        it { is_expected.to match %r{\[one\]} }
         it { is_expected.not_to match %r{two = three} }
       end
     end
@@ -296,7 +296,8 @@ describe 'ini_setting resource' do
           describe '#content' do
             subject { super().content }
 
-            it { is_expected.to be_empty }
+            it { is_expected.to match %r{\[section1\]} }
+            it { is_expected.not_to match %r{valueinsection1 = newValue} }
           end
         end
       end
