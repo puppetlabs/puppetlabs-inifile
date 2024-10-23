@@ -63,6 +63,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       when 3
         # Backwards compatible set_value function, See MODULES-5172
         (section_name, setting, value) = args
+        separator = @key_val_separator
       when 4
         (section_name, setting, separator, value) = args
       end
