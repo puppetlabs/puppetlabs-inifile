@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v6.2.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v6.2.0) - 2024-12-16
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v6.1.1...v6.2.0)
+
+### Added
+
+- (CAT-2124) Add support for Ubuntu 24 [#547](https://github.com/puppetlabs/puppetlabs-inifile/pull/547) ([skyamgarp](https://github.com/skyamgarp))
+- (CAT-2100) Add Debian 12 support [#546](https://github.com/puppetlabs/puppetlabs-inifile/pull/546) ([shubhamshinde360](https://github.com/shubhamshinde360))
+
+### Fixed
+
+- (CAT-2158) Upgrade rexml to address CVE-2024-49761 [#548](https://github.com/puppetlabs/puppetlabs-inifile/pull/548) ([amitkarsale](https://github.com/amitkarsale))
+
 ## [v6.1.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v6.1.1) - 2024-03-11
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v6.1.0...v6.1.1)
@@ -30,6 +43,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v5.4.1...v6.0.0)
 
 ### Changed
+
 - (CONT-783) - Add puppet 8 support/Drop puppet 6 support [#505](https://github.com/puppetlabs/puppetlabs-inifile/pull/505) ([jordanbreen28](https://github.com/jordanbreen28))
 
 ## [v5.4.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v5.4.1) - 2023-04-06
@@ -105,6 +119,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v4.4.0...v5.0.0)
 
 ### Changed
+
 - pdksync - Remove Puppet 5 from testing and bump minimal version to 6.0.0 [#432](https://github.com/puppetlabs/puppetlabs-inifile/pull/432) ([carabasdaniel](https://github.com/carabasdaniel))
 
 ## [v4.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v4.4.0) - 2020-12-08
@@ -157,6 +172,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v3.1.0...v4.0.0)
 
 ### Changed
+
 - pdksync - FM-8499 - remove ubuntu14 support [#363](https://github.com/puppetlabs/puppetlabs-inifile/pull/363) ([lionce](https://github.com/lionce))
 
 ### Added
@@ -178,6 +194,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.5.0...v3.0.0)
 
 ### Changed
+
 - pdksync - (MODULES-8444) - Raise lower Puppet bound [#335](https://github.com/puppetlabs/puppetlabs-inifile/pull/335) ([david22swan](https://github.com/david22swan))
 
 ### Fixed
@@ -260,6 +277,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/2.0.0...2.1.0)
 
 ### Changed
+
 - Updates to metadata [#247](https://github.com/puppetlabs/puppetlabs-inifile/pull/247) ([pmcmaw](https://github.com/pmcmaw))
 - (MODULES-5501) - Remove unsupported Ubuntu [#245](https://github.com/puppetlabs/puppetlabs-inifile/pull/245) ([pmcmaw](https://github.com/pmcmaw))
 
@@ -272,6 +290,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/1.6.0...2.0.0)
 
 ### Changed
+
 - MODULES-4830 Updating Puppet version requirement [#236](https://github.com/puppetlabs/puppetlabs-inifile/pull/236) ([HelenCampbell](https://github.com/HelenCampbell))
 
 ### Added
