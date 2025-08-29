@@ -122,12 +122,17 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       # was modified.
       section_index = @section_names.index(section_name)
       decrement_section_line_numbers(section_index + 1)
+    end
 
-      return unless section.empty?
+    def remove_section(section_name)
+      section = @sections_hash[section_name]
+      return unless section
 
-      # By convention, it's time to remove this newly emptied out section
-      lines.delete_at(section.start_line)
-      decrement_section_line_numbers(section_index + 1)
+      lines.replace(lines[0..(section.start_line - 1)] + lines[(section.end_line + 1)..-1])
+
+      section_index = @section_names.index(section.name)
+      decrement_section_line_numbers(section_index + 1, amount: section.length)
+
       @section_names.delete_at(section_index)
       @sections_hash.delete(section.name)
     end
@@ -222,7 +227,6 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       end_line_num = start_line
       min_indentation = nil
       empty = true
-      empty_line_count = 0
       loop do
         line, line_num = line_iter.peek
         if line_num.nil? || @section_regex.match(line)
@@ -230,7 +234,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
           # when it's empty, we must be sure it's thought of as new,
           # which is signalled with a nil ending line
           end_line_num = nil if name == '' && empty
-          return Section.new(name, start_line, end_line_num, settings, min_indentation, empty_line_count)
+          return Section.new(name, start_line, end_line_num, settings, min_indentation)
         end
         if (match = @setting_regex.match(line))
           settings[match[2]] = match[4]
@@ -238,8 +242,6 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
           min_indentation = [indentation, min_indentation || indentation].min
         end
         end_line_num = line_num
-        empty_line_count += 1 if line == "\n"
-
         empty = false
         line_iter.next
       end
@@ -311,10 +313,10 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
     # Utility method; given a section index (index into the @section_names
     # array), decrement the start/end line numbers for that section and all
     # all of the other sections that appear *after* the specified section.
-    def decrement_section_line_numbers(section_index)
+    def decrement_section_line_numbers(section_index, amount: 1)
       @section_names[section_index..(@section_names.length - 1)].each do |name|
         section = @sections_hash[name]
-        section.decrement_line_nums
+        section.decrement_line_nums(amount)
       end
     end
 
