@@ -1736,5 +1736,61 @@ foo = c
       provider.create
       validate_file(expected_content_four, tmpfile)
     end
+
+    expected_content_five = <<-EOS
+[section]
+bar = barvalue
+
+[section2]
+foo = value
+bar = barvalue
+foo = value2
+
+[section3]
+    EOS
+
+    it 'removes a multi-value setting with ensure => absent' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section', setting: 'foo', ensure: 'absent'))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be true
+      provider.destroy
+      validate_file(expected_content_five, tmpfile)
+    end
+
+    expected_content_six = <<-EOS
+[section]
+foo = foovalue
+foo = foovalue2
+foo = foovalue3
+foo = foovalue4
+bar = barvalue
+
+[section2]
+foo = value
+bar = barvalue
+foo = value2
+
+[section3]
+baz = newvalue
+    EOS
+
+    it 'correctly updates section3 line numbers after modifying section with multi-values' do
+      # First reduce section's foo from 4 values to 1, then add to section3
+      resource1 = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section', setting: 'foo', value: 'foovalue'))
+      provider1 = described_class.new(resource1)
+      provider1.create
+
+      # Re-read the file with new provider to add setting to section3
+      resource2 = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'baz', value: 'newvalue'))
+      provider2 = described_class.new(resource2)
+      provider2.create
+
+      # Now reset file and do both operations to verify section line tracking
+      File.write(tmpfile, orig_content)
+      resource3 = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'baz', value: 'newvalue'))
+      provider3 = described_class.new(resource3)
+      provider3.create
+      validate_file(expected_content_six, tmpfile)
+    end
   end
 end
