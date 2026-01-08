@@ -1675,5 +1675,4 @@ foo = c
       validate_file(expected_content_four, tmpfile)
     end
   end
-
 end
