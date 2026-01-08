@@ -358,4 +358,60 @@ describe provider_class do
       expect(validate_file(expected_content_two, tmpfile)).to be_truthy
     end
   end
+
+  context 'when the parent setting has multiple values (same key repeated)' do
+    let(:common_params) do
+      {
+        title: 'ini_subsetting_multivalue_test',
+        path: tmpfile,
+        section: 'main',
+        key_val_separator: '=',
+      }
+    end
+
+    let(:orig_content) do
+      <<-INIFILE
+        [main]
+        setting="value1 value2"
+        setting="value3 value4"
+        other=data
+      INIFILE
+    end
+
+    it 'reads subsetting from the first occurrence of a multi-value key' do
+      resource = Puppet::Type::Ini_subsetting.new(common_params.merge(setting: 'setting', subsetting: 'value1', quote_char: '"'))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to eq ''
+    end
+
+    # NOTE: When ini_subsetting modifies a key that has multiple values,
+    # it collapses them to a single value (the first one, modified).
+    # This is expected behavior per the multi-value PR design.
+    expected_content_one = <<-INIFILE
+        [main]
+        setting="value1 value2 newval"
+        other=data
+    INIFILE
+
+    it 'modifies the first occurrence and collapses multi-value keys when adding a subsetting' do
+      resource = Puppet::Type::Ini_subsetting.new(common_params.merge(setting: 'setting', subsetting: 'newval', value: '', quote_char: '"'))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be_nil
+      provider.create
+      validate_file(expected_content_one, tmpfile)
+    end
+
+    expected_content_two = <<-INIFILE
+        [main]
+        setting="value2"
+        other=data
+    INIFILE
+
+    it 'removes a subsetting and collapses multi-value keys' do
+      resource = Puppet::Type::Ini_subsetting.new(common_params.merge(setting: 'setting', subsetting: 'value1', quote_char: '"'))
+      provider = described_class.new(resource)
+      provider.destroy
+      validate_file(expected_content_two, tmpfile)
+    end
+  end
 end
