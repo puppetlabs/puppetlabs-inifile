@@ -14,14 +14,13 @@ class Puppet::Util::IniFile # rubocop:disable Style/ClassAndModuleChildren
     #    `end_line` of `nil`.
     #  * `start_line` and `end_line` will be set to `nil` for a new non-global
     #    section.
-    def initialize(name, start_line, end_line, settings, indentation, empty_line_count = 0)
+    def initialize(name, start_line, end_line, settings, indentation)
       @name = name
       @start_line = start_line
       @end_line = end_line
       @existing_settings = settings.nil? ? {} : settings
       @additional_settings = {}
       @indentation = indentation
-      @empty_line_count = empty_line_count
     end
 
     attr_reader :name, :start_line, :end_line, :additional_settings, :indentation
@@ -51,7 +50,7 @@ class Puppet::Util::IniFile # rubocop:disable Style/ClassAndModuleChildren
     # the global section is empty whenever it's new;
     # other sections are empty when they have no lines
     def empty?
-      global? ? new_section? : (start_line == end_line || (end_line && (end_line - @empty_line_count)) == start_line)
+      global? ? new_section? : start_line == end_line
     end
 
     def update_existing_setting(setting_name, value)
