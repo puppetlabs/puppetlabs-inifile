@@ -6,7 +6,7 @@ ini_setting = Puppet::Type.type(:ini_setting)
 
 describe ini_setting do
   describe 'path validation' do
-    subject(:ini_setting_path) { described_class.new(name: 'foo', path:) }
+    subject(:ini_setting_path) { described_class.new(name: 'foo', path: path) }
 
     context 'when on posix platforms' do
       before(:each) do

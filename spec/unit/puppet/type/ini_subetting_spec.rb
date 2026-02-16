@@ -6,7 +6,7 @@ ini_subsetting = Puppet::Type.type(:ini_subsetting)
 
 describe ini_subsetting do
   describe 'quote_char validation' do
-    subject(:ini_subsetting_test) { described_class.new(name: 'foo', path:, quote_char:) }
+    subject(:ini_subsetting_test) { described_class.new(name: 'foo', path: path, quote_char: quote_char) }
 
     context 'when on posix platforms' do
       let(:path) { '/absolute/path' }
@@ -17,7 +17,7 @@ describe ini_subsetting do
   end
 
   describe 'path validation' do
-    subject(:ini_subsetting_test) { described_class.new(name: 'foo', path:) }
+    subject(:ini_subsetting_test) { described_class.new(name: 'foo', path: path) }
 
     context 'when on posix platforms' do
       before(:each) do
