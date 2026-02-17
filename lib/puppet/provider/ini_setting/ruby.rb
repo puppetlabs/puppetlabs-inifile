@@ -19,7 +19,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
         resources.push(
           new(
             name: namevar(section_name, setting),
-            value:,
+            value: value,
             ensure: :present,
           ),
         )
