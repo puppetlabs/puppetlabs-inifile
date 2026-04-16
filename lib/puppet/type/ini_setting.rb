@@ -81,7 +81,7 @@ Puppet::Type.newtype(:ini_setting) do
     defaultto(' = ')
   end
 
-  newproperty(:value) do
+  newproperty(:value, array_matching: :all) do
     desc 'The value of the setting to be defined.'
 
     munge do |value|
