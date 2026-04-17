@@ -81,7 +81,7 @@ Puppet::Type.newtype(:ini_setting) do
     defaultto(' = ')
   end
 
-  newproperty(:value) do
+  newproperty(:value, array_matching: :all) do
     desc 'The value of the setting to be defined.'
 
     munge do |value|
@@ -94,6 +94,7 @@ Puppet::Type.newtype(:ini_setting) do
     end
 
     def should_to_s(newvalue)
+      newvalue = newvalue.first if newvalue.is_a?(Array) && newvalue.length == 1
       if @resource[:show_diff] == :true && Puppet[:show_diff]
         newvalue
       elsif @resource[:show_diff] == :md5 && Puppet[:show_diff]
