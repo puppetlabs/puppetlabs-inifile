@@ -10,7 +10,6 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
   class IniFile
     def initialize(path, key_val_separator = ' = ', section_prefix = '[', section_suffix = ']',
                    indent_char = ' ', indent_width = nil)
-
       k_v_s = (key_val_separator =~ %r{^\s+$}) ? ' ' : key_val_separator.strip
 
       @section_prefix = section_prefix
@@ -282,7 +281,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
 
     # This is mostly here because it makes testing easier--we don't have
     #  to try to stub any methods on File.
-    def self.readlines(path) # rubocop:disable Lint/IneffectiveAccessModifier : Attempting to change breaks tests
+    def self.readlines(path) # rubocop:disable Lint/IneffectiveAccessModifier -- Attempting to change breaks tests
       # If this type is ever used with very large files, we should
       #  write this in a different way, using a temp
       #  file; for now assuming that this type is only used on
