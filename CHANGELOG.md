@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v6.4.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v6.4.0) - 2026-05-18
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v6.3.1...v6.4.0)
+
+### Added
+
+- Add support for multiple values per key [#555](https://github.com/puppetlabs/puppetlabs-inifile/pull/555) ([bwitt](https://github.com/bwitt))
+- (CAT-2152) Add support for CentOS 9 [#549](https://github.com/puppetlabs/puppetlabs-inifile/pull/549) ([skyamgarp](https://github.com/skyamgarp))
+
 ## [v6.3.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v6.3.1) - 2026-02-17
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v6.3.0...v6.3.1)
