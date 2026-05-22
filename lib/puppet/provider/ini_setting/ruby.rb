@@ -149,6 +149,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   private
 
   def ini_file
-    @ini_file ||= Puppet::Util::IniFile.new(file_path, separator, section_prefix, section_suffix, indent_char, indent_width)
+    $ini_settings_ini_file ||= Puppet::Util::IniFile.new(file_path, separator, section_prefix, section_suffix, indent_char, indent_width)
+    @ini_file = $ini_settings_ini_file
   end
 end
