@@ -60,13 +60,11 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
       ini_file.set_value(section, setting, separator, resource[:value])
     end
     ini_file.save
-    @ini_file = nil
   end
 
   def destroy
     ini_file.remove_setting(section, setting)
     ini_file.save
-    @ini_file = nil
   end
 
   def value
@@ -149,13 +147,6 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   private
 
   def ini_file
-    $ini_file_hash ||= { file_path => Puppet::Util::IniFile.new(file_path, separator, section_prefix, section_suffix, indent_char, indent_width) }
-    if $ini_file_hash[file_path]
-      @ini_file = $ini_file_hash[file_path]
-      return @ini_file
-    end
-    $ini_file_hash[file_path] = Puppet::Util::IniFile.new(file_path, separator, section_prefix, section_suffix, indent_char, indent_width)
-    @ini_file = $ini_file_hash[file_path]
-    @ini_file
+    Puppet::Util::IniFile.cached(file_path, separator, section_prefix, section_suffix, indent_char, indent_width)
   end
 end

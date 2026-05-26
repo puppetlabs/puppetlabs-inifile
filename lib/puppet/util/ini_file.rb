@@ -8,6 +8,14 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
   # ini_file.rb
   #
   class IniFile
+    def self.cached(path, key_val_separator = ' = ', section_prefix = '[',
+                    section_suffix = ']', indent_char = ' ', indent_width = nil)
+      @instance_cache ||= {}
+      cache_key = [path, key_val_separator, section_prefix, section_suffix, indent_char, indent_width]
+      @instance_cache[cache_key] ||= new(path, key_val_separator, section_prefix,
+                                         section_suffix, indent_char, indent_width)
+    end
+
     def initialize(path, key_val_separator = ' = ', section_prefix = '[', section_suffix = ']',
                    indent_char = ' ', indent_width = nil)
 
