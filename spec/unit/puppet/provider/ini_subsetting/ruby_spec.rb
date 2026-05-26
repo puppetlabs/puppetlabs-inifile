@@ -15,6 +15,7 @@ describe provider_class do
 
   before :each do
     File.write(tmpfile, orig_content)
+    Puppet::Util::IniFile.instance_variable_set(:@instance_cache, nil)
   end
 
   context 'when ensuring that a subsetting is present' do
@@ -414,6 +415,57 @@ describe provider_class do
       provider = described_class.new(resource)
       provider.destroy
       validate_file(expected_content_two, tmpfile)
+    end
+  end
+
+  context 'when ini_setting and ini_subsetting target the same file' do
+    include PuppetlabsSpec::Files
+
+    let(:orig_content) { '' }
+    let(:shared_file) { tmpfilename('shared_ini_file') }
+
+    before :each do
+      File.write(shared_file, "[section]\nkey=value\n")
+      Puppet::Util::IniFile.instance_variable_set(:@instance_cache, nil)
+    end
+
+    it 'does not raise NoMethodError when ini_subsetting calls ini_file' do
+      resource = Puppet::Type::Ini_subsetting.new(
+        title: 'test', path: shared_file, section: 'section',
+        setting: 'key', subsetting: 'val', key_val_separator: '='
+      )
+      provider = Puppet::Type::Ini_subsetting.provider(:ruby).new(resource)
+      expect { provider.send(:ini_file) }.not_to raise_error
+    end
+
+    it 'shares one IniFile object when key_val_separator matches between providers' do
+      setting_resource = Puppet::Type::Ini_setting.new(
+        title: 'test_setting', path: shared_file, section: 'section',
+        setting: 'key', value: 'val', key_val_separator: '='
+      )
+      subsetting_resource = Puppet::Type::Ini_subsetting.new(
+        title: 'test_subsetting', path: shared_file, section: 'section',
+        setting: 'key', subsetting: 'val', key_val_separator: '='
+      )
+      setting_provider    = Puppet::Type::Ini_setting.provider(:ruby).new(setting_resource)
+      subsetting_provider = Puppet::Type::Ini_subsetting.provider(:ruby).new(subsetting_resource)
+
+      expect(setting_provider.send(:ini_file)).to equal(subsetting_provider.send(:ini_file))
+    end
+
+    it 'uses distinct IniFile objects when key_val_separator differs between providers' do
+      setting_resource = Puppet::Type::Ini_setting.new(
+        title: 'test_setting', path: shared_file, section: 'section',
+        setting: 'key', value: 'val', key_val_separator: ':'
+      )
+      subsetting_resource = Puppet::Type::Ini_subsetting.new(
+        title: 'test_subsetting', path: shared_file, section: 'section',
+        setting: 'key', subsetting: 'val', key_val_separator: '='
+      )
+      setting_provider    = Puppet::Type::Ini_setting.provider(:ruby).new(setting_resource)
+      subsetting_provider = Puppet::Type::Ini_subsetting.provider(:ruby).new(subsetting_resource)
+
+      expect(setting_provider.send(:ini_file)).not_to equal(subsetting_provider.send(:ini_file))
     end
   end
 end

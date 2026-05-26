@@ -348,4 +348,50 @@ describe Puppet::Util::IniFile do
       expect(ini_sub.get_value('section', 'foo')).to eq(['value2'])
     end
   end
+
+  describe '.cached' do
+    let(:path) { '/my/ini/file/path' }
+
+    before :each do
+      described_class.instance_variable_set(:@instance_cache, nil)
+      allow(File).to receive(:file?).with(path).and_return(true)
+      allow(described_class).to receive(:readlines).with(path).and_return([])
+    end
+
+    it 'returns an IniFile instance' do
+      expect(described_class.cached(path)).to be_a(described_class)
+    end
+
+    it 'returns the same object on repeated calls with identical params' do
+      first  = described_class.cached(path, '=')
+      second = described_class.cached(path, '=')
+      expect(first).to equal(second)
+    end
+
+    it 'only parses the file once for repeated calls with identical params' do
+      expect(described_class).to receive(:readlines).once.and_return([])
+      described_class.cached(path, '=')
+      described_class.cached(path, '=')
+    end
+
+    it 'returns distinct objects for different key_val_separator values on the same path' do
+      eq_obj    = described_class.cached(path, '=')
+      colon_obj = described_class.cached(path, ':')
+      expect(eq_obj).not_to equal(colon_obj)
+    end
+
+    it 'returns distinct objects for different section_prefix values on the same path' do
+      bracket_obj = described_class.cached(path, '=', '[')
+      dash_obj    = described_class.cached(path, '=', '-')
+      expect(bracket_obj).not_to equal(dash_obj)
+    end
+
+    it 'does not share cache with subclasses' do
+      subclass = Class.new(described_class)
+      allow(subclass).to receive(:readlines).with(path).and_return([])
+      parent_obj   = described_class.cached(path, '=')
+      subclass_obj = subclass.cached(path, '=')
+      expect(parent_obj).not_to equal(subclass_obj)
+    end
+  end
 end

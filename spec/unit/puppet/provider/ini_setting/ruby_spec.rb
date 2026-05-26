@@ -25,6 +25,7 @@ describe provider_class do
   before :each do
     File.write(tmpfile, orig_content)
     File.write(emptyfile, '')
+    Puppet::Util::IniFile.instance_variable_set(:@instance_cache, nil)
   end
 
   context 'when calling instances' do
@@ -1723,8 +1724,9 @@ baz = newvalue
       provider2 = described_class.new(resource2)
       provider2.create
 
-      # Now reset file and do both operations to verify section line tracking
+      # Now reset file and cache to do both operations fresh
       File.write(tmpfile, orig_content)
+      Puppet::Util::IniFile.instance_variable_set(:@instance_cache, nil)
       resource3 = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'baz', value: 'newvalue'))
       provider3 = described_class.new(resource3)
       provider3.create
