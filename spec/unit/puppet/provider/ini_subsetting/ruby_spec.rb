@@ -3,6 +3,7 @@
 require 'spec_helper'
 require 'puppet'
 
+Puppet::Type.type(:ini_setting)
 provider_class = Puppet::Type.type(:ini_subsetting).provider(:ruby)
 describe provider_class do
   include PuppetlabsSpec::Files
