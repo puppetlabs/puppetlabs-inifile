@@ -1733,4 +1733,70 @@ baz = newvalue
       validate_file(expected_content_six, tmpfile)
     end
   end
+
+  context 'when making sequential reads and writes with new provider instances' do
+    include PuppetlabsSpec::Files
+
+    let(:orig_content) { '' }
+    let(:seq_file) { tmpfilename('ini_setting_sequential') }
+
+    before :each do
+      File.write(seq_file, "[section]\nkey = original\n")
+      Puppet::Util::IniFile.instance_variable_set(:@instance_cache, nil)
+    end
+
+    def make_provider(attrs)
+      resource = Puppet::Type::Ini_setting.new(
+        { title: 'seq_test', path: seq_file, section: 'section' }.merge(attrs)
+      )
+      described_class.new(resource)
+    end
+
+    it 'new provider instance reads the value written by a previous provider' do
+      make_provider(setting: 'key', value: 'updated').create
+
+      reader = make_provider(setting: 'key', value: 'irrelevant')
+      expect(reader.value).to eq(['updated'])
+    end
+
+    it 'two sequential writes accumulate correctly on disk' do
+      make_provider(setting: 'key', value: 'first').create
+      make_provider(setting: 'other', value: 'second').create
+
+      content = File.read(seq_file)
+      expect(content).to include('key = first')
+      expect(content).to include('other = second')
+    end
+
+    it 'new provider instance sees a setting created by a previous provider' do
+      make_provider(setting: 'newkey', value: 'newval').create
+
+      reader = make_provider(setting: 'newkey', value: 'irrelevant')
+      expect(reader.exists?).to be true
+      expect(reader.value).to eq(['newval'])
+    end
+
+    it 'new provider instance destroys a setting created by a previous provider' do
+      make_provider(setting: 'key', value: 'updated').create
+      make_provider(setting: 'key', value: 'irrelevant').destroy
+
+      content = File.read(seq_file)
+      expect(content).not_to include('key')
+    end
+
+    it 'write then read with a different key_val_separator uses a separate cache entry' do
+      make_provider(setting: 'key', value: 'eqval').create
+
+      colon_resource = Puppet::Type::Ini_setting.new(
+        title: 'seq_colon', path: seq_file, section: 'section',
+        setting: 'key', value: 'colonval', key_val_separator: ':'
+      )
+      colon_provider = described_class.new(colon_resource)
+      colon_provider.create
+
+      content = File.read(seq_file)
+      expect(content).to include('key = eqval')
+      expect(content).to include('key:colonval')
+    end
+  end
 end

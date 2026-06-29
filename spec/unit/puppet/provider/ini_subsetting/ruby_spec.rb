@@ -419,6 +419,74 @@ describe provider_class do
     end
   end
 
+  context 'when making sequential reads and writes with new provider instances' do
+    include PuppetlabsSpec::Files
+
+    let(:orig_content) { '' }
+    let(:seq_file) { tmpfilename('ini_subsetting_sequential') }
+
+    before :each do
+      File.write(seq_file, "[section]\nJAVA_ARGS=\"-Xmx192m -Xms64m\"\n")
+      Puppet::Util::IniFile.instance_variable_set(:@instance_cache, nil)
+    end
+
+    def make_provider(attrs)
+      resource = Puppet::Type::Ini_subsetting.new(
+        {
+          title: 'seq_test', path: seq_file, section: 'section',
+          setting: 'JAVA_ARGS', key_val_separator: '='
+        }.merge(attrs)
+      )
+      described_class.new(resource)
+    end
+
+    it 'new provider instance reads the subsetting value written by a previous provider' do
+      make_provider(subsetting: '-Xmx', value: '512m').value = '512m'
+
+      reader = make_provider(subsetting: '-Xmx', value: 'irrelevant')
+      expect(reader.value).to eq('512m')
+    end
+
+    it 'two sequential writes accumulate correctly on disk' do
+      make_provider(subsetting: '-Xmx', value: '512m').create
+      make_provider(subsetting: '-Xms', value: '256m').create
+
+      content = File.read(seq_file)
+      expect(content).to include('-Xmx512m')
+      expect(content).to include('-Xms256m')
+    end
+
+    it 'new provider instance sees a subsetting created by a previous provider' do
+      make_provider(subsetting: '-Xss', value: '8m').create
+
+      reader = make_provider(subsetting: '-Xss', value: 'irrelevant')
+      expect(reader.exists?).to eq('8m')
+    end
+
+    it 'new provider instance destroys a subsetting created by a previous provider' do
+      make_provider(subsetting: '-Xmx', value: '512m').create
+      make_provider(subsetting: '-Xmx', value: 'irrelevant').destroy
+
+      content = File.read(seq_file)
+      expect(content).not_to include('-Xmx')
+    end
+
+    it 'write then read with a different key_val_separator uses a separate cache entry' do
+      make_provider(subsetting: '-Xmx', value: '512m').create
+
+      colon_resource = Puppet::Type::Ini_subsetting.new(
+        title: 'seq_colon', path: seq_file, section: 'section',
+        setting: 'JAVA_ARGS', subsetting: '-Xmx', value: '256m', key_val_separator: ':'
+      )
+      colon_provider = described_class.new(colon_resource)
+      colon_provider.create
+
+      ini_eq    = Puppet::Util::IniFile.cached(seq_file, '=')
+      ini_colon = Puppet::Util::IniFile.cached(seq_file, ':')
+      expect(ini_eq).not_to equal(ini_colon)
+    end
+  end
+
   context 'when ini_setting and ini_subsetting target the same file' do
     include PuppetlabsSpec::Files
 
