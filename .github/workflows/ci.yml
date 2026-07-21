@@ -9,11 +9,29 @@ on:
 jobs:
   Spec:
     uses: "puppetlabs/cat-github-actions/.github/workflows/module_ci.yml@main"
+    with:
+      # puppet_litmus -> bolt 4.x -> faraday-patron -> patron builds a libcurl native extension;
+      # the runner has no libcurl headers, so install them before bundle (Puppet 9 lane, Ruby 4).
+      additional_packages: "libcurl4-openssl-dev"
+      ruby_version: "3.2"
     secrets: "inherit"
 
   Acceptance:
     needs: Spec
     uses: "puppetlabs/cat-github-actions/.github/workflows/module_acceptance.yml@main"
     with:
-      flags: "--nightly"
+      # These platforms are supported on Puppet 8 but Puppet 9 ships no agent package for them
+      # (verified against the puppetcore9-nightly repo), so drop them from the Puppet 9 collection
+      # only and keep testing them on Puppet 8. Note SLES 12, CentOS 8 and Windows 2016 DO have
+      # Puppet 9 agents, so they stay on both lanes. See MODULES-11703 / MODULES-11700.
+      ruby_version: "3.2"
+      flags: >-
+        --nightly
+        --collection-platform-exclude 9:redhat-7
+        --collection-platform-exclude 9:centos-7
+        --collection-platform-exclude 9:oraclelinux-7
+        --collection-platform-exclude 9:scientific-7
+        --collection-platform-exclude 9:debian-10
+        --collection-platform-exclude 9:ubuntu-18.04
+        --collection-platform-exclude 9:ubuntu-20.04
     secrets: "inherit"
