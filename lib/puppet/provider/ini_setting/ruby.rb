@@ -70,7 +70,13 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def value
-    ini_file.get_value(section, setting)
+    result = ini_file.get_value(section, setting)
+    return result if result.nil?
+
+    value_property = resource.class.attrclass(:value)
+    return result if value_property && value_property.array_matching == :all
+
+    (result.length == 1) ? result.first : result
   end
 
   def value=(_value)

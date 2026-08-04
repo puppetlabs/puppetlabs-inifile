@@ -3,6 +3,32 @@
 require 'spec_helper'
 require 'puppet'
 
+# A minimal custom type used to regression-test the case where a type
+# subclasses the ini_setting ruby provider but declares `value` as a scalar
+# (non-array-matching) property.
+unless Puppet::Type.type(:scalar_value_ini_setting)
+  Puppet::Type.newtype(:scalar_value_ini_setting) do
+    newparam(:name, namevar: true)
+    newparam(:section)
+    newparam(:setting)
+    newparam(:path)
+    newparam(:key_val_separator) { defaultto('=') }
+    newparam(:section_prefix) { defaultto('[') }
+    newparam(:section_suffix) { defaultto(']') }
+    newparam(:indent_char) { defaultto(' ') }
+    newparam(:indent_width)
+    newparam(:force_new_section_creation) { defaultto(true) }
+    ensurable
+    newproperty(:value) do
+      munge { |v| v.to_s }
+    end
+  end
+  Puppet::Type.type(:scalar_value_ini_setting).provide(
+    :ruby,
+    parent: Puppet::Type.type(:ini_setting).provider(:ruby),
+  )
+end
+
 provider_class = Puppet::Type.type(:ini_setting).provider(:ruby)
 describe provider_class do
   include PuppetlabsSpec::Files
@@ -1729,6 +1755,28 @@ baz = newvalue
       provider3 = described_class.new(resource3)
       provider3.create
       validate_file(expected_content_six, tmpfile)
+    end
+  end
+
+  context 'when used by a custom type whose value property is not array_matching' do
+    let(:orig_content) do
+      <<-INIFILE
+[section1]
+http_interface=127.0.0.1
+      INIFILE
+    end
+
+    it 'returns a scalar from #value so insync? matches a scalar should' do
+      resource = Puppet::Type.type(:scalar_value_ini_setting).new(
+        title: 'http_interface',
+        path: tmpfile,
+        section: 'section1',
+        setting: 'http_interface',
+        value: '127.0.0.1',
+      )
+      provider = Puppet::Type.type(:scalar_value_ini_setting).provider(:ruby).new(resource)
+      expect(provider.value).to eq('127.0.0.1')
+      expect(resource.property(:value).insync?(provider.value)).to be true
     end
   end
 end
