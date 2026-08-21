@@ -3,6 +3,7 @@
 require 'spec_helper'
 require 'puppet'
 
+Puppet::Type.type(:ini_setting)
 provider_class = Puppet::Type.type(:ini_subsetting).provider(:ruby)
 describe provider_class do
   include PuppetlabsSpec::Files
@@ -15,6 +16,7 @@ describe provider_class do
 
   before :each do
     File.write(tmpfile, orig_content)
+    Puppet::Util::IniFile.instance_variable_set(:@instance_cache, nil)
   end
 
   context 'when ensuring that a subsetting is present' do
@@ -414,6 +416,125 @@ describe provider_class do
       provider = described_class.new(resource)
       provider.destroy
       validate_file(expected_content_two, tmpfile)
+    end
+  end
+
+  context 'when making sequential reads and writes with new provider instances' do
+    include PuppetlabsSpec::Files
+
+    let(:orig_content) { '' }
+    let(:seq_file) { tmpfilename('ini_subsetting_sequential') }
+
+    before :each do
+      File.write(seq_file, "[section]\nJAVA_ARGS=\"-Xmx192m -Xms64m\"\n")
+      Puppet::Util::IniFile.instance_variable_set(:@instance_cache, nil)
+    end
+
+    def make_provider(attrs)
+      resource = Puppet::Type::Ini_subsetting.new(
+        {
+          title: 'seq_test', path: seq_file, section: 'section',
+          setting: 'JAVA_ARGS', key_val_separator: '='
+        }.merge(attrs)
+      )
+      described_class.new(resource)
+    end
+
+    it 'new provider instance reads the subsetting value written by a previous provider' do
+      make_provider(subsetting: '-Xmx', value: '512m').value = '512m'
+
+      reader = make_provider(subsetting: '-Xmx', value: 'irrelevant')
+      expect(reader.value).to eq('512m')
+    end
+
+    it 'two sequential writes accumulate correctly on disk' do
+      make_provider(subsetting: '-Xmx', value: '512m').create
+      make_provider(subsetting: '-Xms', value: '256m').create
+
+      content = File.read(seq_file)
+      expect(content).to include('-Xmx512m')
+      expect(content).to include('-Xms256m')
+    end
+
+    it 'new provider instance sees a subsetting created by a previous provider' do
+      make_provider(subsetting: '-Xss', value: '8m').create
+
+      reader = make_provider(subsetting: '-Xss', value: 'irrelevant')
+      expect(reader.exists?).to eq('8m')
+    end
+
+    it 'new provider instance destroys a subsetting created by a previous provider' do
+      make_provider(subsetting: '-Xmx', value: '512m').create
+      make_provider(subsetting: '-Xmx', value: 'irrelevant').destroy
+
+      content = File.read(seq_file)
+      expect(content).not_to include('-Xmx')
+    end
+
+    it 'write then read with a different key_val_separator uses a separate cache entry' do
+      make_provider(subsetting: '-Xmx', value: '512m').create
+
+      colon_resource = Puppet::Type::Ini_subsetting.new(
+        title: 'seq_colon', path: seq_file, section: 'section',
+        setting: 'JAVA_ARGS', subsetting: '-Xmx', value: '256m', key_val_separator: ':'
+      )
+      colon_provider = described_class.new(colon_resource)
+      colon_provider.create
+
+      ini_eq    = Puppet::Util::IniFile.cached(seq_file, '=')
+      ini_colon = Puppet::Util::IniFile.cached(seq_file, ':')
+      expect(ini_eq).not_to equal(ini_colon)
+    end
+  end
+
+  context 'when ini_setting and ini_subsetting target the same file' do
+    include PuppetlabsSpec::Files
+
+    let(:orig_content) { '' }
+    let(:shared_file) { tmpfilename('shared_ini_file') }
+
+    before :each do
+      File.write(shared_file, "[section]\nkey=value\n")
+      Puppet::Util::IniFile.instance_variable_set(:@instance_cache, nil)
+    end
+
+    it 'does not raise NoMethodError when ini_subsetting calls ini_file' do
+      resource = Puppet::Type::Ini_subsetting.new(
+        title: 'test', path: shared_file, section: 'section',
+        setting: 'key', subsetting: 'val', key_val_separator: '='
+      )
+      provider = Puppet::Type::Ini_subsetting.provider(:ruby).new(resource)
+      expect { provider.send(:ini_file) }.not_to raise_error
+    end
+
+    it 'shares one IniFile object when key_val_separator matches between providers' do
+      setting_resource = Puppet::Type::Ini_setting.new(
+        title: 'test_setting', path: shared_file, section: 'section',
+        setting: 'key', value: 'val', key_val_separator: '='
+      )
+      subsetting_resource = Puppet::Type::Ini_subsetting.new(
+        title: 'test_subsetting', path: shared_file, section: 'section',
+        setting: 'key', subsetting: 'val', key_val_separator: '='
+      )
+      setting_provider    = Puppet::Type::Ini_setting.provider(:ruby).new(setting_resource)
+      subsetting_provider = Puppet::Type::Ini_subsetting.provider(:ruby).new(subsetting_resource)
+
+      expect(setting_provider.send(:ini_file)).to equal(subsetting_provider.send(:ini_file))
+    end
+
+    it 'uses distinct IniFile objects when key_val_separator differs between providers' do
+      setting_resource = Puppet::Type::Ini_setting.new(
+        title: 'test_setting', path: shared_file, section: 'section',
+        setting: 'key', value: 'val', key_val_separator: ':'
+      )
+      subsetting_resource = Puppet::Type::Ini_subsetting.new(
+        title: 'test_subsetting', path: shared_file, section: 'section',
+        setting: 'key', subsetting: 'val', key_val_separator: '='
+      )
+      setting_provider    = Puppet::Type::Ini_setting.provider(:ruby).new(setting_resource)
+      subsetting_provider = Puppet::Type::Ini_subsetting.provider(:ruby).new(subsetting_resource)
+
+      expect(setting_provider.send(:ini_file)).not_to equal(subsetting_provider.send(:ini_file))
     end
   end
 end
