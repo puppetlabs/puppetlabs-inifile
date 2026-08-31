@@ -3,6 +3,10 @@
 require File.expand_path('../../util/ini_file', __dir__)
 
 Puppet::Type.type(:ini_setting).provide(:ruby) do
+  def self.ini_file_cache
+    @ini_file_cache ||= {}
+  end
+
   def self.instances
     desc '
     Creates new ini_setting file, a specific config file with a provider that uses
@@ -60,13 +64,13 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
       ini_file.set_value(section, setting, separator, resource[:value])
     end
     ini_file.save
-    @ini_file = nil
+    flush_ini_file
   end
 
   def destroy
     ini_file.remove_setting(section, setting)
     ini_file.save
-    @ini_file = nil
+    flush_ini_file
   end
 
   def value
@@ -87,6 +91,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
       ini_file.set_value(section, setting, separator, resource[:value])
     end
     ini_file.save
+    flush_ini_file
   end
 
   def section
@@ -156,6 +161,12 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   private
 
   def ini_file
-    @ini_file ||= Puppet::Util::IniFile.new(file_path, separator, section_prefix, section_suffix, indent_char, indent_width)
+    @ini_file ||= self.class.ini_file_cache[file_path] ||=
+      Puppet::Util::IniFile.new(file_path, separator, section_prefix, section_suffix, indent_char, indent_width)
+  end
+
+  def flush_ini_file
+    self.class.ini_file_cache.delete(file_path)
+    @ini_file = nil
   end
 end

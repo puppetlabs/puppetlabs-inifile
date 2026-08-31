@@ -1577,6 +1577,53 @@ setting1 = hellowworld
     end
   end
 
+  context 'when multiple resources target the same file' do
+    let(:orig_content) do
+      <<~INIFILE
+        [section1]
+        foo = bar
+      INIFILE
+    end
+
+    after(:each) { provider_class.ini_file_cache.clear }
+
+    it 'shares a single IniFile object across resources targeting the same path' do
+      resource1 = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', value: 'bar'))
+      resource2 = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', value: 'bar'))
+      provider1 = described_class.new(resource1)
+      provider2 = described_class.new(resource2)
+
+      expect(Puppet::Util::IniFile).to receive(:new).once.and_call_original
+
+      provider1.exists?
+      provider2.exists?
+    end
+
+    it 'clears the cache after create so the next resource re-reads from disk' do
+      resource1 = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', value: 'newval'))
+      provider1 = described_class.new(resource1)
+      provider1.create
+
+      expect(provider_class.ini_file_cache[tmpfile]).to be_nil
+    end
+
+    it 'clears the cache after value= so the next resource re-reads from disk' do
+      resource1 = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', value: 'newval'))
+      provider1 = described_class.new(resource1)
+      provider1.value = 'newval'
+
+      expect(provider_class.ini_file_cache[tmpfile]).to be_nil
+    end
+
+    it 'clears the cache after destroy so the next resource re-reads from disk' do
+      resource1 = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', ensure: 'absent'))
+      provider1 = described_class.new(resource1)
+      provider1.destroy
+
+      expect(provider_class.ini_file_cache[tmpfile]).to be_nil
+    end
+  end
+
   context 'when using keys with multiple values' do
     let(:orig_content) do
       <<-EOS
