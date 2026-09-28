@@ -3,12 +3,13 @@
 require File.expand_path('../../util/ini_file', __dir__)
 
 Puppet::Type.type(:ini_section).provide(:ruby) do
+  desc '
+  Creates new ini_section file, a specific config file with a provider that uses
+  this as its parent and implements the method
+  self.file_path, and that will provide the value for the path to the
+  ini file.'
+
   def self.instances
-    desc '
-    Creates new ini_section file, a specific config file with a provider that uses
-    this as its parent and implements the method
-    self.file_path, and that will provide the value for the path to the
-    ini file.'
     raise(Puppet::Error, 'Ini_section only supports collecting instances when a file path is hard coded') unless respond_to?(:file_path)
 
     # figure out what to do about the separator

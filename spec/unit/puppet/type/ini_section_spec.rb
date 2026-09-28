@@ -10,9 +10,9 @@ describe ini_section do
       expect(described_class.new(name: 'foo')[:section]).to eq('foo')
     end
 
-    it 'rejects empty section names' do
+    it 'rejects blank section names' do
       expect {
-        described_class.new(name: 'foo', section: '')
+        described_class.new(name: 'foo', section: '   ')
       }.to raise_exception(Puppet::ResourceError, %r{Section names must not be empty})
     end
   end

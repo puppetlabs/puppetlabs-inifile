@@ -31,7 +31,7 @@ Puppet::Type.newtype(:ini_section) do
     end
 
     validate do |value|
-      raise(Puppet::Error, 'Section names must not be empty') if value.empty?
+      raise(Puppet::Error, 'Section names must not be empty') if value.strip.empty?
     end
   end
 
