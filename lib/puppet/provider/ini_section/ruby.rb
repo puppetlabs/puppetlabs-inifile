@@ -9,9 +9,9 @@ Puppet::Type.type(:ini_section).provide(:ruby) do
     this as its parent and implements the method
     self.file_path, and that will provide the value for the path to the
     ini file.'
-    raise(Puppet::Error, 'Ini_section only support collecting instances when a file path is hard coded') unless respond_to?(:file_path)
+    raise(Puppet::Error, 'Ini_section only supports collecting instances when a file path is hard coded') unless respond_to?(:file_path)
 
-    # figure out what to do about the seperator
+    # figure out what to do about the separator
     ini_file  = Puppet::Util::IniFile.new(file_path, '=')
     resources = []
     ini_file.section_names.each do |section_name|

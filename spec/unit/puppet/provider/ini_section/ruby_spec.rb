@@ -34,7 +34,7 @@ describe provider_class do
     it 'fails when file path is not set' do
       expect {
         provider_class.instances
-      }.to raise_error(Puppet::Error, 'Ini_section only support collecting instances when a file path is hard coded')
+      }.to raise_error(Puppet::Error, 'Ini_section only supports collecting instances when a file path is hard coded')
     end
 
     context 'when file path is set by a child class' do
@@ -250,6 +250,25 @@ describe provider_class do
       expect(provider.exists?).to be true
       provider.destroy
       validate_file(expected_content_one, tmpfile)
+    end
+
+    it 'removes the first section in a file' do
+      File.write(tmpfile, <<~INIFILE)
+        [section1]
+        foo=foovalue
+
+        [section2]
+        baz=bazvalue
+      INIFILE
+
+      resource = Puppet::Type::Ini_section.new(common_params.merge(section: 'section1'))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be true
+      provider.destroy
+      validate_file(<<~INIFILE, tmpfile)
+        [section2]
+        baz=bazvalue
+      INIFILE
     end
 
     expected_content_two = <<~INIFILE

@@ -5,6 +5,18 @@ require 'spec_helper'
 ini_section = Puppet::Type.type(:ini_section)
 
 describe ini_section do
+  describe 'section validation' do
+    it 'defaults the section to the resource name' do
+      expect(described_class.new(name: 'foo')[:section]).to eq('foo')
+    end
+
+    it 'rejects empty section names' do
+      expect {
+        described_class.new(name: 'foo', section: '')
+      }.to raise_exception(Puppet::ResourceError, %r{Section names must not be empty})
+    end
+  end
+
   describe 'path validation' do
     subject(:ini_section_path) { described_class.new(name: 'foo', path: path) }
 

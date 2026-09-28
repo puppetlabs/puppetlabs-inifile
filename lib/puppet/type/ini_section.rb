@@ -26,7 +26,13 @@ Puppet::Type.newtype(:ini_section) do
 
   newparam(:section) do
     desc 'The name of the section in the ini file which should be managed.'
-    defaultto('')
+    defaultto do
+      @resource[:name]
+    end
+
+    validate do |value|
+      raise(Puppet::Error, 'Section names must not be empty') if value.empty?
+    end
   end
 
   newparam(:path) do
