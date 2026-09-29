@@ -116,7 +116,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       end
     end
 
-    def remove_setting(section_name, setting)
+    def remove_setting(section_name, setting, remove_empty_section: true)
       section = @sections_hash[section_name]
       return unless section.existing_setting?(setting)
       existing_value = section.get_value(setting)
@@ -135,7 +135,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       section_index = @section_names.index(section_name)
       decrement_section_line_numbers(section_index + 1, existing_value.length)
 
-      remove_section(section_name) if removable_named_section?(section)
+      remove_section(section_name) if remove_empty_section && removable_named_section?(section)
     end
 
     def remove_section(section_name)
