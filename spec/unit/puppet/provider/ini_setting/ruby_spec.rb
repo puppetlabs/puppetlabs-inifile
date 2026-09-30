@@ -1028,6 +1028,7 @@ setting1 = hellowworld
           #another comment
        ; yet another comment
 
+       -nonstandard-
     INIFILE
     it 'removes a setting with pre/suffix that exists' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'shoes', ensure: 'absent', section_prefix: '-', section_suffix: '-'))
