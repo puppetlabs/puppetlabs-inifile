@@ -1137,6 +1137,31 @@ setting1 = hellowworld
     end
   end
 
+  context 'when removing the last setting from the first section' do
+    let(:orig_content) do
+      <<~INIFILE
+        [section1]
+        setting1 = value1
+
+        [section2]
+        setting2 = value2
+      INIFILE
+    end
+
+    it 'preserves the now-empty section header' do
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'setting1', ensure: 'absent'))
+      provider = described_class.new(resource)
+      expect(provider.exists?).to be true
+      provider.destroy
+      validate_file(<<~INIFILE, tmpfile)
+        [section1]
+
+        [section2]
+        setting2 = value2
+      INIFILE
+    end
+  end
+
   context 'when dealing with indentation in sections' do
     let(:orig_content) do
       <<~INIFILE

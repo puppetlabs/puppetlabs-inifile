@@ -116,7 +116,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       end
     end
 
-    def remove_setting(section_name, setting)
+    def remove_setting(section_name, setting, remove_empty_section: true)
       section = @sections_hash[section_name]
       return unless section.existing_setting?(setting)
       existing_value = section.get_value(setting)
@@ -134,6 +134,21 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       # was modified.
       section_index = @section_names.index(section_name)
       decrement_section_line_numbers(section_index + 1, existing_value.length)
+
+      remove_section(section_name) if remove_empty_section && removable_named_section?(section)
+    end
+
+    def remove_section(section_name)
+      section = @sections_hash[section_name]
+      return unless section
+
+      lines.slice!(section.start_line..section.end_line)
+
+      section_index = @section_names.index(section.name)
+      decrement_section_line_numbers(section_index + 1, section.length)
+
+      @section_names.delete_at(section_index)
+      @sections_hash.delete(section.name)
     end
 
     def save
@@ -278,6 +293,13 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
 
     def lines
       @lines ||= IniFile.readlines(@path)
+    end
+
+    def removable_named_section?(section)
+      return false if section.global? || section.end_line.nil?
+
+      remaining_lines = lines[(section.start_line + 1)..section.end_line] || []
+      remaining_lines.all? { |line| line.match?(%r{^\s*$}) }
     end
 
     # This is mostly here because it makes testing easier--we don't have
