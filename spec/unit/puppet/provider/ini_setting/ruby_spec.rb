@@ -1147,12 +1147,14 @@ setting1 = hellowworld
       INIFILE
     end
 
-    it 'removes the now-empty section header and whitespace' do
+    it 'preserves the now-empty section header' do
       resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'setting1', ensure: 'absent'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.destroy
       validate_file(<<~INIFILE, tmpfile)
+        [section1]
+
         [section2]
         setting2 = value2
       INIFILE

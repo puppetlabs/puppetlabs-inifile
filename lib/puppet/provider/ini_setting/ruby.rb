@@ -64,7 +64,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
   end
 
   def destroy
-    ini_file.remove_setting(section, setting)
+    ini_file.remove_setting(section, setting, remove_empty_section: false)
     ini_file.save
     @ini_file = nil
   end
