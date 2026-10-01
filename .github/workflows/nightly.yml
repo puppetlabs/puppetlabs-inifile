@@ -21,7 +21,6 @@ jobs:
     with:
       ruby_version: "3.2"
       flags: >-
-        --nightly
         --collection-platform-exclude 9:redhat-7
         --collection-platform-exclude 9:centos-7
         --collection-platform-exclude 9:oraclelinux-7
