@@ -26,7 +26,6 @@ jobs:
       # Puppet 9 agents, so they stay on both lanes. See MODULES-11703 / MODULES-11700.
       ruby_version: "3.2"
       flags: >-
-        --nightly
         --collection-platform-exclude 9:redhat-7
         --collection-platform-exclude 9:centos-7
         --collection-platform-exclude 9:oraclelinux-7
