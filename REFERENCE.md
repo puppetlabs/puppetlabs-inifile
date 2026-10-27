@@ -6,6 +6,7 @@
 
 ### Resource types
 
+* [`ini_section`](#ini_section): ini_section is used to manage a single section in an INI file
 * [`ini_setting`](#ini_setting): ini_settings is used to manage a single setting in an INI file
 * [`ini_subsetting`](#ini_subsetting): ini_subsettings is used to manage multiple values in a setting in an INI file
 
@@ -15,6 +16,64 @@
 * [`inifile::create_ini_settings`](#inifile--create_ini_settings): This function is used to create a set of ini_setting resources from a hash
 
 ## Resource types
+
+### <a name="ini_section"></a>`ini_section`
+
+ini_section is used to manage a single section in an INI file
+
+#### Properties
+
+The following properties are available in the `ini_section` type.
+
+##### `ensure`
+
+Valid values: `present`, `absent`
+
+Ensurable method handles modeling creation. It creates an ensure property
+
+Default value: `present`
+
+#### Parameters
+
+The following parameters are available in the `ini_section` type.
+
+* [`name`](#-ini_section--name)
+* [`path`](#-ini_section--path)
+* [`provider`](#-ini_section--provider)
+* [`section`](#-ini_section--section)
+* [`section_prefix`](#-ini_section--section_prefix)
+* [`section_suffix`](#-ini_section--section_suffix)
+
+##### <a name="-ini_section--name"></a>`name`
+
+namevar
+
+An arbitrary name used as the identity of the resource.
+
+##### <a name="-ini_section--path"></a>`path`
+
+The ini file Puppet will ensure contains the specified section.
+
+##### <a name="-ini_section--provider"></a>`provider`
+
+The specific backend to use for this `ini_section` resource. You will seldom need to specify this --- Puppet will
+usually discover the appropriate provider for your platform.
+
+##### <a name="-ini_section--section"></a>`section`
+
+The name of the section in the ini file which should be managed.
+
+##### <a name="-ini_section--section_prefix"></a>`section_prefix`
+
+The prefix to the section name\'s header.
+
+Default value: `[`
+
+##### <a name="-ini_section--section_suffix"></a>`section_suffix`
+
+The suffix to the section name\'s header.
+
+Default value: `]`
 
 ### <a name="ini_setting"></a>`ini_setting`
 
