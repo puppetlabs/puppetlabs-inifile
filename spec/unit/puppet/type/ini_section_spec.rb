@@ -17,6 +17,18 @@ describe ini_section do
     end
   end
 
+  describe 'ensure insync?' do
+    let(:ensure_property) { described_class.new(name: 'foo', path: '/tmp/foo.ini').property(:ensure) }
+
+    it 'is in sync when current matches should' do
+      expect(ensure_property.insync?(:present)).to be true
+    end
+
+    it 'is out of sync when current differs from should' do
+      expect(ensure_property.insync?(:absent)).to be false
+    end
+  end
+
   describe 'path validation' do
     subject(:ini_section_path) { described_class.new(name: 'foo', path: path) }
 
