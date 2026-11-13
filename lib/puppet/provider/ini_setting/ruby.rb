@@ -77,6 +77,7 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
     return result if value_property && value_property.array_matching == :all
 
     return result unless result.is_a?(Array)
+
     (result.length == 1) ? result.first : result
   end
 

@@ -43,7 +43,9 @@ describe Puppet::Type.type(:inherit_ini_section).provider(:ini_section) do
         instances = described_class.instances
         expect(instances.size).to eq(2)
         # inherited version of namevar flattens the names
-        names = instances.map do |instance| instance.instance_variable_get(:@property_hash)[:name] end # rubocop:disable Style/BlockDelimiters
+        names = instances.map do |instance|
+          instance.instance_variable_get(:@property_hash)[:name]
+        end # rubocop:disable Style/BlockDelimiters
         expect(names.sort).to eq(['green', 'red'])
       end
     end
