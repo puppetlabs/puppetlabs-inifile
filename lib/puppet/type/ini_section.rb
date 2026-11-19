@@ -10,13 +10,6 @@ Puppet::Type.newtype(:ini_section) do
     newvalue(:absent) do
       provider.destroy
     end
-    def insync?(current)
-      if @resource[:refreshonly]
-        true
-      else
-        current == should
-      end
-    end
     defaultto :present
   end
 
