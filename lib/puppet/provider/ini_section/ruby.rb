@@ -17,6 +17,7 @@ Puppet::Type.type(:ini_section).provide(:ruby) do
     resources = []
     ini_file.section_names.each do |section_name|
       next if section_name.empty?
+
       resources.push(
         new(
           name: namevar(section_name),

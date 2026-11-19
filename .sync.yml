@@ -5,6 +5,10 @@ appveyor.yml:
   delete: true
 .rubocop.yml:
   include_todos: true
+  # cop settings the module set by hand (MODULES-11997 pdk update)
+  cop_overrides:
+    Style/HashSyntax:
+      Enabled: false
 spec/spec_helper.rb:
   mock_with: ":rspec"
   coverage_report: true
@@ -16,10 +20,34 @@ spec/spec_helper.rb:
   unmanaged: false
 .github/workflows/ci.yml:
   unmanaged: false
+  # acceptance flags set by hand (Puppet 9 platform excludes) (MODULES-11997 pdk update)
+  acceptance_flags:
+  - "--nightly"
+  - "--collection-platform-exclude 9:redhat-7"
+  - "--collection-platform-exclude 9:centos-7"
+  - "--collection-platform-exclude 9:oraclelinux-7"
+  - "--collection-platform-exclude 9:scientific-7"
+  - "--collection-platform-exclude 9:debian-10"
+  - "--collection-platform-exclude 9:ubuntu-18.04"
+  - "--collection-platform-exclude 9:ubuntu-20.04"
 .github/workflows/nightly.yml:
   unmanaged: false
   cron: '20 3 * * *'
+  # acceptance flags set by hand (Puppet 9 platform excludes) (MODULES-11997 pdk update)
+  acceptance_flags:
+  - "--nightly"
+  - "--collection-platform-exclude 9:redhat-7"
+  - "--collection-platform-exclude 9:centos-7"
+  - "--collection-platform-exclude 9:oraclelinux-7"
+  - "--collection-platform-exclude 9:scientific-7"
+  - "--collection-platform-exclude 9:debian-10"
+  - "--collection-platform-exclude 9:ubuntu-18.04"
+  - "--collection-platform-exclude 9:ubuntu-20.04"
 .github/workflows/release.yml:
   unmanaged: false
 .travis.yml:
   delete: true
+Rakefile:
+  # puppet-lint checks the module disabled by hand (Rakefile/.puppet-lint.rc) (MODULES-11997 pdk update)
+  extra_disabled_lint_checks:
+  - strict_indent

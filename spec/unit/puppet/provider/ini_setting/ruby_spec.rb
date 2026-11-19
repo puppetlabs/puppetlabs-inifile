@@ -40,7 +40,7 @@ describe provider_class do
     {
       title: 'ini_setting_ensure_present_test',
       path: tmpfile,
-      section: 'section2'
+      section: 'section2',
     }
   end
 
@@ -1604,20 +1604,20 @@ setting1 = hellowworld
 
   context 'when using keys with multiple values' do
     let(:orig_content) do
-      <<-EOS
-[section]
-foo = foovalue
-foo = foovalue2
-foo = foovalue3
-foo = foovalue4
-bar = barvalue
+      <<~EOS
+        [section]
+        foo = foovalue
+        foo = foovalue2
+        foo = foovalue3
+        foo = foovalue4
+        bar = barvalue
 
-[section2]
-foo = value
-bar = barvalue
-foo = value2
+        [section2]
+        foo = value
+        bar = barvalue
+        foo = value2
 
-[section3]
+        [section3]
       EOS
     end
 
@@ -1629,17 +1629,17 @@ foo = value2
       validate_file(orig_content, tmpfile)
     end
 
-    expected_content_one = <<-EOS
-[section]
-foo = foovalue
-bar = barvalue
+    expected_content_one = <<~EOS
+      [section]
+      foo = foovalue
+      bar = barvalue
 
-[section2]
-foo = value
-bar = barvalue
-foo = value2
+      [section2]
+      foo = value
+      bar = barvalue
+      foo = value2
 
-[section3]
+      [section3]
     EOS
 
     it 'removes additional values from an existing setting' do
@@ -1650,21 +1650,21 @@ foo = value2
       validate_file(expected_content_one, tmpfile)
     end
 
-    expected_content_two = <<-EOS
-[section]
-foo = foovalue
-foo = foovalue2
-foo = foovalue3
-foo = foovalue4
-bar = barvalue
+    expected_content_two = <<~EOS
+      [section]
+      foo = foovalue
+      foo = foovalue2
+      foo = foovalue3
+      foo = foovalue4
+      bar = barvalue
 
-[section2]
-bar = barvalue
-foo = value
-foo = value2
-foo = value3
+      [section2]
+      bar = barvalue
+      foo = value
+      foo = value2
+      foo = value3
 
-[section3]
+      [section3]
     EOS
 
     it 'adds new values to an existing setting' do
@@ -1675,20 +1675,20 @@ foo = value3
       validate_file(expected_content_two, tmpfile)
     end
 
-    expected_content_three = <<-EOS
-[section]
-foo = foovalue2
-foo = foovalue4
-foo = foovalue
-foo = foovalue3
-bar = barvalue
+    expected_content_three = <<~EOS
+      [section]
+      foo = foovalue2
+      foo = foovalue4
+      foo = foovalue
+      foo = foovalue3
+      bar = barvalue
 
-[section2]
-foo = value
-bar = barvalue
-foo = value2
+      [section2]
+      foo = value
+      bar = barvalue
+      foo = value2
 
-[section3]
+      [section3]
     EOS
 
     it 'modifies an existing setting with values ordered differently' do
@@ -1699,23 +1699,23 @@ foo = value2
       validate_file(expected_content_three, tmpfile)
     end
 
-    expected_content_four = <<-EOS
-[section]
-foo = foovalue
-foo = foovalue2
-foo = foovalue3
-foo = foovalue4
-bar = barvalue
+    expected_content_four = <<~EOS
+      [section]
+      foo = foovalue
+      foo = foovalue2
+      foo = foovalue3
+      foo = foovalue4
+      bar = barvalue
 
-[section2]
-foo = value
-bar = barvalue
-foo = value2
+      [section2]
+      foo = value
+      bar = barvalue
+      foo = value2
 
-[section3]
-foo = a
-foo = b
-foo = c
+      [section3]
+      foo = a
+      foo = b
+      foo = c
     EOS
 
     it 'adds a new setting' do
@@ -1726,16 +1726,16 @@ foo = c
       validate_file(expected_content_four, tmpfile)
     end
 
-    expected_content_five = <<-EOS
-[section]
-bar = barvalue
+    expected_content_five = <<~EOS
+      [section]
+      bar = barvalue
 
-[section2]
-foo = value
-bar = barvalue
-foo = value2
+      [section2]
+      foo = value
+      bar = barvalue
+      foo = value2
 
-[section3]
+      [section3]
     EOS
 
     it 'removes a multi-value setting with ensure => absent' do
@@ -1746,21 +1746,21 @@ foo = value2
       validate_file(expected_content_five, tmpfile)
     end
 
-    expected_content_six = <<-EOS
-[section]
-foo = foovalue
-foo = foovalue2
-foo = foovalue3
-foo = foovalue4
-bar = barvalue
+    expected_content_six = <<~EOS
+      [section]
+      foo = foovalue
+      foo = foovalue2
+      foo = foovalue3
+      foo = foovalue4
+      bar = barvalue
 
-[section2]
-foo = value
-bar = barvalue
-foo = value2
+      [section2]
+      foo = value
+      bar = barvalue
+      foo = value2
 
-[section3]
-baz = newvalue
+      [section3]
+      baz = newvalue
     EOS
 
     it 'correctly updates section3 line numbers after modifying section with multi-values' do

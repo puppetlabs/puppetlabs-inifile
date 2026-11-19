@@ -10,7 +10,6 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
   class IniFile
     def initialize(path, key_val_separator = ' = ', section_prefix = '[', section_suffix = ']',
                    indent_char = ' ', indent_width = nil)
-
       k_v_s = (key_val_separator =~ %r{^\s+$}) ? ' ' : key_val_separator.strip
 
       @section_prefix = section_prefix
@@ -73,7 +72,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
       complete_setting = {
         setting: setting,
         separator: separator,
-        value: value
+        value: value,
       }
       add_section(Section.new(section_name, nil, nil, nil, nil)) unless @sections_hash.key?(section_name)
 
@@ -120,6 +119,7 @@ module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
     def remove_setting(section_name, setting, remove_empty_section: true)
       section = @sections_hash[section_name]
       return unless section.existing_setting?(setting)
+
       existing_value = section.get_value(setting)
 
       # If the setting is found, we have some work to do.

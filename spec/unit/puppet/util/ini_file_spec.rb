@@ -134,8 +134,6 @@ describe Puppet::Util::IniFile do
       expect(ini_sub.get_value('section1', 'bar')).to be_nil
       expect(ini_sub.get_value('section1', "xyzzy['thing1']['thing2']")).to be_nil
     end
-    # rubocop:enable RSpec/ExpectInHook
-
     it 'properlies update uncommented values' do
       ini_sub.set_value('section1', 'foo', ' = ', 'foovalue')
       expect(ini_sub.get_value('section1', 'foo')).to eq(['foovalue'])
