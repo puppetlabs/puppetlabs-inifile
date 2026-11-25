@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v6.6.1](https://github.com/puppetlabs/puppetlabs-inifile/tree/v6.6.1) - 2026-11-25
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v6.6.0...v6.6.1)
+
+### Fixed
+
+- Honor default separator in set_config [#545](https://github.com/puppetlabs/puppetlabs-inifile/pull/545) ([kajinamit](https://github.com/kajinamit))
+
 ## [v6.6.0](https://github.com/puppetlabs/puppetlabs-inifile/tree/v6.6.0) - 2026-10-27
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-inifile/compare/v6.5.0...v6.6.0)
